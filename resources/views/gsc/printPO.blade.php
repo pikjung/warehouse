@@ -275,7 +275,7 @@
           </table>
        </div>
 
-       <div class="col-print-12" style="height: 300px">
+       <div class="col-print-12">
            <br>
         <table id="customers" class="fnt-12">
             <tr class="vendor">
