@@ -81,7 +81,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="save_pouser" class="btn btn-primary">Save changes</button>
+              <button type="button" id="save_customers" class="btn btn-primary">Save changes</button>
             </div>
 
           </div>
@@ -102,7 +102,7 @@
                     <div class="col-6">
                         <div class="form-group">
                           <label for="">Nama Customer</label>
-                          <input id="nama_customer_edit" class="form-control">
+                          <input id="nama_customers_edit" class="form-control">
                           <input type="hidden" id="edit_id">
                         </div>
                       </div>
@@ -128,7 +128,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="save_edit_pouser" class="btn btn-primary">Save changes</button>
+              <button type="button" id="save_edit_customers" class="btn btn-primary">Save changes</button>
             </div>
 
           </div>
@@ -190,18 +190,13 @@
 
       <script>
         $(document).ready(function () {
-          $('#save_pouser').click(function () {
+          $('#save_customers').click(function () {
             var nama_customer = $('#nama_customer').val();
-            var no_po = $('#no_po').val();
-            var noted = $('#noted').val();
-            var payment_terms = $('#payment_terms').val();
-            var to_name = $('#to_name').val();
             var no_telp = $('#no_telp').val();
             var fax = $('#fax').val();
-            var dn_no = $('#dn_no').val();
             var alamat = $('#alamat').val();
 
-            if (nama_customer === '' || no_po === ''|| dn_no === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '') {
+            if (nama_customer === '' || no_telp === '' || fax === '' || alamat === '') {
               new PNotify({
                   title: 'Data Kosong!!',
                   text: 'Data harap tidak dikosongkan!',
@@ -216,8 +211,8 @@
               });
               $.ajax({
                   type: "POST",
-                  url: '/transaksi/po/tambah',
-                  data: { nama_customer:nama_customer, no_po:no_po,dn_no:dn_no, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat }, 
+                  url: '/customers/tambah',
+                  data: { nama_customer:nama_customer, no_telp:no_telp, fax:fax, alamat:alamat }, 
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         new PNotify({
@@ -227,7 +222,7 @@
                           styling: 'bootstrap3'
                       });
                       $('#modal_tambah').modal('hide');
-                      $('#data_pouser').DataTable().ajax.reload();
+                      $('#data_customers').DataTable().ajax.reload();
                       }
                   }
               });
@@ -239,12 +234,10 @@
       <script>
         $(document).ready(function () {
           $('#button_modal').click(function () {
-            $('#nama_customer_select').html('')
             $('#nama_customer').val('');
-            $('#no_po').val('');
-            $('#noted').val('');
-            $('#paymnet_terms').val('');
-            $('#alamat').html('');
+            $('#no_telp').val('');
+            $('#fax').val('');
+            $('#alamat').val('');
 
             $('#modal_tambah').modal('show');
           });
@@ -254,17 +247,12 @@
       
 
       <script>
-        function edit_pouser(id) {
-            $('#nama_customer_edit').val('');
-            $('#no_po_edit').val('');
-            $('#noted_edit').val('');
-            $('#to_name_edit').val('');
+        function edit_customers(id) {
+            $('#nama_customers_edit').val('');
             $('#no_telp_edit').val('');
             $('#fax_edit').val('');
-            $('#dn_no_edit').val('');
-            $('#edit_id').val('');
-            $('#payment_terms_edit').val('');
             $('#alamat_edit').val('');
+            $('#edit_id').val(id);
 
           $.ajaxSetup({
                   headers: {
@@ -273,19 +261,13 @@
               });
             $.ajax({
                 type: "POST",
-                url: '/transaksi/po/editGet',
+                url: '/customers/editGet',
                 data: { id:id }, 
                 success: function( result ) {
                     if (result.res === 'berhasil') {
-                        $('#nama_customer_edit').val(result.data.customer);
-                        $('#no_po_edit').val(result.data.po_customer);
-                        $('#noted_edit').val(result.data.noted);
-                        $('#edit_id').val(result.data.userReq_id);
-                        $('#payment_terms_edit').val(result.data.payment_terms);
-                        $('#to_name_edit').val(result.data.penerima);
+                        $('#nama_customers_edit').val(result.data.nama_customers);
                         $('#no_telp_edit').val(result.data.no_telp);
                         $('#fax_edit').val(result.data.fax);
-                        $('#dn_no_edit').val(result.data.dn_no);
                         $('#alamat_edit').val(result.data.alamat);
                         $('#modal_edit').modal('show');
                       }
@@ -296,20 +278,15 @@
 
 <script>
   $(document).ready(function () {
-    $('#save_edit_pouser').click(function () {
-      var nama_customer = $('#nama_customer_edit').val();
-      var no_po = $('#no_po_edit').val();
-      var noted = $('#noted_edit').val();
+    $('#save_edit_customers').click(function () {
+      var nama_customer = $('#nama_customers_edit').val();
       var id = $('#edit_id').val();
-      var payment_terms = $('#payment_terms_edit').val();
-      var to_name = $('#to_name_edit').val();
       var no_telp = $('#no_telp_edit').val();
-      var dn_no = $('#dn_no_edit').val();
       var fax = $('#fax_edit').val();
       var alamat = $('#alamat_edit').val();
 
 
-      if (nama_customer === '' || no_po === ''|| dn_no === '' || noted === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '') {
+      if (nama_customer === '' || no_telp === '' || fax === '' || alamat === '') {
         new PNotify({
             title: 'Data Kosong!!',
             text: 'Data harap tidak dikosongkan!',
@@ -324,8 +301,8 @@
         });
         $.ajax({
             type: "POST",
-            url: '/transaksi/po/editStore',
-            data: { id:id,nama_customer:nama_customer, no_po:no_po,dn_no:dn_no ,noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat }, 
+            url: '/customers/editStore',
+            data: { id:id,nama_customer:nama_customer, no_telp:no_telp, fax:fax, alamat:alamat }, 
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
@@ -335,7 +312,7 @@
                     styling: 'bootstrap3'
                 });
                 $('#modal_edit').modal('hide');
-                $('#data_pouser').DataTable().ajax.reload();
+                $('#data_customers').DataTable().ajax.reload();
                 }
             }
         });
@@ -345,7 +322,7 @@
 </script>
 
 <script>
-  function hapus_pouser(id) {
+  function hapus_customers(id) {
     $('#hapus_id').val('');
     $('#hapus_id').val(id);
 
@@ -364,7 +341,7 @@
         });
       $.ajax({
             type: "POST",
-            url: '/transaksi/po/hapus',
+            url: '/customers/hapus',
             data: { id:id}, 
             success: function( result ) {
                 if (result.res === 'berhasil') {
@@ -375,248 +352,11 @@
                     styling: 'bootstrap3'
                 });
                 $('#modal_hapus').modal('hide');
-                $('#data_pouser').DataTable().ajax.reload();
+                $('#data_customers').DataTable().ajax.reload();
                 }
             }
         });
     });
   });
 </script>
-
-<!-- gsc -->
-
-<script>
-    function detail_pouser(id){
-        $('#detail_barang').html('');
-        $('#detail_id').val('');
-        $('#detail_id').val(id);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: '/transaksi/po/detail',
-            data: { id:id}, 
-            success: function( result ) {
-                if (result.res === 'berhasil') {
-                  console.log(result.status)
-                    $.each(result.data, function (key, value) {
-                        $('#detail_barang').append(
-                            '<tr>' +
-                                '<td>'+value.nama_barang+'</td>' +
-                                '<td>'+value.spek+'</td>' +
-                                '<td>'+value.pn+'</td>'+
-                                '<td>'+value.sku+'</td>' +
-                                '<td>'+value.quantity+'</td>' +
-                                '<td>'+value.harga_barang_satuan+'</td>' +
-                            '</tr>'
-                        )
-                    });
-                    $('#modal_detail').modal('show');
-                }
-            }
-          });
-    }
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('#detail_edit').click(function () {
-           var id =  $('#detail_id').val();
-           window.location.href = '/transaksi/po/detailMode/'+id;
-        })
-    })
-</script>
-
-<script>
-  function print_invoice(id) {
-    window.location.href = "/transaksi/po/print_invoice/"+id;
-  }
-</script>
-
-<script>
-  function print_dn(id) {
-    window.location.href = "/transaksi/po/print_dn/"+id;
-  }
-</script>
-
-<script>
-  function data_inv(id) {
-        $('#inv_po').val('');
-        $('#inv_id').val('');
-        $('#disc').val('');
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: '/transaksi/po/editGet',
-            data: { id:id}, 
-            success: function( result ) {
-                if (result.res === 'berhasil') {
-                  if (result.data.no_invoice === null) {
-                    $('#inv_id').val(id);
-                    $('#tambahan_invoice').html('<a href="/transaksi/invoice/'+id+'" class="btn btn-sm btn-primary float-right" data-toggle="tooltip" data-placement="top" title="Invoice Tambahan"><i class="fa fa-plus"></i></a>');
-                    $('#modal_inv').modal('show');
-                  }else {
-                    $('#tambahan_invoice').html('<a href="/transaksi/invoice/'+id+'" class="btn btn-sm btn-primary float-right" data-toggle="tooltip" data-placement="top" title="Invoice Tambahan"><i class="fa fa-plus"></i></a>');
-                    $('#inv_pesan').html('<b>No Inv Sudah diisi, Klik EDIT untuk merubah</b>')
-                    $('#inv_edit').html('<button class="btn btn-primary" onclick="edit_inv_button()">Edit</button>')
-                    $('#inv_po').val(result.data.no_invoice)
-                    $('#disc').val(result.data.disc)
-                    $('#inv_po').attr('readonly','')
-                    $('#disc').attr('readonly','')
-                    $('#inv_button').attr('disabled','')
-                    $('#inv_id').val(id);
-                    $('#modal_inv').modal('show');
-                  }
-            }
-            }
-          });
-  }
-</script>
-
-<script>
- function edit_inv_button() {
-      $('#inv_po').removeAttr('readonly','')
-      $('#disc').removeAttr('readonly','')
-      $('#inv_button').removeAttr('disabled','')
- }
-</script>
-
-<script>
-  $(document).ready(function () {
-    $('#inv_button').click(function () {
-            var inv_po = $('#inv_po').val();
-            var inv_id = $('#inv_id').val();
-            var disc = $('#disc').val();
-
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: '/transaksi/po/inv',
-            data: { id:inv_id, inv_po : inv_po, disc:disc}, 
-            success: function( result ) {
-                if (result.res === 'berhasil') {
-                  new PNotify({
-                    title: 'Success!!',
-                    text: 'Data INV Berhasil di Update!',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                $('#data_pouser').DataTable().ajax.reload();
-                $('#modal_inv').modal('hide');
-            }
-            }
-          });
-    })
-  })
-</script>
-
-<script>
-  function lihat_paket(id) {
-    $('#paket_body').html('');
-    $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: '/transaksi/po/lihat_paket',
-            data: { id:id}, 
-            success: function( result ) {
-                if (result.res === 'berhasil') {
-                  $('#paket_body').html(result.data);
-                $('#modal_paket').modal('show');
-            }
-            }
-          });
-  }
-</script>
-
-<script>
-  function payment_pouser(id) {
-    $('#payment_id').val('');
-    $('#payment_id').val(id);
-   $('#modal_payment').modal('show');
-  }
-</script>
-
-<script>
-  $(document).ready(function () {
-    $('#payment_button').click(function() {
-      var id = $('#payment_id').val();
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-      });
-      $.ajax({
-          type: "POST",
-          url: '/transaksi/po/payment',
-          data: { id:id}, 
-          success: function( result ) {
-              if (result.res === 'berhasil') {
-                  new PNotify({
-                    title: 'Success!!',
-                    text: 'Payment OK',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                $('#data_pouser').DataTable().ajax.reload();
-                $('#modal_payment').modal('hide');
-            }
-          }
-        });
-    })
-  })
-</script>
-
-<script>
-  function arsip_pouser(id) {
-    $('#arsip_id').val('');
-    $('#arsip_id').val(id);
-   $('#modal_arsip').modal('show');
-  }
-</script>
-
-<script>
-  $(document).ready(function () {
-    $('#arsip_button').click(function() {
-      var id = $('#arsip_id').val();
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-      });
-      $.ajax({
-          type: "POST",
-          url: '/transaksi/po/arsip',
-          data: { id:id}, 
-          success: function( result ) {
-              if (result.res === 'berhasil') {
-                  new PNotify({
-                    title: 'Success!!',
-                    text: 'Payment OK',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                $('#data_pouser').DataTable().ajax.reload();
-                $('#modal_arsip').modal('hide');
-            }
-          }
-        });
-    })
-  })
-</script>
-
 @endsection

@@ -898,11 +898,11 @@ class transaksiController extends Controller
     public function customersView()
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'CUSTOMERS']);
-        $data = customer::select(['customers_id','nama_customers','no_telp','fax','alamat']);
+        $data = customer::select(['customer_id','nama_customers','no_telp','fax','alamat']);
         return Datatables::of(customer::orderBy('created_at','desc'))
         ->addColumn('action', function ($data)
         {
-            return '<a href="#" id="edit_customers" onclick=edit_customers("'.$data->customers_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_customers" onclick=hapus_customers("'.$data->customers_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+            return '<a href="#" id="edit_customers" onclick=edit_customers("'.$data->customer_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_customers" onclick=hapus_customers("'.$data->customer_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -928,8 +928,8 @@ class transaksiController extends Controller
         $id = uniqid();
 
         $data = customer::create([
-            'customers_id' => $id,
-            'nama_customers' => $request->nama_customers,
+            'customer_id' => $id,
+            'nama_customers' => $request->nama_customer,
             'no_telp' => $request->no_telp,
             'fax' => $request->fax,
             'alamat' => $request->alamat,
@@ -967,7 +967,7 @@ class transaksiController extends Controller
         }
 
         $data = customer::find($request->id);
-        $data->nama_customers = $request->nama_customers;
+        $data->nama_customers = $request->nama_customer;
         $data->no_telp = $request->no_telp;
         $data->fax = $request->fax;
         $data->alamat = $request->alamat;
