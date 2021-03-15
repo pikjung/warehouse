@@ -130,7 +130,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/transaksi/po/autofillCom', [transaksiController::class, 'autofillCom']);
 
 //Customer (New)
-    Route::get('/customers', [transaksiController::class, 'customer']);
+    Route::get('/customers', [transaksiController::class, 'customers']);
     Route::get('/customers/view', [transaksiController::class, 'customersView']);
     Route::post('/customers/tambah', [transaksiController::class, 'customersTambah']);
     Route::post('/customers/editGet', [transaksiController::class, 'customersEditGet']);

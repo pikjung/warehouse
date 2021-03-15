@@ -151,6 +151,7 @@
                     <li><a href="/gsc/pogsc"><i class="fa fa-home"></i>PO GSC</a></li>
                     <li><a href="/gsc/distributor"><i class="fa fa-building"></i>Distributor</a></li>
                     <li><a href="/transaksi"><i class="fa fa-exchange"></i>PO User</a></li>
+                    <li><a href="/customers"><i class="fa fa-user"></i>Customers</a></li>
                     <li><a href="/inventory/barang_masuk"><i class="fa fa-cube"></i>Inventory</a></li>
                     <li><a><i class="fa fa-truck"></i>Delivery</a>
                         <ul class="nav child_menu">

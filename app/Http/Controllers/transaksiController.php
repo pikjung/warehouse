@@ -20,7 +20,7 @@ use App\Models\pouser_det;
 
 use App\Models\paket;
 
-use App\Models\customers;
+use App\Models\customer;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -898,8 +898,8 @@ class transaksiController extends Controller
     public function customersView()
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'CUSTOMERS']);
-        $data = customers::select(['customers_id','nama_customers','no_telp','fax','alamat']);
-        return Datatables::of(customers::orderBy('created_at','desc'))
+        $data = customer::select(['customers_id','nama_customers','no_telp','fax','alamat']);
+        return Datatables::of(customer::orderBy('created_at','desc'))
         ->addColumn('action', function ($data)
         {
             return '<a href="#" id="edit_customers" onclick=edit_customers("'.$data->customers_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_customers" onclick=hapus_customers("'.$data->customers_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
@@ -927,7 +927,7 @@ class transaksiController extends Controller
         }
         $id = uniqid();
 
-        $data = customers::create([
+        $data = customer::create([
             'customers_id' => $id,
             'nama_customers' => $request->nama_customers,
             'no_telp' => $request->no_telp,
@@ -943,7 +943,7 @@ class transaksiController extends Controller
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Tampil Edit' ,'bagian' => 'CUSTOMERS']);
         $id = $request->id;
 
-        $data = customers::find($id);
+        $data = customer::find($id);
 
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
@@ -966,7 +966,7 @@ class transaksiController extends Controller
             return response()->json(array('res' => 'gagal'));
         }
 
-        $data = customers::find($request->id);
+        $data = customer::find($request->id);
         $data->nama_customers = $request->nama_customers;
         $data->no_telp = $request->no_telp;
         $data->fax = $request->fax;
@@ -980,7 +980,7 @@ class transaksiController extends Controller
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Hapus' ,'bagian' => 'CUSTOMERS']);
         $id = $request->id;
-        $data = customers::find($id);
+        $data = customer::find($id);
         $data->delete();
 
         return response()->json(array('res' => 'berhasil'));
