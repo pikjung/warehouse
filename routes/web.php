@@ -134,7 +134,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/customers/view', [transaksiController::class, 'customersView']);
     Route::post('/customers/tambah', [transaksiController::class, 'customersTambah']);
     Route::post('/customers/editGet', [transaksiController::class, 'customersEditGet']);
-    Route::post('/customers/Store', [transaksiController::class, 'customersStore']);
+    Route::post('/customers/editStore', [transaksiController::class, 'customersEditStore']);
     Route::post('/customers/hapus', [transaksiController::class, 'customersHapus']);
  
  //INVENTORY

@@ -10,8 +10,8 @@ class customer extends Model
     use HasFactory;
 
     protected $table = 'customers';
-    protected $primaryKey = 'customers';
-    protected $fillable = ['customers','nama_customers','no_telp','fax','alamat'];
+    protected $primaryKey = 'customers_id';
+    protected $fillable = ['customers_id','nama_customers','no_telp','fax','alamat'];
     protected $casts = [
         'id' => 'string'
     ];
