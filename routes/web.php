@@ -139,21 +139,24 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
  
  //INVENTORY
  
-     //barang masuk
-     Route::get('/inventory/barang_masuk',[inventoryController::class, 'barang_masukView']);
-     Route::get('/inventory/barang_masuk/view',[inventoryController::class, 'barang_masukGet']);
-     Route::post('/inventory/barang_masuk/tambah',[inventoryController::class, 'barang_masukTambah']);
-     Route::post('/inventory/barang_masuk/editGet',[inventoryController::class, 'barang_masukEditGet']);
-     Route::post('/inventory/barang_masuk/editStore',[inventoryController::class, 'barang_masukEditStore']);
-     Route::post('/inventory/barang_masuk/sn_view',[inventoryController::class, 'barang_masukSn_view']);
-     Route::post('/inventory/barang_masuk/hapus',[inventoryController::class, 'barang_masukHapus']);
-     Route::get('/inventory/barang_masuk/snMode/{id}',[inventoryController::class, 'SnMode']);
-     Route::get('/inventory/barang_masuk/snMode/get/{id}',[inventoryController::class, 'SnModeGet']);
-     Route::post('/inventory/barang_masuk/snStore', [inventoryController::class, 'snStore']);
-     Route::post('/inventory/barang_masuk/snEdit', [inventoryController::class, 'snEdit']);
-     Route::post('/inventory/barang_masuk/snUpdate', [inventoryController::class, 'snUpdate']);
-     Route::post('/inventory/barang_masuk/snHapus', [inventoryController::class, 'snHapus']);
-     Route::post('/inventory/barang_masuk/snImport', [inventoryController::class, 'snImport']);
+        //gudang
+        Route::get('/inventory', [transaksiController::class, 'inventory']);
+
+        //barang masuk
+        Route::get('/inventory/barang_masuk/{id}',[inventoryController::class, 'barang_masukView']);
+        Route::get('/inventory/barang_masuk/view',[inventoryController::class, 'barang_masukGet']);
+        Route::post('/inventory/barang_masuk/tambah',[inventoryController::class, 'barang_masukTambah']);
+        Route::post('/inventory/barang_masuk/editGet',[inventoryController::class, 'barang_masukEditGet']);
+        Route::post('/inventory/barang_masuk/editStore',[inventoryController::class, 'barang_masukEditStore']);
+        Route::post('/inventory/barang_masuk/sn_view',[inventoryController::class, 'barang_masukSn_view']);
+        Route::post('/inventory/barang_masuk/hapus',[inventoryController::class, 'barang_masukHapus']);
+        Route::get('/inventory/barang_masuk/snMode/{id}',[inventoryController::class, 'SnMode']);
+        Route::get('/inventory/barang_masuk/snMode/get/{id}',[inventoryController::class, 'SnModeGet']);
+        Route::post('/inventory/barang_masuk/snStore', [inventoryController::class, 'snStore']);
+        Route::post('/inventory/barang_masuk/snEdit', [inventoryController::class, 'snEdit']);
+        Route::post('/inventory/barang_masuk/snUpdate', [inventoryController::class, 'snUpdate']);
+        Route::post('/inventory/barang_masuk/snHapus', [inventoryController::class, 'snHapus']);
+        Route::post('/inventory/barang_masuk/snImport', [inventoryController::class, 'snImport']);
  
  
  //Delivery
