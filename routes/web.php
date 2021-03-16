@@ -143,6 +143,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
         Route::get('/inventory', [inventoryController::class, 'inventory']);
         Route::post('/inventory/gudang/cariGudang', [inventoryController::class, 'inventoryGudangCariGudang']);
         Route::post('/inventory/gudang/cariBarang', [inventoryController::class, 'inventoryGudangCariBarang']);
+        Route::post('/inventory/gudang/cariBarangDestination', [inventoryController::class, 'inventoryGudangCariBarangDestination']);
 
         //barang masuk
         Route::get('/inventory/barang_masuk/{id}',[inventoryController::class, 'barang_masukView']);

@@ -234,17 +234,26 @@ class inventoryController extends Controller
         }
     }
 
+
     public function inventoryGudangCariGudang(Request $request)
     {
         $id = $request->gudang;
         $data = inventory::where('gudang_id', $id)->get();
-        return response()->json(array('res' => 'berhasil', 'data' => $data));
+        $gudang = gudang::where('gudang_id','!=', $id)->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $data, 'gudang' => $gudang));
     }
 
     public function inventoryGudangCariBarang(Request $request)
     {
         $id = $request->barang;
         $data = serial::where('inventory_id', $id)->where('userReq_det_id', NULL)->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    public function inventoryGudangCariBarangDestination(Request $request)
+    {
+        $id = $request->barang;
+        $data = inventory::where('gudang_id', $id)->get();
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 }

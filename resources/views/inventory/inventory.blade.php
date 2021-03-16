@@ -94,8 +94,29 @@
                                 </select>
                             </div>
                             <div class="col-2">
-                                <br>
+                                <label for="">QTY</label>
                                 <input type="text" id="serial_qty" class="form-control">
+                            </div>
+                            <div class="col-10">
+                                <label for="">Destination</label>
+                                <select name="" id="destination" class="form-control">
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <br>
+                                <button class="btn btn-success" id="barang_cari_destination">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                            <div class="col-12">
+                                <label for="">Buat barang baru</label>
+                                <input type="checkbox" id="barangBaru" onclick="checkedBarang()">
+                            </div>
+                            <div class="col-12">
+                                <div id="destination_body">
+                                    <select name="" id="destination_barang" class="form-control">
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -104,7 +125,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" form="form_serial" id="form_serial_button" class="btn btn-primary">Save changes</button>
+              <button type="submit" form="form_serial" id="form_transfer" class="btn btn-primary">Transfer Item</button>
             </div>
 
           </div>
@@ -139,6 +160,9 @@
                             $.each(result.data, function (key,value) {
                                 $('#barang_data').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
                             })
+                            $.each(result.gudang, function (key,value) {
+                                $('#destination').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+                            })
                             $('#barang_data').select2({
                                 theme :'bootstrap',
                                 maximumSelectionLength: result.max_qty,
@@ -161,7 +185,7 @@
     $(document).ready(function(){
           $('#barang_cari').on('click', function(){
               var barang = $('#barang_data').val();
-            $('#serial_data').html('');
+            $('#destination_barang').html('');
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -208,5 +232,52 @@
     })
   </script>
 
+  <script>
+      $(document).ready(function(){
+          $('#barang_cari_destination').on('click', function(){
+              var barang = $('#destination').val();
+              $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+            $.ajax({
+                type: "POST",
+                url: '/inventory/gudang/cariBarangDestination',
+                data: { barang:barang}, 
+                success: function( result ) {
+                    if (result.res === 'berhasil') {
+                        $.each(result.data, function (key,value) {
+                            $('#destination_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
+                        })
+                        $('#destination_barang').select2({
+                            theme :'bootstrap',
+                            maximumSelectionLength: result.max_qty,
+                            formatSelectionTooBig: function (limit) {
+
+                                // Callback
+
+                                return 'Too many selected items';
+                            }
+                        });
+                        //$('#serial_body').removeAttr('hidden');
+                    }
+                }
+            });
+          })
+      })
+  </script>
+
+
+<script>
+    function checkedBarang() {
+        if ($('#barangBaru').is(':checked')) {
+            $('#destination_body').attr('hidden', true);
+        } else {
+            $('#barangBaru').prop('checked', false)
+            $('#destination_body').attr('hidden', false);
+        }
+    }
+</script>
 
 @endsection
