@@ -10,6 +10,9 @@
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
                   <li>
+                    <button type="button" class="btn btn-sm btn-info" id="button_transfer">Transfer Barang</button>
+                  </li>
+                  <li>
                     <button type="button" class="btn btn-sm btn-success" id="button_modal">Tambah Data</button>
                   </li>
                 </ul>

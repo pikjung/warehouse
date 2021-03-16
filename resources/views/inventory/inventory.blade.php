@@ -5,7 +5,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
               <div class="x_title">
-                <h2> Inventory <small>Table</small></h2>
+                <h2> Inventory <small></small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -23,8 +23,6 @@
                                     <div class="tile-stats">
                                     <div class="icon">
                                     </div>
-                                    <div class="count">Gudang</div>
-            
                                     <h3>{{$item->nama_gudang}}</h3>
                                     <p><a href="/inventory/barang_masuk/{{$item->gudang_id}}"><i class="fa fa-arrow-right"></i>Show</a></p>
                                     </div>
