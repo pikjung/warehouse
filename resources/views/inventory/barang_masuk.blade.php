@@ -236,6 +236,7 @@
 
       <script type="text/javascript">
         $(document).ready(function() {
+          var id = {!! json_encode($id) !!};
             $('#data_barang').DataTable({
                 processing: true,
                 serverSide: true,
@@ -246,7 +247,7 @@
                     {extend: 'excel', title: 'Contoh File Excel Datatables'},
                     {extend:'print',title: 'Contoh Print Datatables'},
                 ],
-                ajax: '/inventory/barang_masuk/view',
+                ajax: '/inventory/barang_masuk/view/'+id,
                 columns: [
                     {data: 'nama_disti', name: 'nama_disti'},
                     {data: 'tanggal', name: 'tanggal'},

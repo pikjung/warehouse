@@ -14,6 +14,8 @@ use DataTables;
 
 use DB;
 
+use App\Models\gudang;
+
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\log;
@@ -30,7 +32,8 @@ class inventoryController extends Controller
     //gudang
     public function inventory()
     {
-        return view('/inventory/inventory');
+        $gudang = gudang::all();
+        return view('/inventory/inventory', ['gudang' => $gudang]);
     }
 
     //barang masuk
@@ -42,7 +45,7 @@ class inventoryController extends Controller
 
     public function barang_masukGet($id)
     {
-        $data = inventory::where('quantity', '>','0')->orderBy('created_at','desc');
+        $data = inventory::where('quantity', '>','0')->where('gudang_id',$id)->orderBy('created_at','desc');
 
         return Datatables::of($data)
         ->addColumn('action', function ($data)
