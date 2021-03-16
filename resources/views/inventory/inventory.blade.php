@@ -72,10 +72,12 @@
                         <div id="barang_body" hidden>
                             <div class="row">
                                 <div class="col-10">
-                                    <select id="barang_data" multiple="multiple" style="width:100%">
+                                    <label for="">Pilih Barang</label>
+                                    <select id="barang_data"  style="width:100%">
                                     </select>
                                 </div>
                                 <div class="col-2">
+                                    <br>
                                     <button class="btn btn-success" id="barang_cari">
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
@@ -87,13 +89,13 @@
                     <div id="serial_body" hidden>
                         <div class="row">
                             <div class="col-10">
+                                <label for="">Pilih Serial</label>
                                 <select id="serial_data" multiple="multiple" style="width:100%">
                                 </select>
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-success" id="serial_cari">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
+                                <br>
+                                <input type="text" id="serial_qty" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -130,7 +132,7 @@
                 });
                 $.ajax({
                     type: "POST",
-                    url: '/inventory/gudang/gudang',
+                    url: '/inventory/gudang/cariGudang',
                     data: { gudang:gudang}, 
                     success: function( result ) {
                         if (result.res === 'berhasil') {
@@ -158,8 +160,8 @@
 <script>
     $(document).ready(function(){
           $('#barang_cari').on('click', function(){
-              var gudang = $('#barang_data').val();
-            $('#barang_data').html('');
+              var barang = $('#barang_data').val();
+            $('#serial_data').html('');
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -167,14 +169,14 @@
             });
             $.ajax({
                 type: "POST",
-                url: '/inventory/gudang/barang',
-                data: { gudang:gudang}, 
+                url: '/inventory/gudang/cariBarang',
+                data: { barang:barang}, 
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                         $.each(result.data, function (key,value) {
-                            $('#barang_data').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial)); 
+                            $('#serial_data').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial)); 
                         })
-                        $('#barang_data').select2({
+                        $('#serial_data').select2({
                             theme :'bootstrap',
                             maximumSelectionLength: result.max_qty,
                             formatSelectionTooBig: function (limit) {
@@ -184,12 +186,26 @@
                                 return 'Too many selected items';
                             }
                         });
-                        $('#barang_body').removeAttr('hidden');
+                        $('#serial_body').removeAttr('hidden');
                     }
                 }
             });
           })
       })
+  </script>
+
+  <script>
+      $(document).ready(function (){
+        $('#serial_data').on('select2:close', function (evt) {
+        var count = $(this).select2('data').length
+        if(count==0){
+          $('#serial_qty').val(0);
+        }
+        else{
+            $('#serial_qty').val(count);
+        }
+      })
+    })
   </script>
 
 
