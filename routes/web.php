@@ -140,11 +140,11 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
  //INVENTORY
  
         //gudang
-        Route::get('/inventory', [transaksiController::class, 'inventory']);
+        Route::get('/inventory', [inventoryController::class, 'inventory']);
 
         //barang masuk
         Route::get('/inventory/barang_masuk/{id}',[inventoryController::class, 'barang_masukView']);
-        Route::get('/inventory/barang_masuk/view',[inventoryController::class, 'barang_masukGet']);
+        Route::get('/inventory/barang_masuk/view/{id}',[inventoryController::class, 'barang_masukGet']);
         Route::post('/inventory/barang_masuk/tambah',[inventoryController::class, 'barang_masukTambah']);
         Route::post('/inventory/barang_masuk/editGet',[inventoryController::class, 'barang_masukEditGet']);
         Route::post('/inventory/barang_masuk/editStore',[inventoryController::class, 'barang_masukEditStore']);
