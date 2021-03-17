@@ -185,7 +185,7 @@
     $(document).ready(function(){
           $('#barang_cari').on('click', function(){
               var barang = $('#barang_data').val();
-            $('#destination_barang').html('');
+            $('#serial_data').html('');
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -236,34 +236,35 @@
       $(document).ready(function(){
           $('#barang_cari_destination').on('click', function(){
               var barang = $('#destination').val();
+              $('#destination_barang').html('');
               $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-            $.ajax({
-                type: "POST",
-                url: '/inventory/gudang/cariBarangDestination',
-                data: { barang:barang}, 
-                success: function( result ) {
-                    if (result.res === 'berhasil') {
-                        $.each(result.data, function (key,value) {
-                            $('#destination_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
-                        })
-                        $('#destination_barang').select2({
-                            theme :'bootstrap',
-                            maximumSelectionLength: result.max_qty,
-                            formatSelectionTooBig: function (limit) {
-
-                                // Callback
-
-                                return 'Too many selected items';
-                            }
-                        });
-                        //$('#serial_body').removeAttr('hidden');
-                    }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            });
+                });
+                $.ajax({
+                    type: "POST",
+                    url: '/inventory/gudang/cariBarangDestination',
+                    data: { barang:barang}, 
+                    success: function( result ) {
+                        if (result.res === 'berhasil') {
+                            $.each(result.data, function (key,value) {
+                                $('#destination_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
+                            })
+                            $('#destination_barang').select2({
+                                theme :'bootstrap',
+                                maximumSelectionLength: result.max_qty,
+                                formatSelectionTooBig: function (limit) {
+
+                                    // Callback
+
+                                    return 'Too many selected items';
+                                }
+                            });
+                            //$('#serial_body').removeAttr('hidden');
+                        }
+                    }
+                });
           })
       })
   </script>
@@ -278,6 +279,95 @@
             $('#destination_body').attr('hidden', false);
         }
     }
+</script>
+
+<script>
+    //transfer store
+    $(document).ready(function(){
+        $('#form_transfer').on('click', function(){
+            if ($('#barangBaru').is(':checked')) {
+                var barang = $('#barang_data').val();
+                var serial = $('#serial_data').val();
+                var qty = $('#serial_qty').val();
+                var destination = $('#destination').val();
+                console.log("barang : " + barang + " serial :" + serial + " quantity: "+ qty + " destination: " + destination);
+                if (serial === null || destination === null || barang === null) {
+                    new PNotify({
+                        title: 'Error!!',
+                        text: 'Data tidak boleh Kosong',
+                        type: 'error',
+                        styling: 'bootstrap3'
+                    });
+                } else {
+
+                //store
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: '/inventory/transferStoreMake',
+                    data: { barang:barang, serial:serial, destination:destination, qty:qty}, 
+                    success: function( result ) {
+                        if (result.res === 'berhasil') {
+                            new PNotify({
+                                title: 'Success!!',
+                                text: 'Berhasil',
+                                type: 'success',
+                                styling: 'bootstrap3'
+                            });
+                            $('#modal_transfer').modal('hide');
+                        }
+                    }
+                });
+            }
+
+                
+            } else {
+                var barang = $('#barang_data').val();
+                var serial = $('#serial_data').val();
+                var qty = $('#serial_qty').val();
+                var destination = $('#destination').val();
+                var destination_barang = $('#destination_barang').val();
+
+                if (serial === null || destination === null || barang === null || destination_barang === null) {
+                    new PNotify({
+                        title: 'Error!!',
+                        text: 'Data tidak boleh Kosong',
+                        type: 'error',
+                        styling: 'bootstrap3'
+                    });
+                } else {
+
+                //store
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: '/inventory/transferStore',
+                    data: { barang:barang, serial:serial, destination:destination, destination_barang:destination_barang, qty:qty}, 
+                    success: function( result ) {
+                        if (result.res === 'berhasil') {
+                            new PNotify({
+                                title: 'Success!!',
+                                text: '',
+                                type: 'success',
+                                styling: 'bootstrap3'
+                            });
+                            $('#modal_transfer').modal('hide');
+                        }
+                    }
+                });
+            }
+                console.log("barang : " + barang + " serial :" + serial + " quantity: "+ qty + " destination: " + destination + " destination_barang: " + destination_barang);
+            }
+        })
+    })
 </script>
 
 @endsection

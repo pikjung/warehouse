@@ -256,4 +256,91 @@ class inventoryController extends Controller
         $data = inventory::where('gudang_id', $id)->get();
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
+
+    public function inventoryTransfer(Request $request)
+    {
+        DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Store' ,'bagian' => 'Transfer']);
+        $validasi = Validator::make($request->all(),[
+            'barang' => 'required',
+            'serial' => 'required',
+            'destination' => 'required',
+            'destination_barang' => 'required',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+        $inventory_awal = inventory::find($request->barang);
+        $inventory_qty = $inventory_awal->quantity - $request->qty;
+        $inventory_qty_awal = $inventory_awal->quantity_awal - $request->qty;
+        $inventory_awal->quantity = $inventory_qty;
+        $inventory_awal->quantity_awal = $inventory_qty_awal;
+        $inventory_awal->save();
+
+        $inventory = inventory::find($request->destination_barang);
+        $qty = $request->qty + $inventory->quantity;
+        $qty_awal = $request->qty + $inventory->quantity_awal;
+
+        $inventory->quantity = $qty;
+        $inventory->quantity_awal = $qty_awal;
+        $inventory->save();
+        
+        foreach ($request->serial  as $key => $value) {
+            $data = serial::find($request->serial[$key]);
+            $data->inventory_id = $request->destination_barang;
+            $data->save();
+        }
+        
+        return response()->json(array('res' => 'berhasil'));
+    }
+
+    public function inventoryTransferMake(Request $request)
+    {
+        DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Store' ,'bagian' => 'Transfer']);
+        $validasi = Validator::make($request->all(),[
+            'barang' => 'required',
+            'serial' => 'required',
+            'destination' => 'required',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+
+        $id = uniqid();
+        $inventory = inventory::find($request->barang);
+        $qty = $inventory->quantity - $request->qty;
+        $qty_awal = $inventory->quantity_awal - $request->qty;
+        $inventory->quantity = $qty;
+        $inventory->quantity_awal = $qty_awal;
+        inventory::create([
+            'inventory_id' => $id,
+            'gudang_id' => $request->destination,
+            'nama_disti' => $inventory->nama_disti,
+            'tanggal' => date('Y-m-d'),
+            'nama_barang' => $inventory->nama_barang,
+            'spek' => $inventory->spek,
+            'pn' => $inventory->pn,
+            'sku' => $inventory->sku,
+            'quantity' => $request->qty,
+            'quantity_awal' => $request->qty,
+        ]);
+        $inventory->save();
+        
+        foreach ($request->serial  as $key => $value) {
+            $data = serial::find($request->serial[$key]);
+            $data->inventory_id = $id;
+            $data->save();
+        }
+        
+        return response()->json(array('res' => 'berhasil'));
+    }
 }
