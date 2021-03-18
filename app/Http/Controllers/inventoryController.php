@@ -57,6 +57,11 @@ class inventoryController extends Controller
         {
             return '<a href="#" id="sn_detail" onclick=sn_detail("'.$data->inventory_id.'") class="btn btn-sm btn-secondary"><i class="glyphicon glyphicon-eye-open"></i></a>';
         })
+        ->editColumn('jumlah_sn', function ($data)
+        {
+            $sn = serial::where('inventory_id', $data->inventory_id)->where('userReq_det_id', null)->count();
+            return $sn;
+        })
         ->rawColumns(['sn','action'])
         ->editColumn('inventory_id','{{$inventory_id}}')
         ->make(true);
@@ -79,9 +84,12 @@ class inventoryController extends Controller
             return response()->json($returnData, 500);
         }
 
+        $gudang_id = $request->id;
+
         $id = uniqid();
         $data = inventory::create([
             'inventory_id' => $id,
+            'gudang_id' => $gudang_id,
             'nama_disti' => 'Gudang GSC',
             'tanggal' => date('Y-m-d'),
             'nama_barang' => $request->nama_barang,

@@ -27,6 +27,7 @@
                                 <th>Nama Barang</th>
                                 <th>SPEK</th>
                                 <th>Qty</th>
+                                <th>SN tersisa</th>
                                 <th>SN List</th>
                                 <th>Action</th>
                               </tr>
@@ -254,6 +255,7 @@
                     {data: 'nama_barang', name: 'nama_barang'},
                     {data: 'spek', name: 'spek' },
                     {data: 'quantity', name: 'quantity' },
+                    {data: 'jumlah_sn', name: 'jumlah_sn' },
                     {data: 'sn', name:'sn', orderable: false, searchable:false},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                 ],
@@ -264,6 +266,7 @@
       <script>
         $(document).ready(function () {
           $('#save_barang').click(function () {
+            var id = {!! json_encode($id) !!};
             var nama_barang = $('#nama_barang').val();
             var spek = $('#spek').val();
             var quantity = $('#quantity').val();
@@ -284,7 +287,7 @@
               $.ajax({
                   type: "POST",
                   url: '/inventory/barang_masuk/tambah',
-                  data: { nama_barang:nama_barang, spek:spek, quantity:quantity}, 
+                  data: { nama_barang:nama_barang, spek:spek, quantity:quantity, id:id}, 
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         new PNotify({
