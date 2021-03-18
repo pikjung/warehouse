@@ -90,8 +90,8 @@ class transaksiController extends Controller
     public function pouser()
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'PO USER']);
-        DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'PO USER']);
-        return view('/transaksi/pouser');
+        $data = customer::all();
+        return view('/transaksi/pouser', compact('data'));
     }
 
     public function pouserView()
@@ -865,24 +865,14 @@ class transaksiController extends Controller
     
     public function autofill(Request $request)
     {
-        $nama_customer = $request->nama_customer;
-
-        $data =pouser::where('customer', 'LIKE', '%'.$nama_customer.'%')->get();
-        $li = '';
-        foreach($data as $item)
-            {
-                $li = $li. '<li>'.$item->customer.'</li>';
-            }
-
-        $ul = '<ul>'.$li.'</ul>';
-
-        return $ul;
+        $data = customer::all();
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 
     public function autofillCom(Request $request)
     {
         $nama_customer = $request->nama_customer;
-        $data =pouser::where('customer', 'LIKE', '%'.$nama_customer.'%')->first();
+        $data =customer::find($nama_customer);
         $alamat = $data->alamat;
         $nama_customer = $data->customer;
         return response()->json(array('alamat' => $alamat, 'nama_customer' => $nama_customer));

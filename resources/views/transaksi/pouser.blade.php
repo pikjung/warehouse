@@ -60,8 +60,15 @@
                 <div class="col-6">
                   <div class="form-group">
                     <label for="">Customer</label>
-                    <input id="nama_customer" class="form-control" autocomplete="off">
-                    <div id="nama_customer_select"></div>
+                    <select name="" id="nama_customer" class="form-control"></select>
+                    <!-- <input id="nama_customer" class="form-control" autocomplete="off"> 
+                    <div id="nama_customer_select"></div>-->
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="alamat">Alamat NPWP <i class="text-danger">*terisi otomatis</i> </label>
+                    <textarea name="" id="alamat_npwp" class="form-control" readonly></textarea>
                   </div>
                 </div>
                 <div class="col-6">
@@ -84,7 +91,7 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="alamat">Alamat</label>
+                    <label for="alamat">Alamat Pengiriman</label>
                     <textarea name="" id="alamat" class="form-control"></textarea>
                   </div>
                 </div>
@@ -137,8 +144,14 @@
                     <div class="col-6">
                         <div class="form-group">
                           <label for="">Customer</label>
-                          <input id="nama_customer_edit" class="form-control">
+                          <select name="" id="nama_customer_edit" class="form-control"></select>
                           <input type="hidden" id="edit_id">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label for="alamat">Alamat NPWP <i class="text-danger">*terisi otomatis</i> </label>
+                          <textarea name="" id="alamat_npwp_edit" class="form-control" readonly></textarea>
                         </div>
                       </div>
                       <div class="col-6">
@@ -383,25 +396,34 @@
       </div>
 
       <script>
-        $(document).ready(function(){
-          $('#nama_customer').keyup(function(){
-            var nama_customer = $(this).val();
-            $.ajaxSetup({
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                  }
-              });
-              $.ajax({
-                  type: "POST",
-                  url: '/transaksi/po/autofill',
-                  data: { nama_customer:nama_customer }, 
-                  success: function( result ) {
-                      $('#nama_customer_select').show();
-                      $('#nama_customer_select').html(result)
-                      
-                  }
-              });
+        $(document).ready(function () {
+          var data = {!! json_encode($data->toArray()) !!};
+          console.log(data)
+          $.each(data, function (key,value) {
+              $('#nama_customer').append($("<option></option>").attr("value", value.customer_id).text(value.nama_customers)); 
           })
+          $('#nama_customer').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
+
+          $.each(data, function (key,value) {
+              $('#nama_customer_edit').append($("<option></option>").attr("value", value.customer_id).text(value.nama_customers)); 
+          })
+          $('#nama_customer_edit').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
         })
       </script>
 
@@ -420,8 +442,29 @@
             url: '/transaksi/po/autofillCom',
             data: { nama_customer:nama_customer }, 
             success: function( result ) {
-              $('#nama_customer').val(result.nama_customer)
-                $('#alamat').html(result.alamat)
+                $('#alamat_npwp').html(result.alamat)
+            }
+        });
+    })
+  })
+</script>
+
+<script>
+  $(document).ready(function(){
+    $('#nama_customer_edit').change(function(){
+      $('#nama_customer_select').hide('')
+      var nama_customer = $(this).val();
+      $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: '/transaksi/po/autofillCom',
+            data: { nama_customer:nama_customer }, 
+            success: function( result ) {
+                $('#alamat_npwp_edit').html(result.alamat)
             }
         });
     })
