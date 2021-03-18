@@ -59,4 +59,9 @@ class dashboardController extends Controller
         return response()->json(array('res' => 'berhasil', 'type' => 'pouser', 'inventory' => $inventory /*',pouser' => $pouser */));
         }
     }
+
+    public function checkDN(Request $request)
+    {
+        
+    }
 }

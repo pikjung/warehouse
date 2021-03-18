@@ -53,6 +53,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
  //DASHBOARD
  Route::get('/dashboard', [dashboardController::class, 'index'])->name('home');
  Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
+ Route::post('/dashboard/checkDN', [dashboardController::class, 'checkDN']);
 
 
  //GSC
