@@ -51,9 +51,9 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/account/activated', [accountController::class, 'accountActivated']);
     
  //DASHBOARD
- Route::get('/dashboard', [dashboardController::class, 'index'])->name('home');
- Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
- Route::post('/dashboard/checkDN', [dashboardController::class, 'checkDN']);
+    Route::get('/dashboard', [dashboardController::class, 'index'])->name('home');
+    Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
+    Route::post('/dashboard/checkDN', [dashboardController::class, 'checkDN']);
 
 
  //GSC

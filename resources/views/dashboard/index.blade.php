@@ -35,23 +35,15 @@ $dashboard = app('App\Http\Controllers\dashboardController');
         </div>
       </div>
     </div>
-      <br />
-    </div>
 
 
     <div class="row">
       <div class="col-md-12 col-sm-12 ">
           <div class="x_panel">
             <div class="x_title">
-              <h2> PO User <small>Table</small></h2>
+              <h2> Check DN</h2>
               <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li>
-                  <a href="/transaksi/arsip" role="button" class="btn btn-sm btn-primary text-light">Data Arsip</a>
-                </li>
-                <li>
-                  <button type="button" class="btn btn-sm btn-success" id="button_modal">Tambah Data</button>
                 </li>
               </ul>
               <div class="clearfix"></div>
@@ -60,12 +52,12 @@ $dashboard = app('App\Http\Controllers\dashboardController');
                 <div class="row">
                     <div class="col-sm-12">
                       <div class="card-box table-responsive">
-                        <div class="form-control">
+                        <div class="form-group">
                           <label for="">DN Checking</label>
                           <input type="text" id="checkDN" class="form-control">
                           <div id="pesan"></div>
                         </div>
-                        <div class="form-control">
+                        <div class="form-group">
                           <button type="button" class="btn btn-primary" id="button_check">Check</button>
                         </div>
                       </div>
@@ -88,27 +80,29 @@ $dashboard = app('App\Http\Controllers\dashboardController');
                 type: 'warning',
                 styling: 'bootstrap3'
             });
-          }
-          $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          });
-          $.ajax({
-              type: "POST",
-              url: '/dashboard/checkDN',
-              data: { check:check }, 
-              success: function( result ) {
-                  if ( result.res === 'berhasil') {
-                      $('#pesan').html('<b class="text-danger">DN tidak dapat digunakan, sudah digunakan di bagian POUSER</b>');
-                    } else if (result.dn === 'delivery') {
-                      $('#pesan').html('<b class="text-danger">DN tidak dapat digunakan, sudah digunakan di bagian POUSER</b>');
-                    } else {
-                      $('#pesan').html('<b class="text-success">DN dapat digunakan');
+          } else {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: '/dashboard/checkDN',
+                data: { check:check }, 
+                success: function( result ) {
+                  if (result.res === 'berhasil') {
+                      if ( result.dn === 'pouser') {
+                        $('#pesan').html('<b class="text-danger">DN tidak dapat digunakan, sudah digunakan di bagian POUSER</b>');
+                      } else if (result.dn === 'delivery') {
+                        $('#pesan').html('<b class="text-danger">DN tidak dapat digunakan, sudah digunakan di bagian POUSER</b>');
+                      } else {
+                        $('#pesan').html('<b class="text-success">DN dapat digunakan');
+                      }
                     }
-                  }
-              }
-          });
+                }
+            });
+          }
         })
       })
     </script>

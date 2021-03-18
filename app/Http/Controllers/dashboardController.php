@@ -62,6 +62,16 @@ class dashboardController extends Controller
 
     public function checkDN(Request $request)
     {
-        
+        $check = $request->check;
+        $pouser = pouser::where('dn_no', $check)->count();
+        $paket = paket::where('dn_no', $check)->count();
+
+        if ($pouser > 0) {
+            return response()->json(array('res' => 'berhasil', 'dn' => 'pouser'));
+        } else if ($paket > 0) {
+            return response()->json(array('res' => 'berhasil', 'dn' => 'delivery'));
+        } else {
+            return response()->json(array('res' => 'berhasil', 'dn' => 'available'));
+        }
     }
 }
