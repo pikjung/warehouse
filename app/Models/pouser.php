@@ -11,7 +11,7 @@ class pouser extends Model
 
     protected $table = 'user_req';
     protected $primaryKey = 'userReq_id';
-    protected $fillable = ['userReq_id','po_customer','dn_no','tanggal','status','customer','penerima','no_telp','payment_terms','alamat','no_invoice','no_resi','paket_id','tgl_inv','tgl_resi','tgl_payment','noted'];
+    protected $fillable = ['userReq_id','customer_id','po_customer','dn_no','tanggal','status','customer','penerima','no_telp','payment_terms','alamat','no_invoice','no_resi','paket_id','tgl_inv','tgl_resi','tgl_payment','noted'];
     protected $casts = [
         'id' => 'string'
     ];

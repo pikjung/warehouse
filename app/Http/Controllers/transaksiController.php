@@ -144,14 +144,18 @@ class transaksiController extends Controller
             return response()->json(array('res' => 'gagal'));
         }
         $id = uniqid();
+        $customer_id = $request->nama_customer;
+        $customer_data = customer::find($customer_id);
+        $nama_customer = $customer_data->nama_customers;
 
         $data = pouser::create([
             'userReq_id' => $id,
+            'customer_id' => $request->nama_customer,
             'po_customer' => $request->no_po,
             'dn_no' => $request->dn_no,
             'tanggal' => date('Y-m-d'),
             'status' => 'po',
-            'customer' => $request->nama_customer,
+            'customer' => $nama_customer,
             'penerima' => $request->to_name,
             'no_telp' => $request->no_telp,
             'fax' => $request->fax,

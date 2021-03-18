@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="">No Telp</label>
+                    <label for="">No Telp bersangkutan</label>
                     <input type="text" class="form-control" id="no_telp">
                   </div>
                 </div>
@@ -162,7 +162,7 @@
                       </div>
                       <div class="col-6">
                         <div class="form-group">
-                          <label for="">No Telp</label>
+                          <label for="">No Telp bersangkutan</label>
                           <input type="text" class="form-control" id="no_telp_edit">
                         </div>
                       </div>
@@ -174,7 +174,7 @@
                       </div>
                       <div class="col-6">
                         <div class="form-group">
-                          <label for="alamat">Alamat</label>
+                          <label for="alamat">Alamat Pengiriman</label>
                           <textarea name="" id="alamat_edit" class="form-control"></textarea>
                         </div>
                       </div>
