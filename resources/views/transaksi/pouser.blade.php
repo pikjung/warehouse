@@ -25,6 +25,7 @@
                           <table id="data_pouser" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                               <tr>
+                                <th>Customer</th>
                                 <th width="10%">PO No</th>
                                 <th width="10%">DN No.</th>
                                 <th>Status</th>
@@ -486,6 +487,7 @@
                 ],
                 ajax: '/transaksi/po/view',
                 columns: [
+                    {data: 'customer', name: 'customer'},
                     {data: 'po_customer', name: 'po_customer'},
                     {data: 'dn_no', name: 'dn_no'},
                     {data: 'status', name: 'status' },
@@ -587,7 +589,7 @@
                 data: { id:id }, 
                 success: function( result ) {
                     if (result.res === 'berhasil') {
-                        $('#nama_customer_edit').val(result.data.customer);
+                        $('#nama_customer_edit').val(result.customer_id);
                         $('#no_po_edit').val(result.data.po_customer);
                         $('#noted_edit').val(result.data.noted);
                         $('#edit_id').val(result.data.userReq_id);

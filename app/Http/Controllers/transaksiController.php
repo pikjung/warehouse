@@ -173,8 +173,9 @@ class transaksiController extends Controller
         $id = $request->id;
 
         $data = pouser::find($id);
+        $customer_id = $data->customer_id;
 
-        return response()->json(array('res' => 'berhasil', 'data' => $data));
+        return response()->json(array('res' => 'berhasil', 'data' => $data, 'customer_id' => $customer_id));
     }
 
     public function pouserEditStore(Request $request)
@@ -199,8 +200,11 @@ class transaksiController extends Controller
         $id = $request->id;
 
         $data = pouser::find($id);
+        $customer = customer::find($request->nama_customer);
+        $nama_customer = $customer->nama_customers;
 
-        $data->customer = $request->nama_customer;
+        $data->customer_id = $request->nama_customer;
+        $data->customer = $nama_customer;
         $data->dn_no = $request->dn_no;
         $data->po_customer = $request->no_po;
         $data->penerima = $request->to_name;
