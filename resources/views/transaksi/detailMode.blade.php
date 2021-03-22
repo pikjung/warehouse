@@ -106,7 +106,7 @@
             <div class="modal-body">
                 <div class="form-group">
                   <label for="">Pilih Dari Inventory</label>
-                  <select name="" id="pilih_barang" class="form-control" style="width: 100%"></select>
+                  <select name="" id="pilih_barang_edit" class="form-control" style="width: 100%"></select>
                 </div>
                 <div class="form-group">
                     <label for="">Nama Barang</label>
