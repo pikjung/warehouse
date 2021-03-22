@@ -248,7 +248,7 @@
             <tr>
               <td class="fnt-12 laep" width="30%">
                   <b>{{$pogsc->nama_disti}}</b> <br> <br>
-                    Bp. {{$pogsc->name}}<br>
+                    <b>{{$pogsc->name}}</b><br>
                   {{$pogsc->alamat}} <br>
                   <br>
                   <b>
@@ -256,17 +256,10 @@
                     No. Telp: {{$pogsc->no_telp}}
                   </b>
               </td>
-              <td width="30%" class="fnt-12 laep" id="edit_ship">
-                  <b>PT. Gosyen Solusindo Cemerlang</b> <br>  <br>
-                  Ibu Faradila<br>
-                  <br>
-                  Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430 
+              <td width="30%" class="fnt-12 laep">
+                  {{$pogsc->ship_to}}
                   <br>
                   <br>
-                  <b>
-                      Fax : <br>
-                      Telp : <br>
-                  </b>
               </td>
               <td width="40%" class="fnt-12 leap">
                 {{$pogsc->noted}}

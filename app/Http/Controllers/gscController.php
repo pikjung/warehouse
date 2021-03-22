@@ -333,6 +333,12 @@ class gscController extends Controller
        $po = pogsc::find($id);
        $po->status = 'diterima';
        $nama_disti = $po->nama_disti;
+       $gudang_id = $po->gudang_id;
+        if ($gudang_id == null) {
+            $gudang_id = '5ece4797eaf5e';
+        } else {
+            $gudang_id = $gudang_id;
+        }
        $po->tgl_terima = date('Y-m-d');
        $data = pogsc_det::where('data_barang_id',$id)->get();
 
@@ -340,6 +346,7 @@ class gscController extends Controller
             $id_uniq = uniqid();
            inventory::create([
                'inventory_id' => $id_uniq,
+
                'nama_disti' => $nama_disti,
                'tanggal' => date('Y-m-d'),
                'nama_barang' => $key['nama_barang'],
