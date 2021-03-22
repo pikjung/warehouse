@@ -39,6 +39,27 @@ class gudangController extends Controller
 
     public function gudangTambah(Request $request)
     {
-        
+        $validasi = Validator::make($request->all(),[
+            'nama_gudang' => 'required',
+            'alamat_gudang' => 'required'
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+
+        $id = uniqid();
+
+        gudang::create([
+            'gudang_id' => $id,
+            'nama_gudang' => $request->nama_gudang,
+            'alamat_gudang' => $request->alamat_gudang,
+        ]);
+
+        return response()->json(array('res' => 'berhasil'));
     }
 }

@@ -31,6 +31,8 @@ use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\storeController;
 
+use App\Http\Controllers\gudangController;
+
     
 Auth::routes();
 
