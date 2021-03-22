@@ -148,6 +148,14 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
         Route::post('/inventory/gudang/cariBarang', [inventoryController::class, 'inventoryGudangCariBarang']);
         Route::post('/inventory/gudang/cariBarangDestination', [inventoryController::class, 'inventoryGudangCariBarangDestination']);
 
+
+        //gudang crud
+        Route::get('/gudang', [gudangController::class, 'gudang']);
+        Route::get('/gudang/view', [gudangController::class, 'gudangView']);
+        Route::post('/gudang/tambah', [gudangController::class, 'gudangTambah']);
+        Route::post('/gudang/editGet', [gudangController::class, 'gudangEditGet']);
+        Route::post('/gudang/editStore', [gudangController::class, 'gudangEditStore']);
+
         //transfer
         Route::post('/inventory/transferStoreMake', [inventoryController::class, 'inventoryTransferMake']);
         Route::post('/inventory/transferStore', [inventoryController::class, 'inventoryTransfer']);

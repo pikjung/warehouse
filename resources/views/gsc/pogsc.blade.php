@@ -22,6 +22,7 @@
                           <table id="data_po" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                               <tr>
+                                <th>Nama Disti</th>
                                 <th width="10%">NO PO</th>
                                 <th>Tanggal</th>
                                 <th>Status</th>
@@ -350,6 +351,7 @@
                 ],
                 ajax: '/gsc/pogsc/view',
                 columns: [
+                    {data: 'nama_disti', name: 'nama_disti'},
                     {data: 'no_po_gsc', name: 'no_po_gsc'},
                     {data: 'tanggal', name: 'tanggal'},
                     {data: 'status', name: 'status' },
