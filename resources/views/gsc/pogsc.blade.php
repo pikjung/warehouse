@@ -87,6 +87,18 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
+                    <label for="gudang">Gudang</label>
+                    <select name="" id="gudang_id" class="form-control"></select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="ship_to">Ship to</label>
+                    <textarea name="" id="ship_to" class="form-control"></textarea>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
                     <label for="">No PO</label>
                     <input type="text" class="form-control" id="no_po">
                 </div>
@@ -154,6 +166,18 @@
                   <div class="form-group">
                     <label for="alamat">Alamat</label>
                     <input type="text" class="form-control" id="alamat_edit">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="gudang">Gudang</label>
+                    <select name="" id="gudang_id_edit" class="form-control"></select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="ship_to">Ship to</label>
+                    <textarea name="" id="ship_to_edit" class="form-control"></textarea>
                   </div>
                 </div>
                 <div class="col-6">
