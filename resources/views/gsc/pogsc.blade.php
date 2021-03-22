@@ -88,7 +88,9 @@
                 <div class="col-6">
                   <div class="form-group">
                     <label for="gudang">Gudang</label>
-                    <select name="" id="gudang_id" class="form-control"></select>
+                    <select name="" id="gudang_id" class="form-control">
+                      <option value="-- Other --">-- Other --</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-6">
@@ -171,7 +173,9 @@
                 <div class="col-6">
                   <div class="form-group">
                     <label for="gudang">Gudang</label>
-                    <select name="" id="gudang_id_edit" class="form-control"></select>
+                    <select name="" id="gudang_id_edit" class="form-control">
+                      <option value="">-- Other --</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-6">
@@ -314,6 +318,97 @@
       </div>
 
       <script>
+        $(document).ready(function () {
+          var gudang = {!! json_encode($gudang->toArray()) !!};
+          console.log(gudang)
+          $.each(gudang, function (key,value) {
+              $('#gudang_id').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+          })
+          $('#gudang_id').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
+          
+          $("#gudang_id").select2({
+              width: '100%' // need to override the changed default
+          });
+
+          $.each(gudang, function (key,value) {
+              $('#gudang_id_edit').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+          })
+          $('#gudang_id_edit').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
+          $("#gudang_id_edit").select2({
+              width: '100%' // need to override the changed default
+          });
+        })
+      </script>
+
+<script>
+  $(document).ready(function(){
+    $('#gudang_id').change(function(){
+      var gudang_id = $(this).val();
+      if (gudang_id === '') {
+        $('#ship_to').val('');
+      } else {
+      $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: '/gsc/gudang/autofillCom',
+            data: { gudang_id:gudang_id }, 
+            success: function( result ) {
+               $('#ship_to').val('');
+               $('#ship_to').val(result.alamat_gudang);
+            }
+        });
+      }
+    })
+  })
+</script>
+
+<script>
+  $(document).ready(function(){
+    $('#gudang_id_edit').change(function(){
+      var gudang_id = $(this).val();
+      if (gudang_id === '') {
+        $('#ship_to_edit').val('');
+      } else {
+      $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: '/gsc/gudang/autofillCom',
+            data: { gudang_id:gudang_id }, 
+            success: function( result ) {
+               $('#ship_to_edit').val('');
+               $('#ship_to_edit').val(result.alamat_gudang);
+            }
+        });
+      }
+    })
+  })
+</script>
+
+      <script>
         $(document).ready(function(){
           $('#nama_disti').keyup(function(){
             var nama_disti = $(this).val();
@@ -398,8 +493,10 @@
             var no_telp = $('#no_telp').val();
             var fax = $('#fax').val();
             var alamat = $('#alamat').val();
+            var gudang_id = $('#gudang_id').val();
+            var ship_to = $('#ship_to').val();
 
-            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '') {
+            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '') {
               new PNotify({
                   title: 'Data Kosong!!',
                   text: 'Data harap tidak dikosongkan!',
@@ -415,7 +512,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/tambah',
-                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat }, 
+                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id }, 
                   success: function( result ) {
                       if (result.res === 'success') {
                         new PNotify({
@@ -469,6 +566,8 @@
             $('#edit_id').val('');
             $('#payment_terms_edit').val('');
             $('#alamat_edit').val('');
+            $('#gudang_id_edit').val('');
+            $('#ship_to_edit').val('');
 
           $.ajaxSetup({
                   headers: {
@@ -490,10 +589,11 @@
                         $('#no_telp_edit').val(result.data.no_telp);
                         $('#fax_edit').val(result.data.fax);
                         $('#alamat_edit').val(result.data.alamat);
+                        $('#gudang_id_edit').val(result.data.gudang_id);
+                        $('#ship_to_edit').val(result.data.ship_to)
                         $('#modal_edit').modal('show');
                       }
                     }
-                
             });
         }
       </script>
@@ -510,9 +610,11 @@
       var no_telp = $('#no_telp_edit').val();
       var fax = $('#fax_edit').val();
       var alamat = $('#alamat_edit').val();
+      var gudang_id = $('#gudang_id_edit').val();
+      var ship_to = $('#ship_to_edit').val();
 
 
-      if (nama_disti === '' || no_po === '' || noted === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '') {
+      if (nama_disti === '' || no_po === '' || noted === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to === '') {
         new PNotify({
             title: 'Data Kosong!!',
             text: 'Data harap tidak dikosongkan!',
@@ -528,7 +630,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/editStore',
-            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat }, 
+            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id }, 
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({

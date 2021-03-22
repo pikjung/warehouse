@@ -127,8 +127,9 @@ class gscController extends Controller
 
     public function pogscView()
     {
+        $gudang = gudang::all();
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'POGSC']);
-        return view('/gsc/pogsc');
+        return view('/gsc/pogsc', compact('gudang'));
     }
 
     public function pogscGet()
@@ -177,12 +178,14 @@ class gscController extends Controller
         $id_uniq = uniqid();
         $data = pogsc::create([
             'data_barang_id' => $id_uniq,
+            'gudang_id' => $request->gudang_id,
             'nama_disti' => $request->nama_disti,
             'name' => $request->to_name,
             'no_telp' => $request->no_telp,
             'fax' => $request->fax,
             'alamat' => $request->alamat,
             'no_po_gsc' => $request->no_po,
+            'ship_to' => $request->ship_to,
             'noted' => $request->noted,
             'payment_terms' => $request->payment_terms,
             'status' => 'po',
@@ -214,6 +217,8 @@ class gscController extends Controller
         $id = $request->id;
 
         $data = pogsc::find($id);
+        $data->gudang_id = $request->gudang_id;
+        $data->ship_to = $request->ship_to;
         $data->nama_disti = $request->nama_disti;
         $data->name = $request->to_name;
         $data->no_telp = $request->no_telp;
@@ -364,6 +369,14 @@ class gscController extends Controller
         $data =distributor::find($disti_id);
         //$jsData = json_encode($data);
         return response()->json(array('data' => $data));
+    }
+
+    public function gudangAutofillCom(Request $request)
+    {
+        $gudang_id = $request->gudang_id;
+        $data =gudang::find($gudang_id);
+        //$jsData = json_encode($data);
+        return response()->json($data);
     }
 
 }

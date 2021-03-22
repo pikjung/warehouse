@@ -87,6 +87,10 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::get('/gsc/pogsc/print/{id}', [gscController::class, 'pogscPrint']);
      Route::post('/gsc/pogsc/autofill', [gscController::class, 'autofill']);
      Route::post('/gsc/pogsc/autofillCom', [gscController::class, 'autofillCom']);
+
+     //Gudang
+     Route::post('/gsc/gudang/autofill', [gscController::class, 'gudangAutofill']);
+     Route::post('/gsc/gudang/autofillCom', [gscController::class, 'gudangAutofillCom']);
  
  //TRANSAKSI
      //po user
