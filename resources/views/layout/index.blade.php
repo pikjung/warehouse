@@ -116,6 +116,9 @@
 <!-- datepicker -->
 <script src="{{asset('/vendors/datepicker/js/bootstrap-datepicker.js')}}"></script>
 
+<!-- ckeditor -->
+<script src="{{asset('/vendors/ckeditor/ckeditor.js')}}"></script>
+
 
 
   </head>

@@ -96,7 +96,7 @@
                 <div class="col-6">
                   <div class="form-group">
                     <label for="ship_to">Ship to</label>
-                    <textarea name="" id="ship_to" class="form-control"></textarea>
+                    <textarea name="" id="ship_to" class="form-control" data-editor="ClassicEditor"></textarea>
                   </div>
                 </div>
                 <div class="col-6">
@@ -181,7 +181,7 @@
                 <div class="col-6">
                   <div class="form-group">
                     <label for="ship_to">Ship to</label>
-                    <textarea name="" id="ship_to_edit" class="form-control"></textarea>
+                    <textarea name="" id="ship_to_edit" class="form-control" data-editor="ClassicEditor"></textarea>
                   </div>
                 </div>
                 <div class="col-6">
@@ -319,6 +319,33 @@
 
       <script>
         $(document).ready(function () {
+          ClassicEditor
+              .create( document.querySelector( '#ship_to' ) )
+              .then( editor => {
+                  console.log( editor );
+              } )
+              .catch( error => {
+                  console.error( error );
+              } );
+        })
+      </script>
+
+      <script>
+      $(document).ready(function () {
+        ClassicEditor
+            .create( document.querySelector( '#ship_to_edit' ) )
+            .then( editor => {
+                console.log( editor );
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+      })
+      </script>
+
+
+      <script>
+        $(document).ready(function () {
           var gudang = {!! json_encode($gudang->toArray()) !!};
           console.log(gudang)
           $.each(gudang, function (key,value) {
@@ -361,7 +388,7 @@
     $('#gudang_id').change(function(){
       var gudang_id = $(this).val();
       if (gudang_id === '') {
-        $('#ship_to').val('');
+        $('#ship_to').html('');
       } else {
       $.ajaxSetup({
             headers: {
@@ -373,8 +400,8 @@
             url: '/gsc/gudang/autofillCom',
             data: { gudang_id:gudang_id }, 
             success: function( result ) {
-               $('#ship_to').val('');
-               $('#ship_to').val(result.alamat_gudang);
+               $('#ship_to').html('');
+               $('#ship_to').html(result.alamat_gudang);
             }
         });
       }

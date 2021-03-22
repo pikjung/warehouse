@@ -3,6 +3,7 @@
 <title>Layout</title>
 <link href="{{asset('template/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 <script src="{{asset('template/vendors/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('/vendors/ckeditor/ckeditor.js')}}"></script>
 
 <!-- Main Quill library -->
 <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
