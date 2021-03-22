@@ -129,6 +129,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/transaksi/invoice/hapus', [transaksiController::class, 'invoiceHapus']);
      Route::post('/transaksi/po/autofill', [transaksiController::class, 'autofill']);
      Route::post('/transaksi/po/autofillCom', [transaksiController::class, 'autofillCom']);
+     //Route::post('/transaksi/detail/autofill', [transaksiController::class, 'autofill']);
+     Route::post('/transaksi/detail/autofillCom', [transaksiController::class, 'detailAutofillCom']);
 
 //Customer (New)
     Route::get('/customers', [transaksiController::class, 'customers']);

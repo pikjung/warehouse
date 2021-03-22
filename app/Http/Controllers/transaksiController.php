@@ -280,9 +280,14 @@ class transaksiController extends Controller
     public function detailMode($id)
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses Detail' ,'bagian' => 'PO USER']);
+        $barang = DB::table('gudang')
+                    ->join('inventorie', 'gudang.gudang_id', '=', 'inventorie.gudang_id')
+                    ->select('gudang.*', 'inventorie.*')
+                    ->orderBy('inventorie.created_at','desc')
+                    ->get();
         $pouser = pouser::find($id);
         $status = $pouser->status;
-        return view('/transaksi/detailMode', ['pouser' => $pouser], compact(['id','status']));
+        return view('/transaksi/detailMode', ['pouser' => $pouser, 'barang' => $barang], compact(['id','status']));
     }
 
     public function detailModeView($id)
@@ -386,6 +391,13 @@ class transaksiController extends Controller
         $data->delete();
 
         return response()->json(array('res' => 'berhasil'));
+    }
+
+    public function detailAutofillCom(Request $request)
+    {
+        $pilih_barang = $request->pilih_barang;
+        $data = inventory::find($pilih_barang);
+        return response()->json($data);
     }
 
     public function detailModeSerialView(Request $request)

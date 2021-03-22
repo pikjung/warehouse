@@ -57,6 +57,10 @@
             </div>
             <div class="modal-body">
                     <div class="form-group">
+                      <label for="">Pilih Dari Inventory</label>
+                      <select name="" id="pilih_barang" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
                         <label for="">Nama Barang</label>
                         <input type="text" class="form-control" id="nama_barang">
                     </div>
@@ -100,6 +104,10 @@
               </button>
             </div>
             <div class="modal-body">
+                <div class="form-group">
+                  <label for="">Pilih Dari Inventory</label>
+                  <select name="" id="pilih_barang" class="form-control" style="width: 100%"></select>
+                </div>
                 <div class="form-group">
                     <label for="">Nama Barang</label>
                     <input type="text" class="form-control" id="nama_barang_edit">
@@ -251,6 +259,101 @@
             });
         });
         </script>
+
+      <script>
+        $(document).ready(function () {
+          var barang = {!! json_encode($barang->toArray()) !!};
+          console.log(barang)
+          $.each(barang, function (key,value) {
+              $('#pilih_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang)); 
+          })
+          $('#pilih_barang').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
+          
+          $("#pilih_barang").select2({
+              width: '100%' // need to override the changed default
+          });
+
+          $.each(barang, function (key,value) {
+              $('#pilih_barang_edit').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang)); 
+          })
+          $('#pilih_barang_edit').select2({
+              theme :'bootstrap',
+              formatSelectionTooBig: function (limit) {
+
+                  // Callback
+
+                  return 'Too many selected items';
+              }
+          });
+          $("#pilih_barang_edit").select2({
+              width: '100%' // need to override the changed default
+          });
+        })
+      </script>
+
+      <script>
+        $(document).ready(function(){
+          $('#pilih_barang').change(function(){
+            var pilih_barang = $(this).val();
+            $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: '/transaksi/detail/autofillCom',
+                  data: { pilih_barang:pilih_barang }, 
+                  success: function( result ) {
+                     $('#nama_barang').val('');
+                     $('#spek').val('');
+                     $('#part_number').val('');
+                     $('#sku').val('');
+                     $('#nama_barang').val(result.nama_barang);
+                     $('#spek').val(result.spek);
+                     $('#part_number').val(result.pn);
+                     $('#sku').val(result.sku);
+                  }
+              });
+          })
+        })
+      </script>
+
+      <script>
+        $(document).ready(function(){
+          $('#pilih_barang_edit').change(function(){
+            var pilih_barang = $(this).val();
+            $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: '/transaksi/detail/autofillCom',
+                  data: { pilih_barang:pilih_barang }, 
+                  success: function( result ) {
+                     $('#nama_barang_edit').val('');
+                     $('#spek_edit').val('');
+                     $('#part_number_edit').val('');
+                     $('#sku_edit').val('');
+                     $('#nama_barang_edit').val(result.nama_barang);
+                     $('#spek_edit').val(result.spek);
+                     $('#part_number_edit').val(result.pn);
+                     $('#sku_edit').val(result.sku);
+                  }
+              });
+          })
+        })
+      </script>
 
       <script>
         $(document).ready(function () {
