@@ -26,7 +26,7 @@
                                 <th width="10%">NO PO</th>
                                 <th>Tanggal</th>
                                 <th>Status</th>
-                                <th>Noted</th>
+                                <th>Other Information</th>
                                 <th width="5%">Detail Barang</th>
                                 <th width="20%">Action</th>
                               </tr>
@@ -54,6 +54,10 @@
             </div>
             <div class="modal-body">
               <div class="row">
+                <div class="col-12">
+                  <b>Distributor</b>
+                  <hr>
+                </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="">Nama Disti</label>
@@ -85,6 +89,11 @@
                     <textarea name="" id="alamat" class="form-control"></textarea>
                   </div>
                 </div>
+                <div class="col-12">
+                  <br>
+                  <b>Pengiriman</b>
+                  <hr>
+                </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="gudang">Gudang</label>
@@ -95,9 +104,19 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="ship_to">Ship to</label>
-                    <textarea name="" id="ship_to" class="form-control" data-editor="ClassicEditor"></textarea>
+                    <label for="ship_to">Alamat Pengiriman</label>
+                    <textarea name="" id="ship_to" class="form-control"></textarea>
                   </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="">Nama</label>
+                    <input type="text" class="form-control" id="nama_pengiriman">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="">No Telp</label>
+                  <input type="text" class="form-control" id="no_telp_pengiriman">
                 </div>
                 <div class="col-6">
                   <div class="form-group">
@@ -107,7 +126,7 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="">Noted</label>
+                    <label for="">Other Information</label>
                     <textarea id="noted" class="form-control"></textarea>
                 </div>
                 </div>
@@ -139,6 +158,10 @@
             </div>
             <div class="modal-body">
               <div class="row">
+                <div class="col-12">
+                  <b>Distributor</b>
+                  <hr>
+                </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="">Nama Disti</label>
@@ -170,6 +193,11 @@
                     <input type="text" class="form-control" id="alamat_edit">
                   </div>
                 </div>
+                <div class="col-12">
+                  <br>
+                  <b>Pengiriman</b>
+                  <hr>
+                </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="gudang">Gudang</label>
@@ -180,9 +208,19 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="ship_to">Ship to</label>
+                    <label for="ship_to">Alamat Pengiriman</label>
                     <textarea name="" id="ship_to_edit" class="form-control" data-editor="ClassicEditor"></textarea>
                   </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="">Nama</label>
+                    <input type="text" class="form-control" id="nama_pengiriman_edit">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="">No Telp</label>
+                  <input type="text" class="form-control" id="no_telp_pengiriman_edit">
                 </div>
                 <div class="col-6">
                   <div class="form-group">
@@ -192,7 +230,7 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="">Noted</label>
+                    <label for="">Other Information</label>
                     <textarea id="noted_edit" class="form-control"></textarea>
                 </div>
                 </div>
@@ -316,33 +354,6 @@
           </div>
         </div>
       </div>
-
-      <script>
-        $(document).ready(function () {
-          ClassicEditor
-              .create( document.querySelector( '#ship_to' ) )
-              .then( editor => {
-                  console.log( editor );
-              } )
-              .catch( error => {
-                  console.error( error );
-              } );
-        })
-      </script>
-
-      <script>
-      $(document).ready(function () {
-        ClassicEditor
-            .create( document.querySelector( '#ship_to_edit' ) )
-            .then( editor => {
-                console.log( editor );
-            } )
-            .catch( error => {
-                console.error( error );
-            } );
-      })
-      </script>
-
 
       <script>
         $(document).ready(function () {
