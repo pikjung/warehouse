@@ -186,6 +186,8 @@ class gscController extends Controller
             'alamat' => $request->alamat,
             'no_po_gsc' => $request->no_po,
             'ship_to' => $request->ship_to,
+            'no_telp_ship' => $request->no_telp_ship,
+            'ship_name' => $request->ship_name,
             'noted' => $request->noted,
             'payment_terms' => $request->payment_terms,
             'status' => 'po',
@@ -219,6 +221,8 @@ class gscController extends Controller
         $data = pogsc::find($id);
         $data->gudang_id = $request->gudang_id;
         $data->ship_to = $request->ship_to;
+        $data->ship_name = $request->ship_name;
+        $data->no_telp_ship = $request->no_telp_ship;
         $data->nama_disti = $request->nama_disti;
         $data->name = $request->to_name;
         $data->no_telp = $request->no_telp;
@@ -346,7 +350,7 @@ class gscController extends Controller
             $id_uniq = uniqid();
            inventory::create([
                'inventory_id' => $id_uniq,
-
+                'gudang_id' => $gudang_id,
                'nama_disti' => $nama_disti,
                'tanggal' => date('Y-m-d'),
                'nama_barang' => $key['nama_barang'],

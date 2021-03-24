@@ -370,8 +370,8 @@
           $('#button_default').click(function() {
             $('#nama_pengiriman').val('')
             $('#no_telp_pengiriman').val('')
-            $('#ship_to').val('')
-            $('#gudang_id').val('')
+            //$('#ship_to').val('')
+            //$('#gudang_id').val('')
             $('#nama_pengiriman').val('Ibu Faradila')
             $('#no_telp_pengiriman').val('081218104411')
             //$('#ship_to').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
@@ -385,8 +385,8 @@
           $('#button_default_edit').click(function() {
             $('#nama_pengiriman_edit').val('')
             $('#no_telp_pengiriman_edit').val('')
-            $('#ship_to_edit').val('')
-            $('#gudang_id_edit').val('')
+            //$('#ship_to_edit').val('')
+           //$('#gudang_id_edit').val('')
             $('#nama_pengiriman_edit').val('Ibu Faradila')
             $('#no_telp_pengiriman_edit').val('081218104411')
             //$('#ship_to_edit').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
@@ -646,7 +646,7 @@
             $('#edit_id').val('');
             $('#payment_terms_edit').val('');
             $('#alamat_edit').val('');
-            $('#gudang_id_edit').val('');
+            //$('#gudang_id_edit').val('');
             $('#ship_to_edit').val('');
             $('#nama_pengiriman_edit').val('')
             $('#no_telp_pengiriman_edit').val('')
@@ -671,10 +671,10 @@
                         $('#no_telp_edit').val(result.data.no_telp);
                         $('#fax_edit').val(result.data.fax);
                         $('#alamat_edit').val(result.data.alamat);
-                        $('#gudang_id_edit').val(result.data.gudang_id);
+                        //$('#gudang_id_edit').val(result.data.gudang_id);
                         $('#ship_to_edit').val(result.data.ship_to);
                         $('#nama_pengiriman_edit').val(result.data.ship_name);
-                        $('#no_telp_pengiriman').val(result.data.no_telp_ship);
+                        $('#no_telp_pengiriman_edit').val(result.data.no_telp_ship);
                         $('#modal_edit').modal('show');
                       }
                     }
