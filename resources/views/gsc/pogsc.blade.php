@@ -89,9 +89,14 @@
                     <textarea name="" id="alamat" class="form-control"></textarea>
                   </div>
                 </div>
-                <div class="col-12">
-                  <br>
+                <div class="col-6"></div>
+                <div class="col-6">
                   <b>Pengiriman</b>
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-secondary" id="button_default">Default</button>
+                </div>
+                <div class="col-12">
                   <hr>
                 </div>
                 <div class="col-6">
@@ -193,9 +198,14 @@
                     <input type="text" class="form-control" id="alamat_edit">
                   </div>
                 </div>
-                <div class="col-12">
-                  <br>
+                <div class="col-6"></div>
+                <div class="col-6">
                   <b>Pengiriman</b>
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-secondary" id="button_default_edit">Default</button>
+                </div>
+                <div class="col-12">
                   <hr>
                 </div>
                 <div class="col-6">
@@ -354,6 +364,36 @@
           </div>
         </div>
       </div>
+
+      <script>
+        $(document).ready(function () {
+          $('#button_default').click(function() {
+            $('#nama_pengiriman').val('')
+            $('#no_telp_pengiriman').val('')
+            $('#ship_to').val('')
+            $('#gudang_id').val('')
+            $('#nama_pengiriman').val('Ibu Faradila')
+            $('#no_telp_pengiriman').val('081218104411')
+            //$('#ship_to').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
+            //$('#gudang_id').val('5ece4797eaf5e')
+          })
+        })
+      </script>
+
+      <script>
+        $(document).ready(function () {
+          $('#button_default_edit').click(function() {
+            $('#nama_pengiriman_edit').val('')
+            $('#no_telp_pengiriman_edit').val('')
+            $('#ship_to_edit').val('')
+            $('#gudang_id_edit').val('')
+            $('#nama_pengiriman_edit').val('Ibu Faradila')
+            $('#no_telp_pengiriman_edit').val('081218104411')
+            //$('#ship_to_edit').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
+            //$('#gudang_id_edit').val('5ece4797eaf5e')
+          })
+        })
+      </script>
 
       <script>
         $(document).ready(function () {
@@ -533,8 +573,10 @@
             var alamat = $('#alamat').val();
             var gudang_id = $('#gudang_id').val();
             var ship_to = $('#ship_to').val();
+            var ship_name = $('#nama_pengiriman').val();
+            var no_telp_ship = $('#no_telp_pengiriman').val();
 
-            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '') {
+            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '') {
               new PNotify({
                   title: 'Data Kosong!!',
                   text: 'Data harap tidak dikosongkan!',
@@ -550,7 +592,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/tambah',
-                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id }, 
+                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship }, 
                   success: function( result ) {
                       if (result.res === 'success') {
                         new PNotify({
@@ -606,6 +648,8 @@
             $('#alamat_edit').val('');
             $('#gudang_id_edit').val('');
             $('#ship_to_edit').val('');
+            $('#nama_pengiriman_edit').val('')
+            $('#no_telp_pengiriman_edit').val('')
 
           $.ajaxSetup({
                   headers: {
@@ -628,7 +672,9 @@
                         $('#fax_edit').val(result.data.fax);
                         $('#alamat_edit').val(result.data.alamat);
                         $('#gudang_id_edit').val(result.data.gudang_id);
-                        $('#ship_to_edit').val(result.data.ship_to)
+                        $('#ship_to_edit').val(result.data.ship_to);
+                        $('#nama_pengiriman_edit').val(result.data.ship_name);
+                        $('#no_telp_pengiriman').val(result.data.no_telp_ship);
                         $('#modal_edit').modal('show');
                       }
                     }
@@ -650,9 +696,10 @@
       var alamat = $('#alamat_edit').val();
       var gudang_id = $('#gudang_id_edit').val();
       var ship_to = $('#ship_to_edit').val();
+      var ship_name = $('#nama_pengiriman_edit').val();
+      var no_telp_ship = $('#no_telp_pengiriman_edit').val();
 
-
-      if (nama_disti === '' || no_po === '' || noted === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to === '') {
+      if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '') {
         new PNotify({
             title: 'Data Kosong!!',
             text: 'Data harap tidak dikosongkan!',
@@ -668,7 +715,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/editStore',
-            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id }, 
+            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship }, 
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
