@@ -57,6 +57,15 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
     Route::post('/dashboard/checkDN', [dashboardController::class, 'checkDN']);
 
+    //wizard
+        //pogsc
+        Route::get('/dashboard/pogsc', [dashboardController::class, 'pogsc']);
+        Route::post('/dashboard/pogsc/wizard', [dashboardController::class, 'pogscWizard']);
+
+        //pouser
+        Route::get('/dashboard/pouser', [dashboardController::class, 'pouser']);
+        Route::post('/dashboard/pouser/wizard', [dashboardController::class, 'pouserWizard']);
+
 
  //GSC
  
