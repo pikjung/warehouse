@@ -1,7 +1,6 @@
 @extends('layout.index')
 
 @section('content')
-<h1>Welcome @php echo Auth::User()->name @endphp </h1>
 
 @php
 $no = 0;

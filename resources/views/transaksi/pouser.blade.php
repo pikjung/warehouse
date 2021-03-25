@@ -413,6 +413,10 @@
               }
           });
 
+          $("#nama_customer").select2({
+              width: '100%' // need to override the changed default
+          });
+
           $.each(data, function (key,value) {
               $('#nama_customer_edit').append($("<option></option>").attr("value", value.customer_id).text(value.nama_customers)); 
           })
@@ -424,6 +428,10 @@
 
                   return 'Too many selected items';
               }
+          });
+
+          $("#nama_customer_edit").select2({
+              width: '100%' // need to override the changed default
           });
         })
       </script>

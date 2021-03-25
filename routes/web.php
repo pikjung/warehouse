@@ -57,15 +57,6 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
     Route::post('/dashboard/checkDN', [dashboardController::class, 'checkDN']);
 
-    //wizard
-        //pogsc
-        Route::get('/dashboard/pogsc', [dashboardController::class, 'pogsc']);
-        Route::post('/dashboard/pogsc/wizard', [dashboardController::class, 'pogscWizard']);
-
-        //pouser
-        Route::get('/dashboard/pouser', [dashboardController::class, 'pouser']);
-        Route::post('/dashboard/pouser/wizard', [dashboardController::class, 'pouserWizard']);
-
 
  //GSC
  
@@ -96,6 +87,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::get('/gsc/pogsc/print/{id}', [gscController::class, 'pogscPrint']);
      Route::post('/gsc/pogsc/autofill', [gscController::class, 'autofill']);
      Route::post('/gsc/pogsc/autofillCom', [gscController::class, 'autofillCom']);
+     Route::get('/gsc/pogsc/wizard', [gscController::class, 'wizard']);
+     Route::post('/gsc/pogsc/wizard/store', [gscController::class, 'wizardStore']);
 
      //Gudang
      Route::post('/gsc/gudang/autofill', [gscController::class, 'gudangAutofill']);
@@ -146,6 +139,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/transaksi/po/autofillCom', [transaksiController::class, 'autofillCom']);
      //Route::post('/transaksi/detail/autofill', [transaksiController::class, 'autofill']);
      Route::post('/transaksi/detail/autofillCom', [transaksiController::class, 'detailAutofillCom']);
+     Route::get('/transaksi/wizard', [transaksiController::class, 'wizard']);
+     Route::post('/transaksi/wizard/store', [transaksiController::class, 'wizardStore']);
 
 //Customer (New)
     Route::get('/customers', [transaksiController::class, 'customers']);
