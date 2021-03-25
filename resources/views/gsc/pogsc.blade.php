@@ -353,6 +353,16 @@
                             <tbody id="konfirmasi_barang">
                             </tbody>
                         </table>
+
+                        <div class="form-group">
+                          <label for=""><strong class="text-danger">*</strong> Tanggal Terima: </label>
+                          <input type="date" class="form-control" id="tanggal_terima">
+                        </div>
+
+                        <div class="form-group">
+                          <label for="">Note</label>
+                          <textarea name="" id="note_terima" class="form-control"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -864,6 +874,8 @@
   $(document).ready(function () {
     $('#terima_button').click(function () {
       var id = $('#konfirmasi_id').val();
+      var tanggal_terima = $('#tanggal_terima').val();
+      var note_terima = $('#note_terima').val();
       $.ajaxSetup({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -872,7 +884,7 @@
       $.ajax({
           type: "POST",
           url: '/gsc/pogsc/terima',
-          data: { id:id}, 
+          data: { id:id, tanggal_terima:tanggal_terima, note_terima:note_terima}, 
           success: function( result ) {
               if (result.res === 'berhasil') {
                     new PNotify({
