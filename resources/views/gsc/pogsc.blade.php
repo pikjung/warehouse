@@ -115,6 +115,12 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
+                    <label for="">Customers </label>
+                    <input type="text" class="form-control" id="ship_company">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
                     <label for="">Nama</label>
                     <input type="text" class="form-control" id="nama_pengiriman">
                   </div>
@@ -220,6 +226,12 @@
                   <div class="form-group">
                     <label for="ship_to">Alamat Pengiriman</label>
                     <textarea name="" id="ship_to_edit" class="form-control" data-editor="ClassicEditor"></textarea>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="">Customers </label>
+                    <input type="text" class="form-control" id="ship_company_edit">
                   </div>
                 </div>
                 <div class="col-6">
@@ -380,8 +392,10 @@
           $('#button_default').click(function() {
             $('#nama_pengiriman').val('')
             $('#no_telp_pengiriman').val('')
+            $('#ship_company').val('')
             //$('#ship_to').val('')
             //$('#gudang_id').val('')
+            $('#ship_company').val('PT Gosyen Solusindo Cemerlang')
             $('#nama_pengiriman').val('Ibu Faradila')
             $('#no_telp_pengiriman').val('081218104411')
             //$('#ship_to').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
@@ -395,8 +409,10 @@
           $('#button_default_edit').click(function() {
             $('#nama_pengiriman_edit').val('')
             $('#no_telp_pengiriman_edit').val('')
+            $('#ship_company').val('')
             //$('#ship_to_edit').val('')
            //$('#gudang_id_edit').val('')
+           $('#ship_company_edit').val('PT Gosyen Solusindo Cemerlang')
             $('#nama_pengiriman_edit').val('Ibu Faradila')
             $('#no_telp_pengiriman_edit').val('081218104411')
             //$('#ship_to_edit').val('Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430')
@@ -585,8 +601,9 @@
             var ship_to = $('#ship_to').val();
             var ship_name = $('#nama_pengiriman').val();
             var no_telp_ship = $('#no_telp_pengiriman').val();
+            var ship_company = $('#ship_company').val()
 
-            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '') {
+            if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '' || ship_company === '') {
               new PNotify({
                   title: 'Data Kosong!!',
                   text: 'Data harap tidak dikosongkan!',
@@ -602,7 +619,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/tambah',
-                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship }, 
+                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company }, 
                   success: function( result ) {
                       if (result.res === 'success') {
                         new PNotify({
@@ -660,6 +677,7 @@
             $('#ship_to_edit').val('');
             $('#nama_pengiriman_edit').val('')
             $('#no_telp_pengiriman_edit').val('')
+            $('#ship_company_edit').val('')
 
           $.ajaxSetup({
                   headers: {
@@ -685,6 +703,7 @@
                         $('#ship_to_edit').val(result.data.ship_to);
                         $('#nama_pengiriman_edit').val(result.data.ship_name);
                         $('#no_telp_pengiriman_edit').val(result.data.no_telp_ship);
+                        $('#ship_company_edit').val(result.data.ship_company);
                         $('#modal_edit').modal('show');
                       }
                     }
@@ -708,8 +727,9 @@
       var ship_to = $('#ship_to_edit').val();
       var ship_name = $('#nama_pengiriman_edit').val();
       var no_telp_ship = $('#no_telp_pengiriman_edit').val();
+      var ship_company = $('#ship_company_edit').val()
 
-      if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '') {
+      if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '' || ship_company == ''') {
         new PNotify({
             title: 'Data Kosong!!',
             text: 'Data harap tidak dikosongkan!',
@@ -725,7 +745,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/editStore',
-            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship }, 
+            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company }, 
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({

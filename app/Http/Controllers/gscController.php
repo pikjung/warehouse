@@ -186,6 +186,7 @@ class gscController extends Controller
             'alamat' => $request->alamat,
             'no_po_gsc' => $request->no_po,
             'ship_to' => $request->ship_to,
+            'ship_company' => $request->ship_company,
             'no_telp_ship' => $request->no_telp_ship,
             'ship_name' => $request->ship_name,
             'noted' => $request->noted,
@@ -221,6 +222,7 @@ class gscController extends Controller
         $data = pogsc::find($id);
         $data->gudang_id = $request->gudang_id;
         $data->ship_to = $request->ship_to;
+        $data->ship_company = $request->ship_company;
         $data->ship_name = $request->ship_name;
         $data->no_telp_ship = $request->no_telp_ship;
         $data->nama_disti = $request->nama_disti;
