@@ -335,7 +335,7 @@ class gscController extends Controller
     DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Terima' ,'bagian' => 'POGSC']);
        $id = $request->id;
        $tanggal_terima = $request->tanggal_terima;
-       $noted = $request->noted;
+       $noted = $request->note_terima;
        $po = pogsc::find($id);
        $po->status = 'diterima';
        $nama_disti = $po->nama_disti;
@@ -354,7 +354,8 @@ class gscController extends Controller
                'inventory_id' => $id_uniq,
                 'gudang_id' => $gudang_id,
                'nama_disti' => $nama_disti,
-               'tanggal' => date('Y-m-d'),
+               'tanggal' => $tanggal_terima,
+               'note' => $noted,
                'nama_barang' => $key['nama_barang'],
                'spek' => $key['spek'],
                'pn' => $key['pn'],
