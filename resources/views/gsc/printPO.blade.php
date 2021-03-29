@@ -258,8 +258,12 @@
                   </b>
               </td>
               <td width="30%" class="fnt-12 laep">
+                  <b>{{$pogsc->ship_company}}</b>
+                  <br><br>
+                  <b>{{$pogsc->ship_name}}</b><br>
                   {{$pogsc->ship_to}}
-                  <br>
+                  <br> <br>
+                  <b>No Telp:  {{$pogsc->no_telp_ship}}</b><br>
                   <br>
               </td>
               <td width="40%" class="fnt-12 leap">
