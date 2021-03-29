@@ -64,8 +64,8 @@ class inventoryController extends Controller
         })
         ->editColumn('status', function ($data)
         {
-            if ($data->status == 'active') return '<input type="checkbox" id="active_data" value="'.$data->inventory_id.'" checked>';
-            if ($data->status == 'inactive') return '<input type="checkbox" id="inactive_data" value="'.$data->inventory_id.'">';
+            if ($data->status == 'active') return '<input type="checkbox" onchange=active("'.$data->inventory_id.'") checked><label>Active</label>';
+            if ($data->status == 'inactive') return '<input type="checkbox" onchange=inactive("'.$data->inventory_id.'")><label>Active</label>';
         })
         ->rawColumns(['sn','action','status'])
         ->editColumn('inventory_id','{{$inventory_id}}')
@@ -362,6 +362,8 @@ class inventoryController extends Controller
         $id = $request->id;
         $data = inventory::find($id);
         $data->status = 'active';
+        $data->save();
+        return response()->json(array('res' => 'berhasil'));
     }
 
     public function inactive_data(Request $request)
@@ -369,5 +371,7 @@ class inventoryController extends Controller
         $id = $request->id;
         $data = inventory::find($id);
         $data->status = 'inactive';
+        $data->save();
+        return response()->json(array('res' => 'berhasil'));
     }
 }

@@ -19,6 +19,7 @@
                   <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box table-responsive">
+                          status : <input type="checkbox" checked onclick="return false;"/> <label>Active</label> <input type="checkbox" onclick="return false;"/> <label>Inactive</label> 
                           <table id="data_barang" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                               <tr>
@@ -30,6 +31,7 @@
                                 <th>SN tersisa</th>
                                 <th>SN List</th>
                                 <th>Action</th>
+                                <th>Status</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -258,10 +260,63 @@
                     {data: 'jumlah_sn', name: 'jumlah_sn' },
                     {data: 'sn', name:'sn', orderable: false, searchable:false},
                     {data: 'action', name:'action', orderable: false, searchable:false},
+                    {data: 'status', name: 'status'}
                 ],
             });
         });
         </script>
+
+        <script>
+          function active(id) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: '/inventory/barang_masuk/inactive',
+                  data: {id:id}, 
+                  success: function( result ) {
+                      if (result.res === 'berhasil') {
+                        new PNotify({
+                          title: 'Success!!',
+                          text: 'Data Inactive!',
+                          type: 'success',
+                          styling: 'bootstrap3'
+                      });
+                      $('#data_barang').DataTable().ajax.reload();
+                      }
+                  }
+              });
+          }
+        </script>
+
+        <script>
+           function inactive(id) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: '/inventory/barang_masuk/active',
+                  data: {id:id}, 
+                  success: function( result ) {
+                      if (result.res === 'berhasil') {
+                        new PNotify({
+                          title: 'Success!!',
+                          text: 'Data Active!',
+                          type: 'success',
+                          styling: 'bootstrap3'
+                      });
+                      $('#data_barang').DataTable().ajax.reload();
+                      }
+                  }
+              });
+          }
+        </script>                               
 
       <script>
         $(document).ready(function () {
