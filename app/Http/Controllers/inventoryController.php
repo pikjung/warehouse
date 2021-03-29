@@ -62,7 +62,12 @@ class inventoryController extends Controller
             $sn = serial::where('inventory_id', $data->inventory_id)->where('userReq_det_id', null)->count();
             return $sn;
         })
-        ->rawColumns(['sn','action'])
+        ->editColumn('status', function ($data)
+        {
+            if ($data->status == 'active') return '<input type="checkbox" id="active_data" value="'.$data->inventory_id.'" checked>';
+            if ($data->status == 'inactive') return '<input type="checkbox" id="inactive_data" value="'.$data->inventory_id.'">';
+        })
+        ->rawColumns(['sn','action','status'])
         ->editColumn('inventory_id','{{$inventory_id}}')
         ->make(true);
     }
@@ -350,5 +355,19 @@ class inventoryController extends Controller
         }
         
         return response()->json(array('res' => 'berhasil'));
+    }
+
+    public function active_data(Request $request)
+    {
+        $id = $request->id;
+        $data = inventory::find($id);
+        $data->status = 'active';
+    }
+
+    public function inactive_data(Request $request)
+    {
+        $id = $request->id;
+        $data = inventory::find($id);
+        $data->status = 'inactive';
     }
 }
