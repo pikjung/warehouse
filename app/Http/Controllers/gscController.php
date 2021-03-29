@@ -358,6 +358,7 @@ class gscController extends Controller
                'nama_disti' => $nama_disti,
                'tanggal' => $tanggal_terima,
                'note' => $noted,
+               'status' => 'active',
                'nama_barang' => $key['nama_barang'],
                'spek' => $key['spek'],
                'pn' => $key['pn'],
