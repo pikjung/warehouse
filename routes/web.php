@@ -185,6 +185,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
         Route::post('/inventory/barang_masuk/snUpdate', [inventoryController::class, 'snUpdate']);
         Route::post('/inventory/barang_masuk/snHapus', [inventoryController::class, 'snHapus']);
         Route::post('/inventory/barang_masuk/snImport', [inventoryController::class, 'snImport']);
+        Route::post('/inventory/barang_masuk/active', [inventoryController::class, 'active_data']);
+        Route::post('/inventory/barang_masuk/inactive', [inventoryController::class, 'inactive_data']);
  
  
  //Delivery
