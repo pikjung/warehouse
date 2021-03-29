@@ -524,9 +524,11 @@ class transaksiController extends Controller
     public function pouserPrint_invoice($id)
     {
         $data = pouser::find($id);
+        $customer_id = $data->customer_id;
+        $customer = customer::find($customer_id);
         $det = pouser_det::where('userReq_id',$id)->get();
 
-        return view('/transaksi/print_invoice',['pouser' => $data, 'det' => $det]);
+        return view('/transaksi/print_invoice',['pouser' => $data, 'det' => $det, 'customer' => $customer]);
     }
 
     public function panggil_serial($id)
@@ -870,9 +872,11 @@ class transaksiController extends Controller
     {
         $data = invoice::find($id);
         $pouser = pouser::find($data->userReq_id);
+        $customer_id = $data->customer_id;
+        $customer = customer::find($customer_id);
         $det = pouser_det::where('userReq_id',$data->userReq_id)->get();
 
-        return view('/transaksi/invoice_print',['pouser' => $pouser, 'det' => $det, 'data' => $data]);
+        return view('/transaksi/invoice_print',['pouser' => $pouser, 'det' => $det, 'data' => $data, 'customer' => $customer]);
     }
 
     public function invoiceHapus(Request $request)

@@ -264,9 +264,9 @@
            </div>
 
            <div class="col-print-8 fnt-12">
-            <b>{{$pouser->customer}}</b> <br>
+            <b>{{$customer->nama_customers}}</b> <br>
             <div style="width: 350px">
-                {{$pouser->alamat}} <br>
+                {{$customer->alamat}} <br> 
                 <b><div id="edit_attn"></div></b> 
             </div>
             
