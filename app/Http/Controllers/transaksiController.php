@@ -449,8 +449,14 @@ class transaksiController extends Controller
         if ($request->has('q')) {
             $cari = $request->q;
             $data = DB::table('inventorie')
-                        ->where('nama_barang', 'LIKE', '%'.$cari.'%')
-                        ->where('quantity', '>', 0)
+                        ->join('gudang', 'inventorie.gudang_id', '=', 'gudang.gudang_id')
+                        ->join('serial', 'inventorie.inventory_id', '=', 'serial.inventory_id')
+                        ->where('inventorie.nama_barang', 'LIKE', '%'.$cari.'%')
+                        ->where('inventorie.quantity', '>', 0)
+                        ->where('inventorie.status','active')
+                        ->where('serial.userReq_det_id', null)
+                        ->select('inventorie.inventory_id','inventorie.nama_barang','inventorie.quantity', 'gudang.nama_gudang', DB::raw("IFNULL(count(serial.sn_id),0) as count"))
+                        ->groupBy('inventorie.inventory_id','inventorie.nama_barang','inventorie.quantity','gudang.nama_gudang')
                         ->get();
             if ($data->count() < 1) {
                 $serial = DB::table('serial')

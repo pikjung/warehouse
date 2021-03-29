@@ -57,6 +57,10 @@ class inventoryController extends Controller
         {
             return '<a href="#" id="sn_detail" onclick=sn_detail("'.$data->inventory_id.'") class="btn btn-sm btn-secondary"><i class="glyphicon glyphicon-eye-open"></i></a>';
         })
+        ->editColumn('sn_total', function ($data) {
+            $sn = serial::where('inventory_id', $data->inventory_id)->count();
+            return $sn;
+        })
         ->editColumn('jumlah_sn', function ($data)
         {
             $sn = serial::where('inventory_id', $data->inventory_id)->where('userReq_det_id', null)->count();

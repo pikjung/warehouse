@@ -28,6 +28,7 @@
                                 <th>Nama Barang</th>
                                 <th>SPEK</th>
                                 <th>Qty</th>
+                                <th>SN Keseluruhan</th>
                                 <th>SN tersisa</th>
                                 <th>SN List</th>
                                 <th>Action</th>
@@ -257,6 +258,7 @@
                     {data: 'nama_barang', name: 'nama_barang'},
                     {data: 'spek', name: 'spek' },
                     {data: 'quantity', name: 'quantity' },
+                    {data: 'sn_total', name: 'sn_total'},
                     {data: 'jumlah_sn', name: 'jumlah_sn' },
                     {data: 'sn', name:'sn', orderable: false, searchable:false},
                     {data: 'action', name:'action', orderable: false, searchable:false},

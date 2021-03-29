@@ -509,7 +509,7 @@
             return {
             results:  $.map(data, function (item) {
                 return {
-                text: 'Nama Barang:'+item.nama_barang+'| Qty:'+item.quantity,
+                text: 'Nama Barang:'+item.nama_barang+'| Qty:'+item.quantity+'| Gudang:'+item.nama_gudang+' |SN:' +item.count,
                 id: item.inventory_id
                 }
             })
