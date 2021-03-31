@@ -233,24 +233,20 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/store/data_toko/editGet', [storeController::class, 'data_tokoEditGet']);
     Route::post('/store/data_toko/editStore', [storeController::class, 'data_tokoEditStore']);
     Route::post('/store/data_toko/hapus', [storeController::class, 'data_tokoHapus']);
-    Route::get('/store/data_toko/penjualan', [storeController::class, 'data_tokoPenjualan']);
-    Route::post('/store/data_toko/detail', [storeController::class, 'data_tokoDetail']);
+    Route::get('/store/data_toko/transaksi', [storeController::class, 'data_tokoPenjualan']);
+    //Route::post('/store/data_toko/detail', [storeController::class, 'data_tokoDetail']);
 
-    //barang toko
-    Route::get('/store/barang_toko', [storeController::class, 'barang_toko']);
-    Route::get('/store/barang_toko/get', [storeController::class, 'barang_tokoGet']);
-
-    //penjualan
-    Route::get('/store/penjualan', [storeController::class, 'penjualan']);
-    Route::get('/store/penjualan/get', [storeController::class, 'penjualanGet']);
-    Route::get('/store/penjualan/transaksi', [storeController::class, 'penjualanTransaksi']);
-    Route::post('/store/penjualan/transaksi/store', [storeController::class, 'penjualanTransaksiStore']);
-    Route::get('/store/penjualan/invoice/{id}', [storeController::class, 'penjualanInvoice']);
-    Route::get('/store/penjualan/invoice/cetak', [storeController::class, 'penjualanInvoiceCetak']);
-    Route::post('/store/penjualan/hapus', [storeController::class, 'penjualanHapus']);
-
-    //report
-    Route::get('/store/report', [storeController::class, 'report']);
+    //platform
+    Route::get('/store/platform', [storeController::class, 'platform']);
+    Route::get('/store/platform/get', [storeController::class, 'platformGet']);
+    Route::post('/store/platform/tambah', [storeController::class, 'platformTambah']);
+    Route::get('/store/platform/editGet', [storeController::class, 'platformEditGet']);
+    Route::post('/store/platform/editStore', [storeController::class, 'platformEditStore']);
+    Route::post('/store/platform/hapus', [storeController::class, 'platformHapus']);
+    Route::get('/store/platform/transaksi', [storeController::class, 'platformPenjualan']);
+    //Route::post('/store/platform/detail', [storeController::class, 'platformDetail']);
+    
+    //transaksi
     
  
 
