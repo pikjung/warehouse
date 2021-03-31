@@ -88,7 +88,7 @@
                 <div class="form-group">
                     <div id="serial_body" hidden>
                         <div class="row">
-                            <div class="col-10">
+                            <div class="col-10" id="serial_div">
                                 <label for="">Pilih Serial</label>
                                 <select id="serial_data" multiple="multiple" style="width:100%">
                                 </select>
@@ -131,7 +131,6 @@
           </div>
         </div>
       </div>
-
 
       <script>
           $(document).ready(function(){
