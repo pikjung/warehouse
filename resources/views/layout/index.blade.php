@@ -163,18 +163,18 @@
                           </ul>
                     </li>
                     <li><a href="/report"><i class="fa fa-book"></i>Report</a></li>
-                    <!--
+                    
                     <li><a><i class="fa fa-shopping-cart"></i>Store</a>
                       <ul class="nav child_menu">
                         <li><a href="/store/data_toko">Data Toko</a></li>
-                        <li><a href="/store/barang_toko">Data Barang</a></li>
-                        <li><a href="/store/penjualan">Penjualan</a></li>
+                        <li><a href="/store/platform">Platform</a></li>
+                        <li><a href="/store/transaksi">Transaksi</a></li>
                         <li><a href="/store/report">Report</a></li>
                       </ul>
                     </li>
                     
                     
-                    <li><a href="/account"><i class="fa fa-user"></i>Account</a></li>-->
+                    <!--<li><a href="/account"><i class="fa fa-user"></i>Account</a></li>-->
                 </ul>
               </div>
             </div>
