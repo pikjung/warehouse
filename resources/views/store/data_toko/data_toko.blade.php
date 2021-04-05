@@ -56,19 +56,15 @@
                 
                   <div class="form-group">
                     <label for="nama_toko">Nama Toko</label>
-                    <input type="text" class="form-control" id="nama_toko"> 
+                    <input type="text" class="form-control" id="nama_toko" name="nama_toko"> 
                   </div>
                   <div class="form-group">
                       <label for="platform_toko">Platform Toko</label>
-                      <select name="" id="platform_toko" class="form-control">
+                      <select name="platform_id" id="platform_id" class="form-control">
                         @foreach ($platform as $item)
-                          <option value="{{$item->platform->id}}">{{$item->nama_platform}}</option>
+                          <option value="{{$item->platform_id}}">{{$item->nama}}</option>
                         @endforeach
                       </select>
-                  </div>
-                  <div class="form-group">
-                      <label for="no_telp">No telp</label>
-                      <input type="text" class="form-control" id="no_telp">
                   </div>
                   <div class="form-group">
                       <label for="alamat">Alamat</label>
@@ -76,7 +72,7 @@
                   </div>
                   <div class="form-group">
                       <label for="">Logo</label>
-                      <input type="file" class="form-control" id="logo">
+                      <input type="file" class="form-control" id="logo" name="logo" >
                   </div>
                 
             </div>

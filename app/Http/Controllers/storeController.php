@@ -46,10 +46,10 @@ class storeController extends Controller
     {
         $data1 = toko::all();
         return Datatables::of(toko::orderBy('created_at','desc'))
-        ->addColumn('platform', function ($data) {
+        ->addColumn('platform', function ($data1) {
             //view platform name
             $platform = platform::find($data1->platform_id);
-            $nama_platform = $platform->nama_platform;
+            $nama_platform = $platform->nama;
             return $nama_platform;
         })
         ->addColumn('action', function ($data1)
@@ -60,7 +60,7 @@ class storeController extends Controller
         ->addColumn('logo', function ($data1)
         {
             //return logo
-            return '<a href="#" id="logo_data_toko" onclick=logo_data_toko("'.$data1->toko_id.'") class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i></a>';
+            return '<img src="/img/data_toko/'.$data1->logo.'" width="100px" class="img-fluid" alt="Responsive image">';
         })
         ->editcolumn('jumlah_transaksi', function ($data1)
         {
@@ -76,7 +76,7 @@ class storeController extends Controller
     {
         //valadator
         $validasi = Validator::make($request->all(),[
-            'platform_toko' => 'required',
+            'platform_id' => 'required',
             'nama_toko' => 'required',
             'alamat' => 'required',
             'logo' => 'required',
@@ -90,6 +90,24 @@ class storeController extends Controller
             return response()->json($returnData, 500);
         }
 
+        // menyimpan data file yang diupload ke variabel $file
+		$file = $request->file('logo');
+ 
+		$nama_file = time()."_".$file->getClientOriginalName();
+ 
+        // isi dengan nama folder tempat kemana file diupload
+        $request->logo->move(public_path('img/data_toko'), $nama_file);
+ 
+        $id = uniqid();
+		toko::create([
+            'toko_id' => $id,
+            'platform_id' => $request->platform_id,
+            'nama_toko' => $request->nama_toko,
+            'alamat' => $request->alamat,
+			'logo' => $nama_file,
+		]);
+ 
+		return response()->json(array('res' => 'berhasil'));
 
     }
 
