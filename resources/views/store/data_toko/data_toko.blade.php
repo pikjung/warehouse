@@ -24,9 +24,9 @@
                               <tr>
                                 <th>Nama Toko</th>
                                 <th>Platform</th>
-                                <th>No Telp</th>
                                 <th>Alamat</th>
-                                <th>Detail</th>
+                                <th>Jumlah Transaksi</th>
+                                <th>Logo</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -51,32 +51,40 @@
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
+            <form method="POST" enctype="multipart/form-data" id="save_data_toko" action="javascript:void(0)" >
             <div class="modal-body">
-                <div class="form-group">
+                
+                  <div class="form-group">
                     <label for="nama_toko">Nama Toko</label>
                     <input type="text" class="form-control" id="nama_toko"> 
-                </div>
-                <div class="form-group">
-                    <label for="platform_toko">Platform Toko</label>
-                    <input type="text" class="form-control" id="platform_toko"> 
-                </div>
-                <div class="form-group">
-                    <label for="no_telp">No telp</label>
-                    <input type="text" class="form-control" id="no_telp">
-                </div>
-                <div class="form-group">
-                    <label for="alamat">Alamat</label>
-                    <textarea name="alamat" id="alamat" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Logo</label>
-                    <input type="file" class="form-control" id="logo">
-                </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="platform_toko">Platform Toko</label>
+                      <select name="" id="platform_toko" class="form-control">
+                        @foreach ($platform as $item)
+                          <option value="{{$item->platform->id}}">{{$item->nama_platform}}</option>
+                        @endforeach
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="no_telp">No telp</label>
+                      <input type="text" class="form-control" id="no_telp">
+                  </div>
+                  <div class="form-group">
+                      <label for="alamat">Alamat</label>
+                      <textarea name="alamat" id="alamat" class="form-control"></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="">Logo</label>
+                      <input type="file" class="form-control" id="logo">
+                  </div>
+                
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="save_toko" class="btn btn-primary">Save changes</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+          </form>
 
           </div>
         </div>
@@ -206,10 +214,10 @@
                 ajax: '/store/data_toko/get',
                 columns: [
                     {data: 'nama_toko', name: 'nama_toko'},
-                    {data: 'platform_toko', name: 'platform_toko'},
-                    {data: 'no_telp_toko', name: 'no_telp_toko'},
-                    {data: 'alamat_toko', name: 'alamat_toko' },
-                    {data: 'detail', name: 'detail'},
+                    {data: 'platform', name: 'platform'},
+                    {data: 'alamat', name: 'alamat' },
+                    {data: 'jumlah_transaksi', name: 'jumlah_transaksi'},
+                    {data: 'logo', name: 'logo'},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                 ],
             });
@@ -220,7 +228,6 @@
           $(document).ready(function () {
             $('#button_modal').click(function () {
               $('#nama_toko').val('');
-              $('#no_telp').val('');
               $('#alamat').val('');
               $('#logo').val('');
               $('#platform_toko').val('');
@@ -229,15 +236,50 @@
           })
         </script>
 
+<script type="text/javascript">
+  $(document).ready(function (e) {
+    $.ajaxSetup({
+      headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#save_data_toko').submit(function(e) {
+    e.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({
+        type:'POST',
+        url: "/store/data_toko/tambah",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: (result) => {
+          if (result.res === 'berhasil') {
+            new PNotify({
+                title: 'Success!!',
+                text: 'Data Berhasil di tambah!',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+            $('#data_toko').DataTable().ajax.reload()
+            $('#modal_tambah').modal('hide');
+          }
+        },
+          error: function(data){
+          console.log(data);
+        }
+      });
+    });
+  });
+  </script>
+<!--
         <script>
           $(document).ready(function () {
             $('#save_toko').click(function () {
               var nama_toko = $('#nama_toko').val();
-              var no_telp = $('#no_telp').val();
               var alamat = $('#alamat').val();
               var platform_toko = $('#platform_toko').val();
               var logo = $('#logo').val();
-              if (nama_toko === '' || no_telp === '' || alamat === '' || platform_toko === '' || logo === '') {
+              if (nama_toko === '' ||  alamat === '' || platform_toko === '' || logo === '') {
                 new PNotify({
                     title: 'Error!!',
                     text: 'Data tidak boleh kosong!',
@@ -253,7 +295,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/store/data_toko/tambah',
-                    data: { nama_toko:nama_toko, no_telp_toko:no_telp, alamat_toko:alamat, platform_toko:platform_toko, logo_toko:logo}, 
+                    data: { nama_toko:nama_toko,  alamat:alamat, platform_toko:platform_toko, logo_toko:logo}, 
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                           new PNotify({
@@ -270,12 +312,11 @@
               }
             })
           })
-        </script>
+        </script>-->
 
         <script>
             function edit_toko(id) {
                 $('#nama_toko_edit').val('');
-                $('#no_telp_edit').val('');
                 $('#alamat_edit').val('');
                 $('#id_edit').val('');
                 $('#platform_toko_edit').val('')
@@ -293,8 +334,7 @@
                         if (result.res === 'berhasil') {
                             $('#id_edit').val(result.data.toko_id);
                             $('#nama_toko_edit').val(result.data.nama_toko);
-                            $('#no_telp_edit').val(result.data.no_telp);
-                            $('#alamat_edit').val(result.data.alamat_toko);
+                            $('#alamat_edit').val(result.data.alamat);
                             $('#platform_toko_edit').val(result.data.platform_toko);
                             $('#logo_toko_edit').val(result.data.logo_toko);
                           $('#modal_edit').modal('show');
@@ -302,14 +342,13 @@
                     }
                   });
             }
-        </script>
+        </script> 
 
         <script>
             $(document).ready(function () {
                 $('#save_edit_toko').click(function () {
                     var id = $('#id_edit').val();
                     var nama_toko = $('#nama_toko_edit').val();
-                    var no_telp = $('#no_telp_edit').val();
                     var alamat = $('#alamat_edit').val();
                     var platform_toko = $('#platform_toko_edit').val();
                     var logo = $('#logo_edit').val()
@@ -329,7 +368,7 @@
                         $.ajax({
                             type: "POST",
                             url: '/store/data_toko/editStore',
-                            data: { id:id,nama_toko:nama_toko, no_telp_toko:no_telp, alamat_toko:alamat, platform_toko:platform_toko, logo_toko:logo}, 
+                            data: { id:id,nama_toko:nama_toko, no_telp_toko:no_telp, alamat:alamat, platform_toko:platform_toko, logo_toko:logo}, 
                             success: function( result ) {
                                 if (result.res === 'berhasil') {
                                 new PNotify({

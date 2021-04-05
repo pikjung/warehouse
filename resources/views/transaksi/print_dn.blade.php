@@ -227,13 +227,13 @@
            </div>
            <div class="col-print-4 fnt-12">
             <div class="row">
-                <div class="col-print-6">
+                <div class="col-print-5">
                     Delivery Note <br>
                     Date <br>
                     PO No. <br>			
                 </div>
-                <div class="col-print-6">
-                    : <div id="dn_no"></div>
+                <div class="col-print-7">
+                    : {{$pouser->dn_no}} <br>
                     : @php
                         echo date('d M Y');
                     @endphp <br>

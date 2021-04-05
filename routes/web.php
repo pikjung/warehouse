@@ -240,7 +240,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/store/platform', [storeController::class, 'platform']);
     Route::get('/store/platform/get', [storeController::class, 'platformGet']);
     Route::post('/store/platform/tambah', [storeController::class, 'platformTambah']);
-    Route::get('/store/platform/editGet', [storeController::class, 'platformEditGet']);
+    Route::post('/store/platform/editGet', [storeController::class, 'platformEditGet']);
     Route::post('/store/platform/editStore', [storeController::class, 'platformEditStore']);
     Route::post('/store/platform/hapus', [storeController::class, 'platformHapus']);
     Route::get('/store/platform/transaksi', [storeController::class, 'platformPenjualan']);
