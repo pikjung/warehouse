@@ -368,4 +368,15 @@ class storeController extends Controller
 
         return response()->json(array('res' => 'berhasil'));
     }
+
+    //edit get transaksi
+    public function transaksiEditGet(Request $request)
+    {
+        $id = $request->id;
+        $data = transaksi::find($id);
+
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    
 }
