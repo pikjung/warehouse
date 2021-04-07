@@ -378,5 +378,41 @@ class storeController extends Controller
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 
+    //edit store transaksi
+    public function transaksiEditStore(Request $request)
+    {
+         //valadator
+         $validasi = Validator::make($request->all(),[
+            'no_transaksi' => 'required',
+            'no_inv_platform' => 'required',
+            'customer' => 'required',
+            'alamat' => 'required',
+            'kurir' => 'required',
+            'plat_kendaraan_kurir' => 'required',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+
+        //menyimpan id kedalam variable
+        $id = $request->id;
+
+        $transaksi = transaksi::find($id);
+        $transaksi->toko_id = $request->toko_id;
+        $transaksi->no_transaksi = $request->no_transaksi;
+        $transaksi->no_inv_platform = $request->no_inv_platform;
+        $transaksi->customer = $request->customer;
+        $transaksi->alamat = $request->alamat;
+        $transaksi->kurir = $request->kurir;
+        $transaksi->plat_kendaraan_kurir = $request->plat_kendaraan_kurir;
+        $transaksi->save();
+
+        return response()->json(array('res' => 'berhasil'));
+    }
     
 }
