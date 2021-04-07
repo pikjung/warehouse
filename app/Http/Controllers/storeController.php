@@ -303,4 +303,17 @@ class storeController extends Controller
         $platform->delete();
         return response()->json(array('res' => 'berhasil'));
     }
+
+    //TRANSAKSI
+
+    //view transaksi blade
+    public function transaksi()
+    {
+        $platform = platform::all();
+        $toko = toko::all();
+
+        return view('/store/transaksi/transaksi', ['platform' => $platform, 'toko' => $toko]);
+    }
+
+    //
 }
