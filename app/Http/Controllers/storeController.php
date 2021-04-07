@@ -315,5 +315,22 @@ class storeController extends Controller
         return view('/store/transaksi/transaksi', ['platform' => $platform, 'toko' => $toko]);
     }
 
-    //
+    //get transaksi
+    public function transaksiGet()
+    {
+        $data1 = toko::all();
+        return Datatables::of(toko::orderBy('created_at','desc'))
+        ->addColumn('action', function ($data1)
+        {
+            //return action button
+             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->toko_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->toko_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+        })
+        ->addColumn('detail', function ($data1)
+        {
+            //return detail button
+            return '<a href="#" id="detail_transaksi" onclick=detail_transaksi("'.$data1->toko_id.'") class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i></a>';
+        })
+        ->rawColumns(['action','detail'])
+        ->make(true);     
+    }
 }
