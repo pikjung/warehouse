@@ -414,5 +414,52 @@ class storeController extends Controller
 
         return response()->json(array('res' => 'berhasil'));
     }
+
+    //hapus transaksi
+    public function transaksiHapus(Request $request)
+    {
+        $id = $request->id;
+        $data = transaksi::find($id);
+        $detail_transaksi = detail_transaksi::where('transaksi_id',$id)->get();
+
+        foreach ($detail_transaksi as $key) {
+            $detail_item = detail_transaksi::find($key->detail_transaksi_id);
+            $detail_id = $detail_item->detail_transaksi_id;
+            $serial = serial::where('userReq_det_id', $key->detail_transaksi_id)->get();
+            foreach ($serial as $key ) {
+                $item = serial::find($key->sn_id);
+                $item->userReq_det_id = null;
+                $item->save();
+            }
+            $detail_item->delete();
+        }
+
+        $data->delete();
+
+        return response()->json(array('res' => 'berhasil'));
+    }
+    
+
+    //ambil no transaksi t
+    public function transaksiNoOtomatis(Request $request)
+    {
+        $id = $request->id;
+        $data = transaksi::where('toko_id',$id)->get()->count();
+        return response()->json($data);
+    }
+
+
+
+    public function transaksiNoTransaksiFilter(Request $request)
+    {
+        $noTransaksi = $request->noTransaksi;
+        $data = transaksi::where('no_transaksi',$noTransaksi)->get()->count();
+        if ($data > 0) {
+            return response()->json(array('res' => 'gagal'));
+        } else {
+            return response()->json(array('res' => 'berhasil'));
+        }
+    }
+
     
 }
