@@ -95,12 +95,13 @@
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
-            <form method="POST" enctype="multipart/form-data" id="save_data_toko" action="javascript:void(0)" >
+            <form method="POST" enctype="multipart/form-data" id="save_edit_data_toko" action="javascript:void(0)" >
               <div class="modal-body">
                   
                     <div class="form-group">
                       <label for="nama_toko">Nama Toko</label>
                       <input type="text" class="form-control" id="nama_toko_edit" name="nama_toko"> 
+                      <input type="hidden" name="id" id="id_edit">
                     </div>
                     <div class="form-group">
                         <label for="platform_toko">Platform Toko</label>
@@ -270,119 +271,70 @@
     });
   });
   </script>
-<!--
-        <script>
-          $(document).ready(function () {
-            $('#save_toko').click(function () {
-              var nama_toko = $('#nama_toko').val();
-              var alamat = $('#alamat').val();
-              var platform_toko = $('#platform_toko').val();
-              var logo = $('#logo').val();
-              if (nama_toko === '' ||  alamat === '' || platform_toko === '' || logo === '') {
-                new PNotify({
-                    title: 'Error!!',
-                    text: 'Data tidak boleh kosong!',
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-              } else {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: '/store/data_toko/tambah',
-                    data: { nama_toko:nama_toko,  alamat:alamat, platform_toko:platform_toko, logo_toko:logo}, 
-                    success: function( result ) {
-                        if (result.res === 'berhasil') {
-                          new PNotify({
-                              title: 'Success!!',
-                              text: 'Data Berhasil di tambah!',
-                              type: 'success',
-                              styling: 'bootstrap3'
-                          });
-                          $('#data_toko').DataTable().ajax.reload()
-                          $('#modal_tambah').modal('hide');
-                        }
-                    }
-                  });
+
+  <script>
+      function edit_toko(id) {
+          $('#nama_toko_edit').val('');
+          $('#alamat_edit').val('');
+          $('#id_edit').val('');
+          $('#platform_toko_edit').val('')
+          $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+          });
+          $.ajax({
+              type: "POST",
+              url: '/store/data_toko/editGet',
+              data: { id:id}, 
+              success: function( result ) {
+                  if (result.res === 'berhasil') {
+                      $('#id_edit').val(result.data.toko_id);
+                      $('#nama_toko_edit').val(result.data.nama_toko);
+                      $('#alamat_edit').val(result.data.alamat);
+                      $('#platform_toko_edit').val(result.data.platform_toko);
+                    $('#modal_edit').modal('show');
+                  }
               }
-            })
-          })
-        </script>-->
+            });
+      }
+  </script> 
 
-        <script>
-            function edit_toko(id) {
-                $('#nama_toko_edit').val('');
-                $('#alamat_edit').val('');
-                $('#id_edit').val('');
-                $('#platform_toko_edit').val('')
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: '/store/data_toko/editGet',
-                    data: { id:id}, 
-                    success: function( result ) {
-                        if (result.res === 'berhasil') {
-                            $('#id_edit').val(result.data.toko_id);
-                            $('#nama_toko_edit').val(result.data.nama_toko);
-                            $('#alamat_edit').val(result.data.alamat);
-                            $('#platform_toko_edit').val(result.data.platform_toko);
-                          $('#modal_edit').modal('show');
-                        }
-                    }
-                  });
-            }
-        </script> 
-
-        <script>
-            $(document).ready(function () {
-                $('#save_edit_toko').click(function () {
-                    var id = $('#id_edit').val();
-                    var nama_toko = $('#nama_toko_edit').val();
-                    var alamat = $('#alamat_edit').val();
-                    var platform_toko = $('#platform_toko_edit').val();
-                    var logo = $('#logo_edit').val()
-                    if (nama_toko === '' || no_telp === '' || alamat === '' || platform_toko === '' || logo=== '') {
-                        new PNotify({
-                            title: 'Error!!',
-                            text: 'Data tidak boleh kosong!',
-                            type: 'error',
-                            styling: 'bootstrap3'
-                        });
-                    } else {
-                        $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                        });
-                        $.ajax({
-                            type: "POST",
-                            url: '/store/data_toko/editStore',
-                            data: { id:id,nama_toko:nama_toko, no_telp_toko:no_telp, alamat:alamat, platform_toko:platform_toko, logo_toko:logo}, 
-                            success: function( result ) {
-                                if (result.res === 'berhasil') {
-                                new PNotify({
-                                    title: 'Success!!',
-                                    text: 'Data Berhasil di tambah!',
-                                    type: 'success',
-                                    styling: 'bootstrap3'
-                                });
-                                $('#data_toko').DataTable().ajax.reload()
-                                $('#modal_edit').modal('hide');
-                                }
-                            }
-                        });
-                    }
-                })
-            })
-        </script>
+<script type="text/javascript">
+  $(document).ready(function (e) {
+    $.ajaxSetup({
+      headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#save_edit_data_toko').submit(function(e) {
+    e.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({
+        type:'POST',
+        url: "/store/data_toko/editStore",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: (result) => {
+          if (result.res === 'berhasil') {
+            new PNotify({
+                title: 'Success!!',
+                text: 'Data Berhasil di tambah!',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+            $('#data_toko').DataTable().ajax.reload()
+            $('#modal_edit').modal('hide');
+          }
+        },
+          error: function(data){
+          console.log(data);
+        }
+      });
+    });
+  });
+  </script>
 
         <script>
             function hapus_toko(id) {

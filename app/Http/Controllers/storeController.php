@@ -120,7 +120,51 @@ class storeController extends Controller
 
     public function data_tokoEditStore(Request $request)
     {
-        
+        //valadator
+        $validasi = Validator::make($request->all(),[
+            'platform_id' => 'required',
+            'nama_toko' => 'required',
+            'alamat' => 'required',
+            'logo' => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+
+        //simpan id ke variabel
+        $id = $request->id;
+
+        //query data toko
+        $data = toko::find($id);
+
+        //ambil nama logo lama
+        $nama_img = $data->logo;
+
+        //hapus logo lama
+        File::delete(public_path('img/data_toko/'.$nama_img));
+
+        // menyimpan data file yang diupload ke variabel $file
+		$file = $request->file('logo');
+ 
+		$nama_file = time()."_".$file->getClientOriginalName();
+
+        //update
+        $data->nama_toko = $request->nama_toko;
+        $data->alamat = $request->alamat;
+        $data->logo = $nama_file;
+        $data->platform_id = $request->platform_id;
+        $data->save();
+ 
+        // isi dengan nama folder tempat kemana file diupload
+        $request->logo->move(public_path('img/data_toko/'), $nama_file);
+		
+ 
+		return response()->json(array('res' => 'berhasil'));
     }
 
     //platform
