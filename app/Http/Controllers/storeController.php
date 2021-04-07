@@ -64,6 +64,7 @@ class storeController extends Controller
         })
         ->editcolumn('jumlah_transaksi', function ($data1)
         {
+            //return jumlah transaksi
             $transaksi = transaksi::where('toko_id', $data1->toko_id)->count();
             return $transaksi;
         })
@@ -82,6 +83,7 @@ class storeController extends Controller
             'logo' => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        //check validasi
         if ($validasi->fails()) {
             $returnData = array(
                 'status' => 'error',
@@ -98,7 +100,10 @@ class storeController extends Controller
         // isi dengan nama folder tempat kemana file diupload
         $request->logo->move(public_path('img/data_toko'), $nama_file);
  
+        //id dengan uniqid
         $id = uniqid();
+
+        //store data
 		toko::create([
             'toko_id' => $id,
             'platform_id' => $request->platform_id,
@@ -107,6 +112,7 @@ class storeController extends Controller
 			'logo' => $nama_file,
 		]);
  
+        //response
 		return response()->json(array('res' => 'berhasil'));
 
     }
@@ -114,8 +120,11 @@ class storeController extends Controller
     //return data edit
     public function data_tokoEditGet(Request $request)
     {
+        //menyimpan id variable
         $id = $request->id;
+        //menyimpan hasil query ke variable
         $data = toko::find($id);
+        //response dengan data
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 
