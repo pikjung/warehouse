@@ -230,7 +230,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/store/data_toko', [storeController::class, 'data_toko']);
     Route::get('/store/data_toko/get', [storeController::class, 'data_tokoGet']);
     Route::post('/store/data_toko/tambah', [storeController::class, 'data_tokoTambah']);
-    Route::get('/store/data_toko/editGet', [storeController::class, 'data_tokoEditGet']);
+    Route::post('/store/data_toko/editGet', [storeController::class, 'data_tokoEditGet']);
     Route::post('/store/data_toko/editStore', [storeController::class, 'data_tokoEditStore']);
     Route::post('/store/data_toko/hapus', [storeController::class, 'data_tokoHapus']);
     Route::get('/store/data_toko/transaksi', [storeController::class, 'data_tokoPenjualan']);

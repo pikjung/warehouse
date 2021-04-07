@@ -95,33 +95,36 @@
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="nama_toko">Nama Toko</label>
-                    <input type="text" class="form-control" id="nama_toko_edit"> 
-                    <input type="hidden" id="id_edit" >
-                </div>
-                <div class="form-group">
-                    <label for="">Platform Toko</label>
-                    <input type="text" class="form-control" id="platform_toko_edit">
-                </div>
-                <div class="form-group">
-                    <label for="no_telp">No telp</label>
-                    <input type="text" class="form-control" id="no_telp_edit">
-                </div>
-                <div class="form-group">
-                    <label for="alamat">Alamat</label>
-                    <textarea name="alamat" id="alamat_edit" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Logo</label>
-                    <input type="file" class="form-control" id="logo_edit">
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="save_edit_toko" class="btn btn-primary">Save changes</button>
-            </div>
+            <form method="POST" enctype="multipart/form-data" id="save_data_toko" action="javascript:void(0)" >
+              <div class="modal-body">
+                  
+                    <div class="form-group">
+                      <label for="nama_toko">Nama Toko</label>
+                      <input type="text" class="form-control" id="nama_toko_edit" name="nama_toko"> 
+                    </div>
+                    <div class="form-group">
+                        <label for="platform_toko">Platform Toko</label>
+                        <select name="platform_id" id="platform_id_edit" class="form-control">
+                          @foreach ($platform as $item)
+                            <option value="{{$item->platform_id}}">{{$item->nama}}</option>
+                          @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <textarea name="alamat" id="alamat_edit" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Logo</label>
+                        <input type="file" class="form-control" id="logo" name="logo" >
+                    </div>
+                  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+            </form>
 
           </div>
         </div>
@@ -316,7 +319,6 @@
                 $('#alamat_edit').val('');
                 $('#id_edit').val('');
                 $('#platform_toko_edit').val('')
-                $('#logo_toko_edit').val('')
                 $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -332,7 +334,6 @@
                             $('#nama_toko_edit').val(result.data.nama_toko);
                             $('#alamat_edit').val(result.data.alamat);
                             $('#platform_toko_edit').val(result.data.platform_toko);
-                            $('#logo_toko_edit').val(result.data.logo_toko);
                           $('#modal_edit').modal('show');
                         }
                     }

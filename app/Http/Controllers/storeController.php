@@ -55,7 +55,7 @@ class storeController extends Controller
         ->addColumn('action', function ($data1)
         {
             //return action button
-             return '<a href="#" id="edit_data_toko" onclick=edit_data_toko("'.$data1->toko_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_data_toko" onclick=hapus_data_toko("'.$data1->toko_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+             return '<a href="#" id="edit_data_toko" onclick=edit_toko("'.$data1->toko_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_toko" onclick=hapus_data_toko("'.$data1->toko_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
         })
         ->addColumn('logo', function ($data1)
         {
@@ -79,7 +79,7 @@ class storeController extends Controller
             'platform_id' => 'required',
             'nama_toko' => 'required',
             'alamat' => 'required',
-            'logo' => 'required',
+            'logo' => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($validasi->fails()) {
@@ -109,6 +109,18 @@ class storeController extends Controller
  
 		return response()->json(array('res' => 'berhasil'));
 
+    }
+
+    public function data_tokoEditGet(Request $request)
+    {
+        $id = $request->id;
+        $data = toko::find($id);
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    public function data_tokoEditStore(Request $request)
+    {
+        
     }
 
     //platform
