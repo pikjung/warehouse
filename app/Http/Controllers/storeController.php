@@ -309,9 +309,8 @@ class storeController extends Controller
     //view transaksi blade
     public function transaksi()
     {
-        $platform = platform::all();
+        //get toko data
         $toko = toko::all();
-
         return view('/store/transaksi/transaksi', ['platform' => $platform, 'toko' => $toko]);
     }
 
@@ -332,5 +331,41 @@ class storeController extends Controller
         })
         ->rawColumns(['action','detail'])
         ->make(true);     
+    }
+
+    //transaksi store
+    public function transaksiTambah(Request $request)
+    {
+        //valadator
+        $validasi = Validator::make($request->all(),[
+            'no_transaksi' => 'required',
+            'no_inv_platform' => 'required',
+            'customer' => 'required',
+            'alamat' => 'required',
+            'kurir' => 'required',
+            'plat_kendaraan_kurir' => 'required',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            return response()->json($returnData, 500);
+        }
+
+        $id = uniqid();
+
+        transaksi::create([
+            'transaksi_id' => $id,
+            'toko_id' => $request->toko_id,
+            'no_transaksi' => $request->no_transaksi,
+            'customer' => $request->customer,
+            'alamat' => $request->alamat,
+            'kurir' => $request->kurir,
+            'plat_kendaraan_kurir' => $request->plat_kendaraan_kurir
+        ]);
+
+        return response()->json(array('res' => 'berhasil'));
     }
 }
