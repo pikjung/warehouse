@@ -254,8 +254,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/store/transaksi/editGet', [storeController::class, 'transaksiEditGet']);
     Route::post('/store/transaksi/editStore', [storeController::class, 'transaksiEditStore']);
     Route::post('/store/transaksi/hapus', [storeController::class, 'transaksiHapus']);
-    Route::get('/store/transaksi/no_transaksi', [storeController::class, 'transaksiNoOtomatis']);
-    Route::get('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
+    Route::post('/store/transaksi/no_transaksi', [storeController::class, 'transaksiNoOtomatis']);
+    Route::post('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
  
 
 });

@@ -70,7 +70,7 @@
                   </div>
                   <div class="form-group">
                       <label for="">No Invoice Platform</label>
-                      <input type="text" class="form-control" id="no_invoice_platform">
+                      <input type="text" class="form-control" id="no_inv_platform">
                   </div>
                   <div class="form-group">
                     <label for="">Customer</label>
@@ -125,7 +125,7 @@
                   </div>
                   <div class="form-group">
                       <label for="">No Invoice Platform</label>
-                      <input type="text" class="form-control" id="no_invoice_platform_edit">
+                      <input type="text" class="form-control" id="no_inv_platform_edit">
                   </div>
                   <div class="form-group">
                     <label for="">Customer</label>
@@ -201,7 +201,7 @@
                     {data: 'customer', name: 'customer'},
                     {data: 'alamat', name: 'alamat'},
                     {data: 'kurir', name: 'kurir'},
-                    {data: 'no_plat_kurir', name: 'no_plat_kurir'},
+                    {data: 'plat_kendaraan_kurir', name: 'plat_kendaraan_kurir'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                 ],
@@ -235,7 +235,7 @@
               var plat_kendaraan_kurir = $('#plat_kendaraan_kurir').val();
               var toko_id = $('#toko_id').val();
 
-              if (no_transaksi === '' ||  no_inv_transaksi === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '') {
+              if (no_transaksi === '' ||  no_inv_platform === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '' || alamat === '') {
                 new PNotify({
                     title: 'Error!!',
                     text: 'Data tidak boleh kosong!',
@@ -251,7 +251,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/store/transaksi/tambah',
-                    data: { no_transaksi:no_transaksi,  no_inv_transaksi:no_inv_transaksi, customer:customer, kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id}, 
+                    data: { no_transaksi:no_transaksi,  no_inv_platform:no_inv_platform, customer:customer, alamat:alamat,kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id}, 
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                           new PNotify({
@@ -317,7 +317,7 @@
                 var toko_id = $('#toko_id_edit').val();
                 var id = $('#id_edit').val();
 
-                if (no_transaksi === '' ||  no_inv_transaksi === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '') {
+                if (no_transaksi === '' ||  no_inv_platform === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '' || alamat === '') {
                 new PNotify({
                     title: 'Error!!',
                     text: 'Data tidak boleh kosong!',
@@ -333,7 +333,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/store/transaksi/editStore',
-                    data: { no_transaksi:no_transaksi,  no_inv_transaksi:no_inv_transaksi, customer:customer, kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id, id:id}, 
+                    data: { no_transaksi:no_transaksi,  no_inv_platform:no_inv_platform, customer:customer, alamat:alamat,kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id, id:id}, 
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             new PNotify({
@@ -389,6 +389,37 @@
                 })
             })
         </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#toko_id').change(function(){
+                    var data = $(this).val();
+                    
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                        });
+                    $.ajax({
+                        type: "POST",
+                        url: '/store/transaksi/no_transaksi',
+                        data: { id:data}, 
+                        success: function( result ) {
+                            var no = result.no + 1;
+                            const monthNames = ["I", "II", "III", "IV", "V", "VI",
+                            "VII", "VII", "IX", "X", "XI", "XII"
+                            ];
+
+                            const d = new Date();
+                            var bulan =  monthNames[d.getMonth()];
+                            var tahun = d.getFullYear();
+                            var po =  result.data.nama_toko +'/' + tahun + '/' + bulan + '/' + no;
+                            $('#no_transaksi').val(po)
+                        }
+                    });
+                })
+            })
+        </script>
         
         <script>
             $(document).ready(function () {
@@ -401,7 +432,7 @@
                         }
                         });
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: '/store/transaksi/no_transaksiFilter',
                         data: { no_transaksi:data}, 
                         success: function( result ) {
@@ -429,7 +460,7 @@
                         }
                         });
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: '/store/transaksi/no_transaksiFilter',
                         data: { no_transaksi:data}, 
                         success: function( result ) {

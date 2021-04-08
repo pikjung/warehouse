@@ -366,6 +366,7 @@ class storeController extends Controller
             'transaksi_id' => $id,
             'toko_id' => $request->toko_id,
             'no_transaksi' => $request->no_transaksi,
+            'no_inv_platform' => $request->no_inv_platform,
             'customer' => $request->customer,
             'alamat' => $request->alamat,
             'kurir' => $request->kurir,
@@ -450,8 +451,9 @@ class storeController extends Controller
     public function transaksiNoOtomatis(Request $request)
     {
         $id = $request->id;
-        $data = transaksi::where('toko_id',$id)->get()->count();
-        return response()->json($data);
+        $no = transaksi::where('toko_id',$id)->get()->count();
+        $data = toko::find($id);
+        return response()->json(array('res' => 'berhasil', 'data' => $data, 'no' => $no));
     }
 
 
