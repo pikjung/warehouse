@@ -310,15 +310,21 @@ class storeController extends Controller
     public function transaksi()
     {
         //get toko data
-        $toko = toko::all();
-        return view('/store/transaksi/transaksi', ['platform' => $platform, 'toko' => $toko]);
+        $toko = DB::table('toko')
+                ->join('platform', 'toko.platform_id', '=', 'platform.platform_id')
+                ->get();
+        return view('/store/transaksi/transaksi', ['toko' => $toko]);
     }
 
     //get transaksi
     public function transaksiGet()
     {
-        $data1 = toko::all();
-        return Datatables::of(toko::orderBy('created_at','desc'))
+        $data1 = transaksi::all();
+        return Datatables::of(transaksi::orderBy('created_at','desc'))
+        ->addColumn('toko', function ($data1){
+            $toko = toko::find($data1->toko_id);
+            return $toko->nama_toko;
+        })
         ->addColumn('action', function ($data1)
         {
             //return action button
@@ -440,7 +446,7 @@ class storeController extends Controller
     }
     
 
-    //ambil no transaksi t
+    //ambil no transaksi otomatis
     public function transaksiNoOtomatis(Request $request)
     {
         $id = $request->id;
@@ -449,7 +455,7 @@ class storeController extends Controller
     }
 
 
-
+    //ambil no transaksi keyup
     public function transaksiNoTransaksiFilter(Request $request)
     {
         $noTransaksi = $request->noTransaksi;

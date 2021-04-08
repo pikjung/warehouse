@@ -225,7 +225,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::get('/report/cetak', [reportController::class, 'reportCetak']);
  
     
-//Store
+//STORE
+
     //data toko
     Route::get('/store/data_toko', [storeController::class, 'data_toko']);
     Route::get('/store/data_toko/get', [storeController::class, 'data_tokoGet']);
@@ -247,7 +248,14 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     //Route::post('/store/platform/detail', [storeController::class, 'platformDetail']);
     
     //transaksi
-    
+    Route::get('/store/transaksi', [storeController::class, 'transaksi']);
+    Route::get('/store/transaksi/get', [storeController::class, 'transaksiGet']);
+    Route::post('/store/transaksi/tambah', [storeController::class, 'transaksiTambah']);
+    Route::post('/store/transaksi/editGet', [storeController::class, 'transaksiEditGet']);
+    Route::post('/store/transaksi/editStore', [storeController::class, 'transaksiEditStore']);
+    Route::post('/store/transaksi/hapus', [storeController::class, 'transaksiHapus']);
+    Route::get('/store/transaksi/no_transaksi', [storeController::class, 'transaksiNoOtomatis']);
+    Route::get('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
  
 
 });
