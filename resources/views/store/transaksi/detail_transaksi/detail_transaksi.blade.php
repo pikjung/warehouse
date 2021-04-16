@@ -51,7 +51,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Tambah Data Transaksi</h4>
+              <h4 class="modal-title" id="myModalLabel">Tambah Data Platform</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
@@ -65,7 +65,7 @@
                         </select>
                     </div>
                   <div class="form-group">
-                    <label for="">No Transaksi</label>
+                    <label for="nama_platform">No Transaksi</label>
                     <input type="text" class="form-control" id="no_transaksi">
                     <div id="pesan"></div>
                   </div>
@@ -103,7 +103,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Edit Data Transaksi</h4>
+              <h4 class="modal-title" id="myModalLabel">Edit Data Platform</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
@@ -117,7 +117,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="">No Transaksi</label>
+                    <label for="nama_platform">No Transaksi</label>
                     <input type="hidden" id="id_edit">
                     <input type="text" class="form-control" id="no_transaksi_edit">
                     <div id="pesan_edit">
@@ -158,7 +158,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Hapus Data Transaksi</h4>
+              <h4 class="modal-title" id="myModalLabel">Hapus Data Platform</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
@@ -187,7 +187,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Detail Transaksi</h4>
+              <h4 class="modal-title" id="myModalLabel">Detail Barang PO User</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
