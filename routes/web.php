@@ -256,8 +256,15 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/store/transaksi/hapus', [storeController::class, 'transaksiHapus']);
     Route::post('/store/transaksi/no_transaksi', [storeController::class, 'transaksiNoOtomatis']);
     Route::post('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
-    Route::get('store/transaksi/detail/{id}', [storeController::class, 'transaksiDetail']);
- 
+    Route::get('/store/transaksi/detail/{id}', [storeController::class, 'transaksiDetail']); //get detail_transaksi_data
+
+
+    //detail transaksi
+    Route::get('/store/detail_transaksi/{id}', [storeController::class, 'detailTransaksi']);
+    Route::get('/store/detail_transaksi/get/{id}', [storeController::class, 'detailTransaksiGet']);
+    Route::post('/store/detail_transaksi/tambah', [storeController::class, 'detailTransaksiTambah']);
+    Route::post('/store/detail_transaksi/editGet', [storeController::class, 'detailTransaksiEditGet']);
+    Route::post('/store/detail_transaksi/editStore', [storeController::class, 'detailTransaksiEditStore']);
 
 });
 

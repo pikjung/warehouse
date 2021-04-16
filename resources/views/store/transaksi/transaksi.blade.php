@@ -552,7 +552,7 @@
           $(document).ready(function() {
             $('#detail_edit').click(function () {
               var id = $('#detail_id').val();
-              window.location.href = '/store/transaksiDetail/'+id;
+              window.location.href = '/store/detail_transaksi/'+id;
             })
           })
         </script>
