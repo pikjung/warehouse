@@ -256,6 +256,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/store/transaksi/hapus', [storeController::class, 'transaksiHapus']);
     Route::post('/store/transaksi/no_transaksi', [storeController::class, 'transaksiNoOtomatis']);
     Route::post('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
+    Route::get('store/transaksi/detail/{id}', [storeController::class, 'transaksiDetail']);
  
 
 });

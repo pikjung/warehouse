@@ -469,5 +469,12 @@ class storeController extends Controller
         }
     }
 
+    //transaksi detail
+    public function transaksiDetail($id)
+    {
+        $data = detail_transaksi::where('transaksi_id', $id)->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
     
 }

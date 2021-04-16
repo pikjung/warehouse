@@ -182,6 +182,48 @@
         </div>
       </div>
 
+      <div id="modal_detail" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">Detail Barang PO User</h4>
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <input type="hidden" id="detail_id">
+                        <button class="btn btn-primary float-right" id="detail_edit">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </button>
+                    </div>
+                    <div class="col-12" id="modal_table">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>Nama Barang</th>
+                                <th>Type</th>
+                                <th>Qty</th>
+                                <th>SN</th>
+                                <th>Gudang</th>
+                                <th>Description</th>
+                                <th>Tanggal</th>
+                            </thead>
+                            <tbody id="detail_transaksi_body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
       <script type="text/javascript">
         $(document).ready(function() {
             $('#transaksi').DataTable({
@@ -477,6 +519,33 @@
                     });
                 })
             })
+        </script>
+
+        <script>
+          function detail_transaksi(id) {
+            $('#detail_id').val('');
+            $('#detail_id').val(id);
+            $('#detail_transaksi_body').html('')
+            $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                  });
+              $.ajax({
+                  type: "get",
+                  url: '/store/transaksi/detail/'+id, 
+                  success: function( result ) {
+                    if (result.res === 'berhasil') {
+                      $.each(result.data, function(key, val){
+                      $('#detail_transaksi_body').append('<tr><td>'+val.nama_barang+'</td><td>'+val.type+'</td><td>'+val.qty+'</td><td>'+val.sn+'</td><td>'+val.deskripsi+'</td><td>'+val.tanggal+'</td><tr>');
+                    });
+                    $('#modal_detail').modal('show');
+                    }
+                  }, error: function() { 
+                    console.log("Error")
+                }  
+              });
+          }
         </script>
 
 @endsection
