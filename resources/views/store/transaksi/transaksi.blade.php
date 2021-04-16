@@ -30,6 +30,7 @@
                                 <th>Kurir</th>
                                 <th>Plat Kurir</th>
                                 <th>Tanggal</th>
+                                <th>Detail</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -203,6 +204,7 @@
                     {data: 'kurir', name: 'kurir'},
                     {data: 'plat_kendaraan_kurir', name: 'plat_kendaraan_kurir'},
                     {data: 'created_at', name: 'created_at'},
+                    {data: 'detail', name: 'detail'},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                 ],
             });
