@@ -5,7 +5,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
               <div class="x_title">
-                <h2> Transaksi</h2>
+                <h2> Detail Transaksi</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -19,18 +19,15 @@
                   <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box table-responsive">
-                          <table id="transaksi" class="table table-striped table-bordered" style="width:100%">
+                          <table id="detail_transaksi" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                               <tr>
-                                <th>Toko</th>
-                                <th>No Transaksi</th>
-                                <th>No Invoice Platform</th>
-                                <th>Customer</th>
-                                <th>Alamat</th>
-                                <th>Kurir</th>
-                                <th>Plat Kurir</th>
-                                <th>Tanggal</th>
-                                <th>Detail</th>
+                                <th>Nama Barang</th>
+                                <th>Type</th>
+                                <th>QTY</th>
+                                <th>SN</th>
+                                <th>Gudang</th>
+                                <th>Deskripsi</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -59,9 +56,6 @@
                     <div class="form-group">
                         <label for="">Toko</label>
                         <select name="" id="toko_id" class="form-control">
-                            @foreach ($toko as $item)
-                                <option value="{{$item->toko_id}}">{{$item->nama_toko. " | " .$item->nama}}</option>
-                            @endforeach
                         </select>
                     </div>
                   <div class="form-group">
@@ -111,9 +105,6 @@
                 <div class="form-group">
                     <label for="">Toko</label>
                     <select name="" id="toko_id_edit" class="form-control">
-                        @foreach ($toko as $item)
-                            <option value="{{$item->toko_id}}">{{$item->nama_toko. " | " .$item->nama}}</option>
-                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
@@ -226,7 +217,8 @@
 
       <script type="text/javascript">
         $(document).ready(function() {
-            $('#transaksi').DataTable({
+            var id = {!! json_encode($id) !!};
+            $('#detail_transaksi').DataTable({
                 processing: true,
                 serverSide: true,
                 dom: '<"html5buttons">BlTfrtip',
@@ -236,17 +228,14 @@
                     {extend: 'excel', title: 'Contoh File Excel Datatables'},
                     {extend:'print',title: 'Contoh Print Datatables'},
                 ],
-                ajax: '/store/transaksi/get',
+                ajax: '/store/detail_transaksi/get/'+id,
                 columns: [
-                    {data: 'toko', name: 'toko'},
-                    {data: 'no_transaksi', name: 'no_transaksi'},
-                    {data: 'no_inv_platform', name: 'no_inv_platform'},
-                    {data: 'customer', name: 'customer'},
-                    {data: 'alamat', name: 'alamat'},
-                    {data: 'kurir', name: 'kurir'},
-                    {data: 'plat_kendaraan_kurir', name: 'plat_kendaraan_kurir'},
-                    {data: 'created_at', name: 'created_at'},
-                    {data: 'detail', name: 'detail'},
+                    {data: 'nama_barang', name: 'nama_barang'},
+                    {data: 'type', name: 'type'},
+                    {data: 'qty', name: 'qty'},
+                    {data: 'sn', name: 'sn'},
+                    {data: 'gudang', name: 'gudang'},
+                    {data: 'deskripsi', name: 'deskripsi'},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                 ],
             });
@@ -304,7 +293,7 @@
                               type: 'success',
                               styling: 'bootstrap3'
                           });
-                          $('#transaksi').DataTable().ajax.reload()
+                          $('#detail_transaksi').DataTable().ajax.reload()
                           $('#modal_tambah').modal('hide');
                         }
                     }
@@ -386,7 +375,7 @@
                                 type: 'success',
                                 styling: 'bootstrap3'
                             });
-                            $('#transaksi').DataTable().ajax.reload()
+                            $('#detail_transaksi').DataTable().ajax.reload()
                             $('#modal_edit').modal('hide');
                         }
                     }
@@ -425,7 +414,7 @@
                                     type: 'success',
                                     styling: 'bootstrap3'
                                 });
-                                $('#transaksi').DataTable().ajax.reload()
+                                $('#detail_transaksi').DataTable().ajax.reload()
                                 $('#modal_hapus').modal('hide');
                                 }
                             }

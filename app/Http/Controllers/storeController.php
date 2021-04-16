@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 //use toko model
 use App\Models\toko;
 
+//use gudang model;
+use App\Models\gudang;
+
 //use platform model
 use App\Models\platform;
 
@@ -474,6 +477,28 @@ class storeController extends Controller
     {
         $data = detail_transaksi::where('transaksi_id', $id)->get();
         return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    public function detailTransaksi($id)
+    {
+        return view('/store/transaksi/detail_transaksi/detail_transaksi', compact('id'));
+    }
+
+    public function detailTransaksiGet($id)
+    {
+        $data1 = detail_transaksi::all();
+        return Datatables::of(detail_transaksi::orderBy('created_at','desc'))
+        ->addColumn('gudang', function ($data1){
+            $gudang = gudang::find($data1->gudang_id);
+            return $gudang->nama_gudang;
+        })
+        ->addColumn('action', function ($data1)
+        {
+            //return action button
+             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+        })
+        ->rawColumns(['action','detail'])
+        ->make(true);     
     }
 
     
