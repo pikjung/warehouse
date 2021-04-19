@@ -22,8 +22,14 @@ use App\Models\detail_transaksi;
 //use serial nodel
 use App\Models\serial;
 
+//use inventory
+use App\Models\inventory;
+
 //use validator 
 use Illuminate\Support\Facades\Validator;
+
+//use Sessions
+use Illuminate\Support\Facades\Session;
 
 //use data Tables
 use DataTables;
@@ -520,7 +526,53 @@ class storeController extends Controller
     //detail_transaksi tambah
     public function detailTransaksiTambah(Request $request)
     {
-        
+         //valadator
+         $validasi = Validator::make($request->all(),[
+            'transaksi_id' => 'required',
+            'inventory_id' => 'required',
+            'serial' => 'required',
+            'deskripsi' => 'required',
+        ]);
+
+        if ($validasi->fails()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'An error occurred!'
+            );
+            Session::flash('error');
+            return redirect()->back();
+        }
+
+        $id = uniqid();
+        $transaksi_id = $request->transaksi_id;
+
+        $sn = "";
+
+        foreach ($request->serial  as $key => $value) {
+            $data = serial::find($request->serial[$key]);
+            $data->userReq_det_id = $id;
+            $data->status = 'store';
+            $sn = $sn . $data->no_serial .",";
+            $data->save();
+        }
+
+        $inventory = inventory::find($request->inventory_id);
+        $nama_barang = $inventory->nama_barang;
+        $gudang_id = $inventory->gudang_id;
+
+        detail_transaksi::create([
+            'detail_transaksi_id' => $id,
+            'transaksi_id' => $transaksi_id,
+            'nama_barang' => $nama_barang,
+            'type' => '',
+            'qty' => $request->qty,
+            'sn' => $sn,
+            'gudang_id' => $gudang_id,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        Session::flash('success');
+        return redirect()->back();
     }
 
     //detail_transaksi edit get

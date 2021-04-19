@@ -53,7 +53,7 @@
               </button>
             </div>
             <div class="modal-body">
-                  <form action="/stora/detail_transaksi/tambah" method="post" id="form-tambah">
+                  <form action="/store/detail_transaksi/tambah" method="post" id="form-tambah">
                     {{ csrf_field() }}
                     <div class="row">
                       <div class="col-md-10">
@@ -70,7 +70,7 @@
   
                       <div class="col-md-2">
                         <label for="">  </label>
-                        <button class="btn btn-info" id="button_cari_barang">
+                        <button class="btn btn-info" type="button" id="button_cari_barang">
                           <span class="glyphicon glyphicon-search"></span>
                         </button>
                       </div>
@@ -78,7 +78,7 @@
                       <div class="col-md-10">
                         <div class="form-group">
                           <label for="">Pilih SN</label>
-                          <select name="serial" id="pilih_sn" class="form-control" >
+                          <select name="serial[]" id="pilih_sn" class="form-control" >
                           </select>
                         </div>
                       </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" form="form-tambah" class="btn btn-primary">Save changes</button>
+              <button type="submit" form="form-tambah" class="btn btn-primary">Save changes</button>
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@
               </button>
             </div>
               <div class="modal-body">
-                <form action="/stora/detail_transaksi/editStore" method="post" id="form-edit">
+                <form action="/store/detail_transaksi/editStore" method="post" id="form-edit">
                   {{ csrf_field() }}
                   <div class="row">
                     <div class="col-md-10">
@@ -135,7 +135,7 @@
 
                     <div class="col-md-2">
                       <label for="">  </label>
-                      <button class="btn btn-info" id="button_cari_barang">
+                      <button class="btn btn-info" type="button" id="button_cari_barang">
                         <span class="glyphicon glyphicon-search"></span>
                       </button>
                     </div>
@@ -143,7 +143,7 @@
                     <div class="col-md-10">
                       <div class="form-group">
                         <label for="">Pilih SN</label>
-                        <select name="serial" id="pilih_sn" class="form-control" >
+                        <select name="serial[]" id="pilih_sn" class="form-control" >
                         </select>
                       </div>
                     </div>
@@ -167,7 +167,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" form="form-edit" class="btn btn-primary">Save changes</button>
+                <button type="submit" form="form-edit" class="btn btn-primary">Save changes</button>
               </div>
           </div>
         </div>
@@ -201,6 +201,32 @@
           </div>
         </div>
       </div>
+
+      @if(Session::has('error'))
+        <script>
+          $(document).ready(function () {
+            new PNotify({
+              title: 'Error!!',
+              text: 'Data tidak lengkap!',
+              type: 'error',
+              styling: 'bootstrap3'
+          })
+        })
+        </script>
+      @endif
+
+      @if(Session::has('success'))
+        <script>
+          $(document).ready(function () {
+            new PNotify({
+              title: 'Success!!',
+              text: 'Data berhasil di tambah!',
+              type: 'success',
+              styling: 'bootstrap3'
+          })
+        })
+        </script>
+      @endif
 
       <script type="text/javascript">
         $(document).ready(function() {
