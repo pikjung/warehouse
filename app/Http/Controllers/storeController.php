@@ -517,7 +517,7 @@ class storeController extends Controller
         ->addColumn('action', function ($data1)
         {
             //return action button
-             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+             return '<a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
         })
         ->rawColumns(['action','detail'])
         ->make(true);     
@@ -575,34 +575,20 @@ class storeController extends Controller
         return redirect()->back();
     }
 
-    //detail_transaksi edit get
-    public function detailTransaksiEditGet(Request $request)
-    {
-        $id = $request->id;
-        $data = detail_transaksi::find($id);
-        return response()->json($data);
-    }
-
-    //detail_transaksi edit store
-    public function detailTransaksiStore(Request $request)
-    {
-
-    }
-
     //detail_transaksi hapus
     public function detailTransaksiHapus(Request $request)
     {
         $id = $request->id;
         $detail_transaksi = detail_transaksi::find($id);
+        $detail_transaksi->delete();
+
         $serial = serial::where('userReq_det_id',$id)->get();
         foreach ($serial as $key ) {
             $serial_edit = serial::find($key->sn_id);
             $serial_edit->userReq_det_id = null;
-            $serial_edit->status = 'Gudang GSC';
+            $serial_edit->status = null;
             $serial_edit->save();
         }
-
-        $detail_transaksi->delete();
 
         return response()->json(array('res' => 'berhasil'));
     }
