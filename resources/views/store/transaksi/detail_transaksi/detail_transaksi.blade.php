@@ -48,40 +48,52 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Tambah Data Platform</h4>
+              <h4 class="modal-title" id="myModalLabel">Tambah Data Barang</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
             <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Toko</label>
-                        <select name="" id="toko_id" class="form-control">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <div class="form-group">
+                        <label for="">Pilih Barang</label>
+                        <select name="" id="pilih_barang" class="form-control">
+                          @foreach($barang as $item)
+                            <option value="{{$item->inventory_id}}">{{$item->nama_barang}} || {{$item->nama_gudang}} || {{$item->count}}</option>
+                          @endforeach
                         </select>
+                      </div>
                     </div>
-                  <div class="form-group">
-                    <label for="nama_platform">No Transaksi</label>
-                    <input type="text" class="form-control" id="no_transaksi">
-                    <div id="pesan"></div>
-                  </div>
-                  <div class="form-group">
-                      <label for="">No Invoice Platform</label>
-                      <input type="text" class="form-control" id="no_inv_platform">
-                  </div>
-                  <div class="form-group">
-                    <label for="">Customer</label>
-                    <input type="text" class="form-control" id="customer">
-                  </div>
-                  <div class="form-group">
-                    <label for="alamat">Alamat</label>
-                    <textarea id="alamat" class="form-control"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label for="">Kurir</label>
-                    <input type="text" class="form-control" id="kurir">
-                  </div>
-                  <div class="form-group">
-                    <label for="">Plat Kendaraan Kurir</label>
-                    <input type="text" class="form-control" id="plat_kendaraan_kurir">
+
+                    <div class="col-md-2">
+                      <label for="">  </label>
+                      <button class="btn btn-info" id="button_cari_barang">
+                        <span class="glyphicon glyphicon-search"></span>
+                      </button>
+                    </div>
+
+                    <div class="col-md-10">
+                      <div class="form-group">
+                        <label for="">Pilih SN</label>
+                        <select name="" id="pilih_sn" class="form-control" >
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label for="">Qty</label>
+                        <input type="text" class="form-control" id="qty" readonly>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="">Deskripsi</label>
+                        <input type="text" class="form-control" id="deskripsi">
+                      </div>
+                    </div>
+
                   </div>
             </div>
             <div class="modal-footer">
@@ -97,7 +109,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Edit Data Platform</h4>
+              <h4 class="modal-title" id="myModalLabel">Edit Data Barang</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
@@ -149,7 +161,7 @@
           <div class="modal-content">
 
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Hapus Data Platform</h4>
+              <h4 class="modal-title" id="myModalLabel">Hapus Data Barang</h4>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
               </button>
             </div>
@@ -258,52 +270,6 @@
         </script>
 
         <script>
-          $(document).ready(function () {
-            $('#save_transaksi').click(function () {
-              var no_transaksi = $('#no_transaksi').val();
-              var no_inv_platform = $('#no_inv_platform').val();
-              var customer = $('#customer').val();
-              var alamat = $('#alamat').val();
-              var kurir = $('#kurir').val();
-              var plat_kendaraan_kurir = $('#plat_kendaraan_kurir').val();
-              var toko_id = $('#toko_id').val();
-
-              if (no_transaksi === '' ||  no_inv_platform === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '' || alamat === '') {
-                new PNotify({
-                    title: 'Error!!',
-                    text: 'Data tidak boleh kosong!',
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-              } else {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: '/store/transaksi/tambah',
-                    data: { no_transaksi:no_transaksi,  no_inv_platform:no_inv_platform, customer:customer, alamat:alamat,kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id}, 
-                    success: function( result ) {
-                        if (result.res === 'berhasil') {
-                          new PNotify({
-                              title: 'Success!!',
-                              text: 'Data Berhasil di tambah!',
-                              type: 'success',
-                              styling: 'bootstrap3'
-                          });
-                          $('#detail_transaksi').DataTable().ajax.reload()
-                          $('#modal_tambah').modal('hide');
-                        }
-                    }
-                  });
-              }
-            })
-          })
-        </script>
-
-        <script>
             function edit_transaksi(id) {
                 $('#toko_id').val('');
                 $('#no_transaksi').val('')
@@ -337,53 +303,6 @@
                   });
             }
         </script> 
-
-        <script>
-            $(document).ready(function () {
-            $('#save_edit_transaksi').click(function () {
-                var no_transaksi = $('#no_transaksi_edit').val();
-                var no_inv_platform = $('#no_inv_platform_edit').val();
-                var customer = $('#customer_edit').val();
-                var alamat = $('#alamat_edit').val();
-                var kurir = $('#kurir_edit').val();
-                var plat_kendaraan_kurir = $('#plat_kendaraan_kurir_edit').val();
-                var toko_id = $('#toko_id_edit').val();
-                var id = $('#id_edit').val();
-
-                if (no_transaksi === '' ||  no_inv_platform === '' || customer === '' || kurir === '' || plat_kendaraan_kurir === '' || toko_id === '' || alamat === '') {
-                new PNotify({
-                    title: 'Error!!',
-                    text: 'Data tidak boleh kosong!',
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-                } else {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: '/store/transaksi/editStore',
-                    data: { no_transaksi:no_transaksi,  no_inv_platform:no_inv_platform, customer:customer, alamat:alamat,kurir:kurir, plat_kendaraan_kurir:plat_kendaraan_kurir,toko_id:toko_id, id:id}, 
-                    success: function( result ) {
-                        if (result.res === 'berhasil') {
-                            new PNotify({
-                                title: 'Success!!',
-                                text: 'Data Berhasil di tambah!',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            $('#detail_transaksi').DataTable().ajax.reload()
-                            $('#modal_edit').modal('hide');
-                        }
-                    }
-                    });
-                }
-            })
-            })
-        </script>
 
         <script>
             function hapus_transaksi(id) {
@@ -545,5 +464,58 @@
             })
           })
         </script>
+
+        <script>
+          $('#pilih_barang').select2({
+            theme :'bootstrap',
+            width: '100%',
+          });
+        </script>
+
+
+        <script>
+          $(document).ready(function () {
+            $('#button_cari_barang').click(function(){
+              var id = $('#pilih_barang').val();
+              $('#pilih_sn').html('')
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                  });
+              $.ajax({
+                  type: "get",
+                  url: '/store/detail_transaksi/cari_barang/'+id, 
+                  success: function( result ) {
+                    if (result.res === 'berhasil') {
+                      $('#pilih_sn').attr('multiple',"multiple")
+                      $.each(result.data, function (key,value) {
+                            $('#pilih_sn').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial)); 
+                        })
+                        $('#pilih_sn').select2({
+                        });
+                    }
+                  }, error: function() { 
+                    console.log("Error")
+                }  
+              });
+
+            })
+          })
+        </script>
+
+<script>
+  $(document).ready(function (){
+    $('#pilih_sn').on('select2:close', function (evt) {
+    var count = $(this).select2('data').length
+    if(count==0){
+      $('#qty').val(0);
+    }
+    else{
+        $('#qty').val(count);
+    }
+  })
+})
+</script>
 
 @endsection

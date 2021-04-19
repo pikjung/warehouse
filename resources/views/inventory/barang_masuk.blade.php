@@ -258,8 +258,8 @@
                     {data: 'nama_barang', name: 'nama_barang'},
                     {data: 'spek', name: 'spek' },
                     {data: 'quantity', name: 'quantity' },
-                    {data: 'sn_total', name: 'sn_total'},
-                    {data: 'jumlah_sn', name: 'jumlah_sn' },
+                    {data: 'sn_total', name: 'sn_total', orderable: false, searchable:false},
+                    {data: 'jumlah_sn', name: 'jumlah_sn', orderable: false, searchable:false },
                     {data: 'sn', name:'sn', orderable: false, searchable:false},
                     {data: 'action', name:'action', orderable: false, searchable:false},
                     {data: 'status', name: 'status'}

@@ -19,6 +19,9 @@ use  App\Models\transaksi;
 //use transaksi_detail model;
 use App\Models\detail_transaksi;
 
+//use serial nodel
+use App\Models\serial;
+
 //use validator 
 use Illuminate\Support\Facades\Validator;
 
@@ -484,7 +487,16 @@ class storeController extends Controller
     //view transaksi detail
     public function detailTransaksi($id)
     {
-        return view('/store/transaksi/detail_transaksi/detail_transaksi', compact('id'));
+        $barang = DB::table('inventorie')
+        ->join('gudang', 'inventorie.gudang_id', '=', 'gudang.gudang_id')
+        ->join('serial', 'inventorie.inventory_id', '=', 'serial.inventory_id')
+        ->where('inventorie.quantity', '>', 0)
+        ->where('inventorie.status','active')
+        ->where('serial.userReq_det_id', null)
+        ->select('inventorie.inventory_id','inventorie.nama_barang','inventorie.quantity', 'gudang.nama_gudang', DB::raw("IFNULL(count(serial.sn_id),0) as count"))
+        ->groupBy('inventorie.inventory_id','inventorie.nama_barang','inventorie.quantity','gudang.nama_gudang')
+        ->get();
+        return view('/store/transaksi/detail_transaksi/detail_transaksi',['barang'=>$barang] ,compact('id'));
     }
 
     //detail transaksi dataTables
@@ -555,6 +567,13 @@ class storeController extends Controller
     {
         $serial = serial::where('inventory.id', $id)->where('status', 'Gudang GSC')->get();
         return $serial;
+    }
+
+    //cari barang
+    public function detailTransaksiCari_barang($id)
+    {
+        $serial = serial::where('inventory_id', $id)->where('status', 'Gudang GSC')->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $serial));
     }
 
     
