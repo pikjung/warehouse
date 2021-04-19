@@ -479,11 +479,15 @@ class storeController extends Controller
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 
+    //DETAIL TRANSAKSI
+
+    //view transaksi detail
     public function detailTransaksi($id)
     {
         return view('/store/transaksi/detail_transaksi/detail_transaksi', compact('id'));
     }
 
+    //detail transaksi dataTables
     public function detailTransaksiGet($id)
     {
         $data1 = detail_transaksi::all();
@@ -499,6 +503,58 @@ class storeController extends Controller
         })
         ->rawColumns(['action','detail'])
         ->make(true);     
+    }
+
+    //detail_transaksi tambah
+    public function detailTransaksiTambah(Request $request)
+    {
+        
+    }
+
+    //detail_transaksi edit get
+    public function detailTransaksiEditGet(Request $request)
+    {
+        $id = $request->id;
+        $data = detail_transaksi::find($id);
+        return response()->json($data);
+    }
+
+    //detail_transaksi edit store
+    public function detailTransaksiStore(Request $request)
+    {
+
+    }
+
+    //detail_transaksi hapus
+    public function detailTransaksiHapus(Request $request)
+    {
+        $id = $request->id;
+        $detail_transaksi = detail_transaksi::find($id);
+        $serial = serial::where('userReq_det_id',$id)->get();
+        foreach ($serial as $key ) {
+            $serial_edit = serial::find($key->sn_id);
+            $serial_edit->userReq_det_id = null;
+            $serial_edit->status = 'Gudang GSC';
+            $serial_edit->save();
+        }
+
+        $detail_transaksi->delete();
+
+        return response()->json(array('res' => 'berhasil'));
+    }
+
+    //detail transaksi inventory
+    public function detailTransaksiInventory($id)
+    {
+        $data = inventory::find($id);
+        return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    //detail transaksi serial
+    public function detailTransaksiSerial($id)
+    {
+        $serial = serial::where('inventory.id', $id)->where('status', 'Gudang GSC')->get();
+        return $serial;
     }
 
     
