@@ -309,7 +309,7 @@
                         });
                         $.ajax({
                             type: "POST",
-                            url: '/store/transaksi/hapus',
+                            url: '/store/detail_transaksi/hapus',
                             data: { id:id}, 
                             success: function( result ) {
                                 if (result.res === 'berhasil') {
@@ -320,7 +320,7 @@
                                     styling: 'bootstrap3'
                                 });
                                 $('#detail_transaksi').DataTable().ajax.reload()
-                                $('#modal_hapus').modal('hide');
+                                window.location.reload(); 
                                 }
                             }
                         });

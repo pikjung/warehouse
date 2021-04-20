@@ -448,6 +448,7 @@ class storeController extends Controller
             foreach ($serial as $key ) {
                 $item = serial::find($key->sn_id);
                 $item->userReq_det_id = null;
+                $item->status = 'Gudang GSC';
                 $item->save();
             }
             $detail_item->delete();
@@ -517,7 +518,7 @@ class storeController extends Controller
         ->addColumn('action', function ($data1)
         {
             //return action button
-             return '<a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+             return '<a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->detail_transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
         })
         ->rawColumns(['action','detail'])
         ->make(true);     
@@ -586,7 +587,7 @@ class storeController extends Controller
         foreach ($serial as $key ) {
             $serial_edit = serial::find($key->sn_id);
             $serial_edit->userReq_det_id = null;
-            $serial_edit->status = null;
+            $serial_edit->status = 'Gudang GSC';
             $serial_edit->save();
         }
 

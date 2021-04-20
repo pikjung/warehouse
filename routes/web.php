@@ -265,6 +265,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/store/detail_transaksi/tambah', [storeController::class, 'detailTransaksiTambah']);
     Route::post('/store/detail_transaksi/editGet', [storeController::class, 'detailTransaksiEditGet']);
     Route::post('/store/detail_transaksi/editStore', [storeController::class, 'detailTransaksiEditStore']);
+    Route::post('/store/detail_transaksi/hapus', [storeController::class, 'detailTransaksiHapus']);
     Route::get('/store/detail_transaksi/cari_barang/{id}', [storeController::class, 'detailTransaksiCari_barang']);
 
 });
