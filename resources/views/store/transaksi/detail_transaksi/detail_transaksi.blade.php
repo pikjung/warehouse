@@ -74,6 +74,13 @@
                           <span class="glyphicon glyphicon-search"></span>
                         </button>
                       </div>
+
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="">Harga Jual</label>
+                          <input type="number" id="harga_jual" class="form-control" name="harga_jual">
+                        </div>
+                      </div>
   
                       <div class="col-md-10">
                         <div class="form-group">
@@ -260,6 +267,7 @@
             $('#button_modal').click(function () {
               var id_transaksi = {!! json_encode($id) !!};
               $('#transaksi_id').val(id_transaksi);
+              $('#harga_jual').val('')
               $('#deskripsi').val('')
               $('#modal_tambah').modal('show');
             })

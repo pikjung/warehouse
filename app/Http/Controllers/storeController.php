@@ -531,6 +531,7 @@ class storeController extends Controller
          $validasi = Validator::make($request->all(),[
             'transaksi_id' => 'required',
             'inventory_id' => 'required',
+            'harga_jual' => 'required',
             'serial' => 'required',
             'deskripsi' => 'required',
         ]);
@@ -565,6 +566,7 @@ class storeController extends Controller
             'detail_transaksi_id' => $id,
             'transaksi_id' => $transaksi_id,
             'nama_barang' => $nama_barang,
+            'harga_jual' => $request->harga_jual,
             'type' => '',
             'qty' => $request->qty,
             'sn' => $sn,
