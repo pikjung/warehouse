@@ -340,7 +340,7 @@ class storeController extends Controller
         ->addColumn('action', function ($data1)
         {
             //return action button
-             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a><a href="/store/transaksi/print_transaksi/'.$data1->transaksi_id.'" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-print"></i></a>';
         })
         ->addColumn('detail', function ($data1)
         {
@@ -487,6 +487,15 @@ class storeController extends Controller
     {
         $data = detail_transaksi::where('transaksi_id', $id)->get();
         return response()->json(array('res' => 'berhasil', 'data' => $data));
+    }
+
+    public function transaksiPrintTransaksi($id)
+    {
+        $data = transaksi::find($id);
+        $toko = toko::find($data->toko_id);
+        $platform = platform::find($toko->platform_id);
+        $det = detail_transaksi::where('transaksi_id', $id)->get();
+        return view('/store/transaksi/print', ['data' => $data, 'det' => $det, 'toko' => $toko, 'platform' => $platform]);
     }
 
     //DETAIL TRANSAKSI
