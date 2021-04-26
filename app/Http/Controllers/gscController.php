@@ -24,6 +24,8 @@ use DataTables;
 
 use DB;
 
+use App\Controllers\botNotifController;
+
 
 class gscController extends Controller
 {
@@ -367,6 +369,7 @@ class gscController extends Controller
                 'quantity_awal' => $key['quantity']
            ]);
        }
+       app('App\Http\Controllers\botNotifController')->sendMessagePOGSC($po->no_po_gsc, Auth::User()->name,$request->note_terima,$po->nama_disti);
        $po->save();
        return response()->json(array('res' => 'berhasil'));
 

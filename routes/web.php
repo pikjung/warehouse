@@ -33,6 +33,8 @@ use App\Http\Controllers\storeController;
 
 use App\Http\Controllers\gudangController;
 
+use App\Http\Controllers\botNotifController;
+
     
 Auth::routes();
 
@@ -42,6 +44,10 @@ Route::post('login', [AuthController::class, 'login' ]);
 Route::get('logout', [AuthController::class, 'logout' ]);
 
 Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function () {
+
+
+    //TELEGRAM
+    Route::get('/update-activity', [botNotifController::class, 'updatedActivity']);
 
     //ACCOUNT
     Route::get('/account', [accountController::class, 'account']);
