@@ -369,7 +369,15 @@ class gscController extends Controller
                 'quantity_awal' => $key['quantity']
            ]);
        }
-       app('App\Http\Controllers\botNotifController')->sendMessagePOGSC($po->no_po_gsc, Auth::User()->name,$request->note_terima,$po->nama_disti);
+       $user =Auth::User()->name;
+
+       $text = "Barang Dari : $nama_disti\n"
+       . "dengan No PO : <b>$$po->no_po_gsc</b>\n"
+       . "<i>Status diterima </i>\n"
+       . "Diterima oleh: <b>$user</b>\n"
+       . "Pesan dari $user:<b>$request->note_terima</b>\n";
+
+       app('App\Http\Controllers\botNotifController')->sendMessage($text);
        $po->save();
        return response()->json(array('res' => 'berhasil'));
 

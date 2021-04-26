@@ -340,7 +340,7 @@ class storeController extends Controller
         ->addColumn('action', function ($data1)
         {
             //return action button
-             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a><a href="/store/transaksi/print_transaksi/'.$data1->transaksi_id.'" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-print"></i></a>';
+             return '<a href="#" id="edit_transaksi" onclick=edit_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_transaksi" onclick=hapus_transaksi("'.$data1->transaksi_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a><a href="/store/transaksi/print_transaksi/'.$data1->transaksi_id.'" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-print"></i></a><a href="/store/transaksi/send/'.$data1->transaksi_id.'" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-envelope"></i></a>';
         })
         ->addColumn('detail', function ($data1)
         {
@@ -496,6 +496,24 @@ class storeController extends Controller
         $platform = platform::find($toko->platform_id);
         $det = detail_transaksi::where('transaksi_id', $id)->get();
         return view('/store/transaksi/print', ['data' => $data, 'det' => $det, 'toko' => $toko, 'platform' => $platform]);
+    }
+
+    public function transaksiSend($id)
+    {
+        $transaksi = transaksi::find($id);
+        $detail_transaksi = detail_transaksi::where('transaksi_id', $id)->get();
+
+        $html = "-----------\n";
+        
+        foreach ($detail_transaksi as $key ) {
+            $html = "Nama Barang: $key->nama_barang \nSerial: $key->sn \nDeskripsi: $key->deskripsi \n". $html;
+        }
+
+        $text = "No Inv: $transaksi->no_inv_platform \nAn Nama: $transaksi->customer \n -----------\n"
+        . $html;
+
+        app('App\Http\Controllers\botNotifController')->sendMessage($text);
+        return redirect()->back();
     }
 
     //DETAIL TRANSAKSI

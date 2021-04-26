@@ -15,14 +15,8 @@ class botNotifController extends Controller
         dd($activity);
     }
     
-    public function sendMessagePOGSC($pogsc, $user,$note,$disti)
+    public function sendMessage($text)
     {
-        $text = "Barang Dari : $disti\n"
-            . "dengan No PO : <b>$pogsc</b>\n"
-            . "<i>Status diterima </i>\n"
-            . "Diterima oleh: <b>$user</b>\n"
-            . "Pesan dari $user:<b>$note</b>\n";
- 
         Telegram::sendMessage([
             'chat_id' => env('TELEGRAM_CHANNEL_ID', '-1001451687642'),
             'parse_mode' => 'HTML',

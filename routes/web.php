@@ -264,6 +264,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/store/transaksi/no_transaksiFilter', [storeController::class, 'transaksiNoTransaksiFilter']);
     Route::get('/store/transaksi/detail/{id}', [storeController::class, 'transaksiDetail']); //get detail_transaksi_data
     Route::get('/store/transaksi/print_transaksi/{id}', [storeController::class, 'transaksiPrintTransaksi']);
+    Route::get('/store/transaksi/send/{id}', [storeController::class, 'transaksiSend']);
 
 
     //detail transaksi
