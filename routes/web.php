@@ -50,7 +50,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/update-activity', [botNotifController::class, 'updatedActivity']);
 
     //TELEGRAM BOT
-    Route::get('/whgsc_bot/bot', [botNotifController::class, 'bot']);
+    Route::post('/whgsc_bot/bot', [botNotifController::class, 'bot']);
 
     //ACCOUNT
     Route::get('/account', [accountController::class, 'account']);
