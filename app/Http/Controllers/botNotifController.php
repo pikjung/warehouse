@@ -25,4 +25,13 @@ class botNotifController extends Controller
 
         return response()->json(array('res' => 'berhasil'));
     }
+
+    public function bot()
+    {
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', '-1001451687642'),
+            'parse_mode' => 'HTML',
+            'text' => "halo"
+        ]);
+    }
 }
