@@ -28,15 +28,26 @@ class botNotifController extends Controller
 
     public function bot(Request $request)
     {
-        $TOKEN = "1713523929:AAEXiqg1c3G7T-DFxE7sXtQ3qQq1xX17G0A";
-        $apiURL = "https://api.telegram.org/bot$TOKEN";
         $update = json_decode(file_get_contents("php://input"), TRUE);
         $chatID = $update["message"]["chat"]["id"];
         $message = $update["message"]["text"];
+
+        Telegram::sendMessage([
+            'chat_id' => $chatID,
+            'text' => $text
+        ]);
         
-        if (strpos($message, "/start") === 0) {
-        
-        file_get_contents($apiURL."/sendmessage?chat_id=".$chatID."&text=Haloo, test webhooks <code>dicoffeean.com</code>.&parse_mode=HTML");
-        }
+    }
+
+    public function setWebhook(Request $request)
+    {
+        $response = Telegram::setWebhook(['url' => 'https:///gosyen.id/whgsc_bot/bot']);
+        dd($response);
+    }
+
+    public function removeWebHook(Request $request)
+    {
+        $response = Telegram::removeWebhook();
+        dd($response);
     }
 }

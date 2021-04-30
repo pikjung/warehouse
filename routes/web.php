@@ -43,14 +43,17 @@ Route::get('login', [AuthController::class, 'showFormLogin' ])->name('login');
 Route::post('login', [AuthController::class, 'login' ]);
 Route::get('logout', [AuthController::class, 'logout' ]);
 
+//TELEGRAM BOT
+Route::post('/whgsc_bot/bot', [botNotifController::class, 'bot']);
+Route::post('/whgsc_bot/setWebhook', [botNotifController::class, 'setWebhook']);
+Route::post('/whgsc_bot/removeWebhook', [botNotifController::class, 'removeWebhook']);
+Route::post('/whgsc_bot/getUpdates', [botNotifController::class, 'getUpdates']);
+
 Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function () {
 
 
     //TELEGRAM
     Route::get('/update-activity', [botNotifController::class, 'updatedActivity']);
-
-    //TELEGRAM BOT
-    Route::post('/whgsc_bot/bot', [botNotifController::class, 'bot']);
 
     //ACCOUNT
     Route::get('/account', [accountController::class, 'account']);
