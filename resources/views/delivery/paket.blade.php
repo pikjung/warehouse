@@ -33,7 +33,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
                           </table>
                         </div>
@@ -57,6 +57,9 @@
                     <div class="form-group">
                       <label for="">DN No</label>
                       <input type="text" class="form-control" id="dn_no">
+                      <div id="text_dn">
+
+                      </div>
                     </div>
                     <div class="form-group">
                         <label for="">Nama Paket</label>
@@ -93,6 +96,9 @@
               <div class="form-group">
                 <label for="">DN No</label>
                 <input type="text" class="form-control" id="dn_no_edit">
+                <div id="text_dn_edit">
+
+                </div>
               </div>
               <div class="form-group">
                   <label for="">Nama Paket</label>
@@ -145,7 +151,7 @@
           </div>
         </div>
       </div>
-      
+
 
       <div id="modal_detail" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -271,6 +277,52 @@
       </div>
 
       <script type="text/javascript">
+      $(document).ready(function () {
+          $('#dn_no').on('keyup', function () {
+            var dn_no = $('#dn_no').val();
+            $.ajaxSetup({
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: "/delivery/paket/checkDN",
+                  data: {dn_no:dn_no},
+                  success: function(result){
+                    $('#text_dn').removeAttr('class');
+                    $('#text_dn').attr('class', result.text);
+                    $('#text_dn').html(result.dn_no);
+                  },
+                });
+          })
+        })
+      </script>
+
+      <script type="text/javascript">
+      $(document).ready(function () {
+          $('#dn_no_edit').on('keyup', function () {
+            var dn_no = $('#dn_no_edit').val();
+            $.ajaxSetup({
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: "/delivery/paket/checkDNEdit",
+                  data: {dn_no:dn_no},
+                  success: function(result){
+                    $('#text_dn_edit').removeAttr('class');
+                    $('#text_dn_edit').attr('class', result.text);
+                    $('#text_dn_edit').html(result.dn_no);
+                  },
+                });
+          })
+        })
+      </script>
+
+      <script type="text/javascript">
         $(document).ready(function() {
             $('#data_paket').DataTable({
                 processing: true,
@@ -328,7 +380,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/delivery/paket/tambah',
-                    data: {dn_no:dn_no, nama_paket:nama_paket, expedisi_id:expedisi}, 
+                    data: {dn_no:dn_no, nama_paket:nama_paket, expedisi_id:expedisi},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                           new PNotify({
@@ -360,7 +412,7 @@
             $.ajax({
                 type: "POST",
                 url: '/delivery/paket/editGet',
-                data: { id:id}, 
+                data: { id:id},
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                       $('#nama_paket_edit').val(result.data.nama_paket);
@@ -395,7 +447,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/delivery/paket/editStore',
-                    data: { id:id,dn_no:dn_no,nama_paket:nama_paket, expedisi_id:expedisi}, 
+                    data: { id:id,dn_no:dn_no,nama_paket:nama_paket, expedisi_id:expedisi},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                           new PNotify({
@@ -427,7 +479,7 @@
               $.ajax({
                   type: "GET",
                   url: '/delivery/paket/hapusGet',
-                  data: { id:id}, 
+                  data: { id:id},
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         $('#pesan_hapus').html('<p class="text-danger">Harap Kosongkan Detail sebelum menghapus Paket</p>')
@@ -453,7 +505,7 @@
               $.ajax({
                   type: "POST",
                   url: '/delivery/paket/hapus',
-                  data: { id:id}, 
+                  data: { id:id},
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         new PNotify({
@@ -485,7 +537,7 @@
               $.ajax({
                   type: "POST",
                   url: '/delivery/paket/detail',
-                  data: { id:id}, 
+                  data: { id:id},
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         if (result.paket.status == 'Terkirim') {
@@ -522,7 +574,7 @@
               $.ajax({
                   type: "POST",
                   url: '/transaksi/po/lihat_paket',
-                  data: { id:id}, 
+                  data: { id:id},
                   success: function( result ) {
                         if (result.res === 'berhasil') {
                           $('#paket_body').html(result.data);
@@ -550,7 +602,7 @@
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                         $.each(result.data, function (key,value) {
-                            $('#detail_select').append($("<option></option>").attr("value", value.userReq_id).text(value.po_customer)); 
+                            $('#detail_select').append($("<option></option>").attr("value", value.userReq_id).text(value.po_customer));
                         })
                         $('#detail_select').select2({
                             theme :'bootstrap'

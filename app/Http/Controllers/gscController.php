@@ -131,7 +131,23 @@ class gscController extends Controller
     {
         $gudang = gudang::all();
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'POGSC']);
-        return view('/gsc/pogsc', compact('gudang'));
+        $pogsc = pogsc::orderBy('created_at','desc')->where('status','!=','Arsip')->skip(0)->take(10)->get();
+        return view('/gsc/pogsc',['pogsc' => $pogsc] ,compact('gudang'));
+    }
+
+    public function pogscLazy(Request $request)
+    {
+      $cur_index = $request->cur_index;
+      $take = $cur_index + 10;
+      $pogsc = pogsc::orderBy('created_at','desc')->where('status','!=','Arsip')->skip($cur_index)->take(10)->get();
+      return response()->json(array('res' => 'berhasil', 'data' => $pogsc));
+    }
+
+    public function pogscCari_po(Request $request)
+    {
+      $po = $request->po;
+      $pogsc = pogsc::orderBy('created_at','desc')->where('no_po_gsc','like','%'.$po.'%')->get();
+      return response()->json(array('res' => 'berhasil', 'data' => $pogsc));
     }
 
     public function pogscGet()
@@ -142,7 +158,7 @@ class gscController extends Controller
         {
             if ($data->status == 'po') return '<a href="#" id="edit_po" onclick=edit_po("'.$data->data_barang_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_po" onclick=hapus_po("'.$data->data_barang_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a><a href="#" id="konfirmasi_po" onclick=konfirmasi_po("'.$data->data_barang_id.'") class="btn btn-sm btn-success"><i class="glyphicon glyphicon-arrow-right"></i></a><a href="#" id="print_po" onclick=print_po("'.$data->data_barang_id.'") class="btn btn-sm btn-success"><i class="glyphicon glyphicon-print"></i> Print PO</a>';
             if ($data->status == 'diterima') return '<span class="badge badge-info">Diterima</span> <a href="#" id="print_po" onclick=print_po("'.$data->data_barang_id.'") class="btn btn-sm btn-success"><i class="glyphicon glyphicon-print"></i> Print PO</a>';
-            
+
         })
         ->editColumn('detail', function ($data)
         {
@@ -263,7 +279,7 @@ class gscController extends Controller
         ->addColumn('action', function ($data)
         {
             return '<a href="#" id="edit_detail" onclick=edit_detail("'.$data->detData_barang_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_detail" onclick=hapus_detail("'.$data->detData_barang_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
-            
+
         })
         ->addColumn('total_barang', function ($data)
         {

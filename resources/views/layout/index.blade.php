@@ -11,6 +11,23 @@
 
     <title>GSC WAREHOUSE </title>
 
+    <style>
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #44d1b0; /* Blue */
+        border-radius: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
     <!-- Bootstrap -->
   <link href="{{asset('/template/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -19,7 +36,7 @@
   <link href="{{asset('/template/vendors/nprogress/nprogress.css')}}" rel="stylesheet">
     <!-- iCheck -->
   <link href="{{asset('/template/vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
   <link href="{{asset('/template/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css')}}" rel="stylesheet">
     <!-- JQVMap -->
@@ -32,7 +49,7 @@
 
 
   <!-- Datatables -->
-    
+
   <link href="{{asset('/template/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
   <link href="{{asset('/template/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
   <link href="{{asset('/template/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
@@ -119,8 +136,6 @@
 <!-- ckeditor -->
 <script src="{{asset('/vendors/ckeditor/ckeditor.js')}}"></script>
 
-
-
   </head>
 
   <body class="nav-md">
@@ -148,26 +163,30 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
+                <h3>Company</h3>
                 <ul class="nav side-menu">
                     <li><a href="/"><i class="fa fa-th-large"></i>Dashboard</a></li>
-                    <li><a href="/gsc/pogsc"><i class="fa fa-home"></i>PO GSC</a></li>
-                    <li><a href="/gsc/distributor"><i class="fa fa-building"></i>Distributor</a></li>
-                    <li><a href="/transaksi"><i class="fa fa-exchange"></i>PO User</a></li>
-                    <li><a href="/customers"><i class="fa fa-user"></i>Customers</a></li>
-                    <li><a href="/inventory"><i class="fa fa-cube"></i>Inventory</a></li>
-                    <li><a><i class="fa fa-truck"></i>Delivery</a>
-                        <ul class="nav child_menu">
-                            <li><a href="/delivery/paket">Paket</a></li>
-                            <li><a href="/delivery/logistic">Expedisi</a></li>
-                          </ul>
+                    <li><a><i class="fa fa-exchange"></i>PO</a>
+                      <ul class="nav child_menu">
+                        <li><a href="/gsc/pogsc">PO GSC</a></li>
+                        <li><a href="/transaksi">PO User</a></li>
+                        <li><a href="/delivery/paket">Pengiriman</a></li>
+                      </ul>
                     </li>
+                    <li><a><i class="fa fa-home"></i>Master</a>
+                      <ul class="nav child_menu">
+                        <li><a href="/inventory">Inventory</a></li>
+                        <li><a href="/customers">Customer</a></li>
+                        <li><a href="/gsc/distributor">Distributor</a></li>
+                        <li><a href="/delivery/logistic">Expedisi</a></li>
+                      </ul>
+                    </li>
+                    @if(Auth::User()->level == '4')
+                    <li><a href="/account"><i class="fa fa-user"></i>Account</a></li>
+                    @endif
+                    @if(Auth::User()->level == '2' || Auth::User()->level == '4')
                     <li><a href="/report"><i class="fa fa-book"></i>Report</a></li>
-                    
-                    
-                    
-                    
-                    <!--<li><a href="/account"><i class="fa fa-user"></i>Account</a></li>-->
+                    @endif
                 </ul>
                 <h3>Store</h3>
                 <ul  class="nav side-menu">
@@ -176,7 +195,7 @@
                       <li><a href="/store/data_toko">Data Toko</a></li>
                       <li><a href="/store/platform">Platform</a></li>
                       <li><a href="/store/transaksi">Transaksi</a></li>
-                      <li><a href="/store/report">Report</a></li>
+                      <!--<li><a href="/store/report">Report</a></li> -->
                     </ul>
                   </li>
                 </ul>
@@ -184,7 +203,7 @@
             </div>
             <!-- /sidebar menu -->
 
-            <!-- /menu footer buttons 
+            <!-- /menu footer buttons
             <div class="sidebar-footer hidden-small">
               <a data-toggle="tooltip" data-placement="top" title="Settings">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -223,75 +242,8 @@
                   <button class="btn btn-info" id="serial_track_button"><i class="fa fa-search"></i></button>
                 </li>
                 <li class="nav-item">
-                  <input type="text" id="serial_track" class="form-control" placeholder="Cari Serial.."> 
+                  <input type="text" id="serial_track" class="form-control" placeholder="Cari Serial..">
                 </li>
-
-                <!-- --
-<li role="presentation" class="nav-item dropdown open">
-                  <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <div class="text-center">
-                        <a class="dropdown-item">
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-                -->
               </ul>
             </nav>
           </div>
@@ -305,7 +257,7 @@
             <div id="modal_serial_track" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-      
+
                   <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">Serial</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -314,14 +266,14 @@
                   <div class="modal-body">
                     <div class="" id="body_serial_track"></div>
                   </div>
-      
+
                 </div>
               </div>
             </div>
         <!-- footer content -->
             <footer>
                 <div class="pull-right">
-                    GSC WAREHOUSE 2020
+                    GSC WAREHOUSE {{date("Y")}}
                 </div>
                 <div class="clearfix"></div>
             </footer>
@@ -330,11 +282,9 @@
         <!--end of Page content -->
     </div>
     <!-- jQuery -->
-
-
-
         <!-- Custom Theme Scripts -->
-<script src="{{asset('/template/build/js/custom.min.js')}}"></script>
+        <script src="{{asset('/template/build/js/custom.min.js')}}"></script>
+  </div>
 <script>
   $(document).ready(function() {
     $('#serial_track_button').click(function(){
@@ -349,7 +299,7 @@
         $.ajax({
             type: "POST",
             url: '/dashboard/serial',
-            data: { serial:serial}, 
+            data: { serial:serial},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   if (result.type === 'inventory') {
@@ -397,7 +347,7 @@
     })
   })
 </script>
-	
+
 </body>
-  
+
 </html>

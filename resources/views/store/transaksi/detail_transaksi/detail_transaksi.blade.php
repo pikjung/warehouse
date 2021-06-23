@@ -32,7 +32,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
                           </table>
                         </div>
@@ -44,7 +44,7 @@
       </div>
 
       <div id="modal_tambah" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
 
             <div class="modal-header">
@@ -67,9 +67,9 @@
                           </select>
                         </div>
                       </div>
-  
+
                       <div class="col-md-2">
-                        <label for="">  </label>
+                        <label for=""></label><br>
                         <button class="btn btn-info" type="button" id="button_cari_barang">
                           <span class="glyphicon glyphicon-search"></span>
                         </button>
@@ -81,7 +81,7 @@
                           <input type="number" id="harga_jual" class="form-control" name="harga_jual">
                         </div>
                       </div>
-  
+
                       <div class="col-md-10">
                         <div class="form-group">
                           <label for="">Pilih SN</label>
@@ -89,21 +89,21 @@
                           </select>
                         </div>
                       </div>
-  
+
                       <div class="col-md-2">
                         <div class="form-group">
                           <label for="">Qty</label>
                           <input type="text" class="form-control" id="qty" name="qty" readonly>
                         </div>
                       </div>
-  
+
                       <div class="col-md-12">
                         <div class="form-group">
                           <label for="">Deskripsi</label>
                           <input type="text" class="form-control" id="deskripsi" name="deskripsi">
                         </div>
                       </div>
-  
+
                     </div>
                   </form>
             </div>
@@ -287,7 +287,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/store/detail_transaksi/editGet',
-                    data: { id:id}, 
+                    data: { id:id},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             $('#deskripsi').val(result.data.deskripsi);
@@ -296,7 +296,7 @@
                     }
                   });
             }
-        </script> 
+        </script>
 
         <script>
             function hapus_transaksi(id) {
@@ -318,7 +318,7 @@
                         $.ajax({
                             type: "POST",
                             url: '/store/detail_transaksi/hapus',
-                            data: { id:id}, 
+                            data: { id:id},
                             success: function( result ) {
                                 if (result.res === 'berhasil') {
                                 new PNotify({
@@ -328,7 +328,7 @@
                                     styling: 'bootstrap3'
                                 });
                                 $('#detail_transaksi').DataTable().ajax.reload()
-                                window.location.reload(); 
+                                window.location.reload();
                                 }
                             }
                         });
@@ -340,6 +340,7 @@
           $('#pilih_barang').select2({
             theme :'bootstrap',
             width: '100%',
+            dropdownParent: $("#modal_tambah"),
           });
         </script>
 
@@ -356,19 +357,19 @@
                   });
               $.ajax({
                   type: "get",
-                  url: '/store/detail_transaksi/cari_barang/'+id, 
+                  url: '/store/detail_transaksi/cari_barang/'+id,
                   success: function( result ) {
                     if (result.res === 'berhasil') {
                       $('#pilih_sn').attr('multiple',"multiple")
                       $.each(result.data, function (key,value) {
-                            $('#pilih_sn').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial)); 
+                            $('#pilih_sn').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial));
                         })
                         $('#pilih_sn').select2({
                         });
                     }
-                  }, error: function() { 
+                  }, error: function() {
                     console.log("Error")
-                }  
+                }
               });
 
             })

@@ -1,46 +1,80 @@
 @extends('layout.index')
 
 @section('content')
+<div class="row">
+  <div class="col-sm-4">
+    <b><h2> PO GSC</h2></b>
+  </div>
+  <div class="col-sm-8">
+    <div class="float-right">
       <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2> PO GSC <small>Table</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li>
-                    <button type="button" class="btn btn-sm btn-success" id="button_modal">Tambah Data</button>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-                  <div class="row">
-                      <div class="col-sm-12">
-                        <div class="card-box table-responsive">
-                          <table id="data_po" class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-                              <tr>
-                                <th>Nama Disti</th>
-                                <th width="10%">NO PO</th>
-                                <th>Tanggal</th>
-                                <th>Status</th>
-                                <th>Other Information</th>
-                                <th width="5%">Detail Barang</th>
-                                <th width="20%">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        <div class="col-xs-4">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="po_cari" placeholder="Cari PO disini" aria-label="Cari" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-success" id="button_cari_po" type="button"><span class="glyphicon glyphicon-search"></span></button>
             </div>
           </div>
+        </div>
+        <div class="col-xs-4">
+          <button type="button" class="btn btn-outline-success " id="button_modal">Tambah Data</button>
+        </div>
+        <div class="col-xs-4">
+          <!--<a href="/transaksi/arsip" role="button" class="btn btn-outline-primary ">Data Arsip</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div id="lazy_pouser">
+       @foreach ($pogsc as $item)
+           <!-- lazy load -->
+       <div class="row">
+         <div class="col-md-12 col-sm-12 ">
+             <div class="x_panel">
+               <div class="x_title">
+                 <div class="text-primary"><b> {{$item->no_po_gsc}}</b></div>
+                 <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                   <div class="row">
+                       <div class="col-sm-12">
+                           <div class="col-sm-12">
+                           <div class="row">
+                             <div class="col-sm-4">
+                               {{$item->nama_disti}} | {{$item->tanggal}} |
+                             </div>
+                             <div class="col-sm-4">
+                               Noted: {{$item->noted}}
+                             </div>
+                             <div class="col-sm-4">
+                               <a class="btn btn-outline-info text-info float-right " onclick='detail_po("{{$item->data_barang_id}}")' >Lihat detail transaksi disini</a>
+                             </div>
+                           </div>
+                           </div>
+                           <div class="col-sm-12">
+                             <b>{{$item->status}} | {{$item->payment_terms}}</b>
+                           </div>
+                           <div class="col-sm-12">
+                             <hr>
+                             <a class="btn btn-success text-light float-right" onclick='konfirmasi_po("{{$item->data_barang_id}}")' ><span class="glyphicon glyphicon-arrow-right"></span></a>
+                             <a class="btn btn-info text-light float-right" onclick='print_po("{{$item->data_barang_id}}")' ><span class="glyphicon glyphicon-print"></span></a>
+                             <a class="btn btn-warning text-light float-right" onclick='edit_po("{{$item->data_barang_id}}")' ><span class="glyphicon glyphicon-edit"></span></a>
+                             <a class="btn btn-danger text-light float-right" onclick='hapus_po("{{$item->data_barang_id}}")' ><span class="glyphicon glyphicon-trash"></span></a>
+                           </div>
+                       </div>
+                     </div>
+                   </div>
+             </div>
+           </div>
+       </div>
+       <!-- end of lazy load -->
+       @endforeach
+      </div>
+
+      <div class="text-center" id="button_tampilkan">
+        <button type="button" class="btn btn-outline-primary " id="tampilkan_lebih">Tampilkan Lebih</button>
       </div>
 
       <div id="modal_tambah" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -103,7 +137,7 @@
                   <div class="form-group">
                     <label for="gudang">Gudang</label>
                     <select name="" id="gudang_id" class="form-control">
-                      <option value="-- Other --">-- Other --</option>
+                      <option value="	5ece4797eaf5e">-- Other --</option>
                     </select>
                   </div>
                 </div>
@@ -387,6 +421,138 @@
         </div>
       </div>
 
+      <script type="text/javascript">
+      $(document).ready(function () {
+          $('#button_cari_po').click(function (){
+            var po = $('#po_cari').val();
+            $.ajaxSetup({
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                    type: "POST",
+                    url: "/gsc/pogsc/cari_po",
+                    data: {po:po},
+                    success: function(result){
+                      $('#lazy_pouser').html('');
+                      $('#button_tampilkan').hide();
+                        $.each(result.data, function(key, val)
+                        {
+                          $('#lazy_pouser').append(
+                                  '<div class="row" loading="lazy">' +
+                                  '<div class="col-md-12 col-sm-12 ">' +
+                                  '<div class="x_panel">' +
+                                  '<div class="x_title">' +
+                                  '<div class="text-primary"><b> '+val.no_po_gsc+'</b></div>' +
+                                  '<div class="clearfix"></div>' +
+                                  '</div>' +
+                                  '<div class="x_content">' +
+                                  '<div class="row">' +
+                                  '<div class="col-sm-12">' +
+                                  '<div class="col-sm-12">' +
+                                  '<div class="row">' +
+                                  '<div class="col-sm-4">' +
+                                  ''+val.nama_disti+' | '+val.tanggal+
+                                  '</div>' +
+                                  '<div class="col-sm-4">' +
+                                  'Noted: '+val.noted+'' +
+                                  '</div>' +
+                                  '<div class="col-sm-4">' +
+                                  '<a class="btn btn-outline-info text-info float-right " onclick=detail_po("'+val.data_barang_id+'") >Lihat detail transaksi disini</a>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '<div class="col-sm-12">' +
+                                  '<b>'+val.status+' | '+val.payment_terms+'</b>' +
+                                  '</div>' +
+                                  '<div class="col-sm-12">' +
+                                  '<hr>' +
+                                  '<a class="btn btn-info text-light float-right" onclick=print_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-print"></span></a>' +
+                                  '<a class="btn btn-warning text-light float-right" onclick=edit_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-edit"></span></a>' +
+                                  '<a class="btn btn-danger text-light float-right" onclick=hapus_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-trash"></span></a>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>'
+                          )
+                        })
+                    },
+                });
+            })
+
+        });
+      </script>
+
+      <script>
+      $(document).ready(function () {
+        var cur_index = 10;
+          $('#tampilkan_lebih').click(function (){
+            $.ajaxSetup({
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                    type: "POST",
+                    url: "/gsc/pogsc/lazy",
+                    data: {cur_index:cur_index},
+                    success: function(result){
+                        $.each(result.data, function(key, val)
+                        {
+                          cur_index += 1;
+                          $('#lazy_pouser').append(
+                                  '<div class="row" loading="lazy">' +
+                                  '<div class="col-md-12 col-sm-12 ">' +
+                                  '<div class="x_panel">' +
+                                  '<div class="x_title">' +
+                                  '<div class="text-primary"><b> '+val.no_po_gsc+'</b></div>' +
+                                  '<div class="clearfix"></div>' +
+                                  '</div>' +
+                                  '<div class="x_content">' +
+                                  '<div class="row">' +
+                                  '<div class="col-sm-12">' +
+                                  '<div class="col-sm-12">' +
+                                  '<div class="row">' +
+                                  '<div class="col-sm-4">' +
+                                  ''+val.nama_disti+' | '+val.tanggal+
+                                  '</div>' +
+                                  '<div class="col-sm-4">' +
+                                  'Noted: '+val.noted+'' +
+                                  '</div>' +
+                                  '<div class="col-sm-4">' +
+                                  '<a class="btn btn-outline-info text-info float-right " onclick=detail_pouser("'+val.data_barang_id+'") >Lihat detail transaksi disini</a>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '<div class="col-sm-12">' +
+                                  '<b>'+val.status+' | '+val.payment_terms+'</b>' +
+                                  '</div>' +
+                                  '<div class="col-sm-12">' +
+                                  '<hr>' +
+                                  '<a class="btn btn-info text-light float-right" onclick=print_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-print"></span></a>' +
+                                  '<a class="btn btn-warning text-light float-right" onclick=edit_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-edit"></span></a>' +
+                                  '<a class="btn btn-danger text-light float-right" onclick=hapus_po("'+val.data_barang_id+'") ><span class="glyphicon glyphicon-trash"></span></a>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>' +
+                                  '</div>'
+                          )
+                        })
+                        screen_height = $('body').height();
+                    },
+                });
+            })
+
+        });
+      </script>
+
       <script>
         $(document).ready(function () {
           $('#button_default').click(function() {
@@ -426,7 +592,7 @@
           var gudang = {!! json_encode($gudang->toArray()) !!};
           console.log(gudang)
           $.each(gudang, function (key,value) {
-              $('#gudang_id').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+              $('#gudang_id').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang));
           })
           $('#gudang_id').select2({
               theme :'bootstrap',
@@ -437,13 +603,13 @@
                   return 'Too many selected items';
               }
           });
-          
+
           $("#gudang_id").select2({
               width: '100%' // need to override the changed default
           });
 
           $.each(gudang, function (key,value) {
-              $('#gudang_id_edit').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+              $('#gudang_id_edit').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang));
           })
           $('#gudang_id_edit').select2({
               theme :'bootstrap',
@@ -475,7 +641,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/gudang/autofillCom',
-            data: { gudang_id:gudang_id }, 
+            data: { gudang_id:gudang_id },
             success: function( result ) {
                $('#ship_to').html('');
                $('#ship_to').html(result.alamat_gudang);
@@ -501,7 +667,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/gudang/autofillCom',
-            data: { gudang_id:gudang_id }, 
+            data: { gudang_id:gudang_id },
             success: function( result ) {
                $('#ship_to_edit').val('');
                $('#ship_to_edit').val(result.alamat_gudang);
@@ -525,7 +691,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/autofill',
-                  data: { nama_disti:nama_disti }, 
+                  data: { nama_disti:nama_disti },
                   success: function( result ) {
                     $.each( result.data, function(key, value) {
                       html = html + "<a onclick=autofill('"+value.disti_id+"')>"+value.nama_disti+"</a><br>";
@@ -548,7 +714,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/autofillCom',
-                  data: { disti_id:disti_id }, 
+                  data: { disti_id:disti_id },
                   success: function( result ) {
                       $('#nama_disti').val('');
                       $('#nama_disti').val(result.data.nama_disti);
@@ -560,31 +726,33 @@
       </script>
 
 
-      <script type="text/javascript">
-        $(document).ready(function() {
-            $('#data_po').DataTable({
-                processing: true,
-                serverSide: true,
-                dom: '<"html5buttons">BlTfrtip',
-                buttons : [
-                    {extend:'csv'},
-                    {extend: 'pdf', title:'Contoh File PDF Datatables'},
-                    {extend: 'excel', title: 'Contoh File Excel Datatables'},
-                    {extend:'print',title: 'Contoh Print Datatables'},
-                ],
-                ajax: '/gsc/pogsc/view',
-                columns: [
-                    {data: 'nama_disti', name: 'nama_disti'},
-                    {data: 'no_po_gsc', name: 'no_po_gsc'},
-                    {data: 'tanggal', name: 'tanggal'},
-                    {data: 'status', name: 'status' },
-                    {data: 'noted', name: 'noted' },
-                    {data: 'detail', name:'detail', orderable: false, searchable:false},
-                    {data: 'action', name:'action', orderable: false, searchable:false},
-                ],
-            });
-        });
-        </script>
+    <!--
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $('#data_po').DataTable({
+              processing: true,
+              serverSide: true,
+              dom: '<"html5buttons">BlTfrtip',
+              buttons : [
+                  {extend:'csv'},
+                  {extend: 'pdf', title:'Contoh File PDF Datatables'},
+                  {extend: 'excel', title: 'Contoh File Excel Datatables'},
+                  {extend:'print',title: 'Contoh Print Datatables'},
+              ],
+              ajax: '/gsc/pogsc/view',
+              columns: [
+                  {data: 'nama_disti', name: 'nama_disti'},
+                  {data: 'no_po_gsc', name: 'no_po_gsc'},
+                  {data: 'tanggal', name: 'tanggal'},
+                  {data: 'status', name: 'status' },
+                  {data: 'noted', name: 'noted' },
+                  {data: 'detail', name:'detail', orderable: false, searchable:false},
+                  {data: 'action', name:'action', orderable: false, searchable:false},
+              ],
+          });
+      });
+      </script>
+   -->
 
       <script>
         $(document).ready(function () {
@@ -619,7 +787,7 @@
               $.ajax({
                   type: "POST",
                   url: '/gsc/pogsc/tambah',
-                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company }, 
+                  data: { nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat, ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company },
                   success: function( result ) {
                       if (result.res === 'success') {
                         new PNotify({
@@ -629,7 +797,7 @@
                           styling: 'bootstrap3'
                       });
                       $('#modal_tambah').modal('hide');
-                      $('#data_po').DataTable().ajax.reload();
+                      window.location.reload();
                       }
                   }
               });
@@ -660,7 +828,7 @@
         })
       </script>
 
-      
+
 
       <script>
         function edit_po(id) {
@@ -687,7 +855,7 @@
             $.ajax({
                 type: "POST",
                 url: '/gsc/pogsc/editGet',
-                data: { id:id }, 
+                data: { id:id },
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                         $('#nama_disti_edit').val(result.data.nama_disti);
@@ -729,7 +897,7 @@
       var no_telp_ship = $('#no_telp_pengiriman_edit').val();
       var ship_company = $('#ship_company_edit').val()
 
-      if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '' || ship_company == ''') {
+      if (nama_disti === '' || no_po === '' || noted === '' || payment_terms === '' || to_name === '' || no_telp === '' || fax === '' || alamat === '' || ship_to == '' || ship_name == '' || no_telp_edit == '' || ship_company == '') {
         new PNotify({
             title: 'Data Kosong!!',
             text: 'Data harap tidak dikosongkan!',
@@ -745,7 +913,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/editStore',
-            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company }, 
+            data: { id:id,nama_disti:nama_disti, no_po:no_po, noted:noted, payment_terms:payment_terms, to_name:to_name, no_telp:no_telp, fax:fax, alamat:alamat,ship_to:ship_to, gudang_id:gudang_id, ship_name:ship_name, no_telp_ship:no_telp_ship, ship_company:ship_company },
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
@@ -755,7 +923,7 @@
                     styling: 'bootstrap3'
                 });
                 $('#modal_edit').modal('hide');
-                $('#data_po').DataTable().ajax.reload();
+                window.location.reload();
                 }
             }
         });
@@ -785,7 +953,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/hapus',
-            data: { id:id}, 
+            data: { id:id},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
@@ -795,7 +963,7 @@
                     styling: 'bootstrap3'
                 });
                 $('#modal_hapus').modal('hide');
-                $('#data_po').DataTable().ajax.reload();
+                window.location.reload();
                 }
             }
         });
@@ -818,7 +986,7 @@
         $.ajax({
             type: "POST",
             url: '/gsc/pogsc/detail',
-            data: { id:id}, 
+            data: { id:id},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   console.log(result.status)
@@ -859,7 +1027,7 @@
       $.ajax({
           type: "POST",
           url: '/gsc/pogsc/detail',
-          data: { id:id}, 
+          data: { id:id},
           success: function( result ) {
               if (result.res === 'berhasil') {
                   $.each(result.data, function (key, value) {
@@ -873,7 +1041,7 @@
                       )
                   });
                   $('#modal_konfirmasi').modal('show');
-                  
+
               }
           }
       });
@@ -904,7 +1072,7 @@
       $.ajax({
           type: "POST",
           url: '/gsc/pogsc/terima',
-          data: { id:id, tanggal_terima:tanggal_terima, note_terima:note_terima}, 
+          data: { id:id, tanggal_terima:tanggal_terima, note_terima:note_terima},
           success: function( result ) {
               if (result.res === 'berhasil') {
                     new PNotify({

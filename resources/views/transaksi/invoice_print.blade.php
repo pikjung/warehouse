@@ -141,13 +141,13 @@
     hr {
         border-top: 2px solid black; margin-top:5px;width:110%;margin-left:-15px;
     }
-    
+
     input {
     border: none;
     background: transparent;
     }
 
-        
+
     @page {
         size: A4;
         margin: 0;
@@ -176,7 +176,7 @@
     @media print {
     tr.vendor {
         background-color: black !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -189,7 +189,7 @@
     @media print {
     td#kiri {
         background-color: #404040 !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -216,7 +216,7 @@
     <div class="subpage">
         <div class="row">
             <div class="col-print-12">
-                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo"> 
+                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo">
                 <span style="font-size: 20; font-weight: bold;"> PT GOSYEN SOLUSINDO CEMERLANG</span>
                 <br>
            </div>
@@ -238,8 +238,8 @@
             <div style="width: 350px">
                 Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430
             </div>
-            
-            
+
+
            </div>
            <div class="col-print-1"></div>
            <div class="col-print-5 fnt-12">
@@ -249,7 +249,7 @@
                     Date <br>
                     Due Date <br>
                     Payment Terms <br>
-                    PO No. <br>			
+                    PO No. <br>
                 </div>
                 <div class="col-print-8">
                     : {{$data->no_invoice}} <br>
@@ -266,10 +266,10 @@
            <div class="col-print-8 fnt-12">
             <b>{{$customer->nama_customers}}</b> <br>
             <div style="width: 350px">
-                {{$customer->alamat}} <br> 
-                <b><div id="edit_attn"></div></b> 
+                {{$customer->alamat}} <br>
+                <b><div id="edit_attn"></div></b>
             </div>
-            
+
            </div>
            <div class="col-print-4 fnt-12"></div>
 
@@ -283,7 +283,7 @@
                     <b>MODEL & DESCR. <br>
                         Nama Barang Kena Pajak</b>
                    </div>
-    
+
                    <div class="col-print-2">
                     <b>QTY</b>
                    </div>
@@ -355,7 +355,7 @@
                             VAT (IDR) <br> <br>
                             TOTAL (IDR)  <br>
                             <b>{{$data->nama_invoice}}</b>
-                            
+
                            </div>
                            <div class="col-print-6">
                             @if ($pouser->dis == "-")
@@ -367,11 +367,11 @@
                             <hr>
                             IDR <input type="text" value="{{$serial->rupiah(($total - $pouser->disc) * 10/100 + ($total - $pouser->disc))}}">
                         @else
-                        <p id="sub_total"></p> 
+                        <p id="sub_total"></p>
                         IDR - <br>
                         <hr>
-                         <p id="sub_total2"></p> 
-                         <p id="vat"></p>  
+                         <p id="sub_total2"></p>
+                         <p id="vat"></p>
                         <hr>
                          <p id="grand_total"></p>
                         @endif

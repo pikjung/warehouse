@@ -536,8 +536,8 @@ class storeController extends Controller
     //detail transaksi dataTables
     public function detailTransaksiGet($id)
     {
-        $data1 = detail_transaksi::all();
-        return Datatables::of(detail_transaksi::orderBy('created_at','desc'))
+        $data1 = detail_transaksi::where('transaksi_id', $id)->get();
+        return Datatables::of(detail_transaksi::where('transaksi_id', $id)->orderBy('created_at','desc'))
         ->addColumn('gudang', function ($data1){
             $gudang = gudang::find($data1->gudang_id);
             return $gudang->nama_gudang;

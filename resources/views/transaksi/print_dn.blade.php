@@ -138,7 +138,7 @@
     }
 
 
-        
+
     @page {
         size: A4;
         margin: 0;
@@ -167,7 +167,7 @@
     @media print {
     tr.vendor {
         background-color: black !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -180,7 +180,7 @@
     @media print {
     td#kiri {
         background-color: #404040 !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -207,7 +207,7 @@
     <div class="subpage">
         <div class="row">
             <div class="col-print-12">
-                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo"> 
+                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo">
                 <span style="font-size: 20; font-weight: bold;"> PT GOSYEN SOLUSINDO CEMERLANG</span>
                 <br>
            </div>
@@ -222,22 +222,22 @@
             <div style="width: 270px">
                 Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430
             </div>
-            
-            
+
+
            </div>
            <div class="col-print-4 fnt-12">
             <div class="row">
                 <div class="col-print-5">
                     Delivery Note <br>
                     Date <br>
-                    PO No. <br>			
+                    PO No. <br>
                 </div>
                 <div class="col-print-7">
                     : {{$pouser->dn_no}} <br>
                     : @php
                         echo date('d M Y');
                     @endphp <br>
-                    :  - <br>
+                    :  {{$pouser->po_customer}} <br>
                 </div>
             </div>
            </div>
@@ -249,7 +249,7 @@
                 {{$pouser->alamat}} <br><br>
                 <b>Attn: {{$pouser->penerima}} ({{$pouser->no_telp}})</b> <br><br>
             </div>
-            
+
            </div>
            <div class="col-print-4 fnt-12"></div>
 
@@ -262,7 +262,7 @@
                    <div class="col-print-9">
                     Description
                    </div>
-    
+
                    <div class="col-print-2">
                     QTY/EA
                    </div>
@@ -286,7 +286,7 @@
                         {{$item->quantity}} UNIT
                     </div>
                     <div class="col-print-1">
-                        
+
                     </div>
                     <div class="col-print-9 fnt-12 serial">
                         <div id="toolbar"></div>
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                     <div class="col-print-2">
-                        
+
                     </div>
                 </div>
             @endforeach
@@ -310,7 +310,7 @@
                 <b>{{$pouser->customer}}</b>
                 <br><br><br><br><br>
                 Name:______________ <br>
-                                    
+
                 Date:______________ <br>
                 (Please sign & stamp)
 

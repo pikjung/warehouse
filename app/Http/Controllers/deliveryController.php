@@ -34,8 +34,8 @@ class deliveryController extends Controller
 
     public function paketGet()
     {
-        $data1 = paket::all();
-        return Datatables::of(paket::all())
+        $data1 = paket::orderBy('created_at','desc')->get();
+        return Datatables::of(paket::orderBy('created_at','desc'))
         ->addColumn('action', function ($data1)
         {
             if ($data1->status == 'draft') return '<a href="#" id="edit_paket" onclick=edit_paket("'.$data1->paket_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_paket" onclick=hapus_paket("'.$data1->paket_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a><a href="#" class="btn btn-sm btn-success" onclick=kirim_paket("'.$data1->paket_id.'")><i class="glyphicon glyphicon-send"></i></a>';
@@ -90,6 +90,34 @@ class deliveryController extends Controller
         return response()->json(array('res' => 'berhasil', 'data' => $data));
     }
 
+    public function paketCheckDN(Request $request)
+    {
+        $dn_no = $request->dn_no;
+        $check = pouser::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        $checkPaket = paket::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        if ($check > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else if ($checkPaket > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else {
+          return response()->json(array('dn_no' => 'available', 'text' => 'text-success'));
+        }
+    }
+
+    public function paketCheckDNEdit(Request $request)
+    {
+        $dn_no = $request->dn_no;
+        $check = pouser::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        $checkPaket = paket::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        if ($check > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else if ($checkPaket > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else {
+          return response()->json(array('dn_no' => 'available', 'text' => 'text-success'));
+        }
+    }
+
     public function paketEditStore(Request $request)
     {
         $validasi = Validator::make($request->all(),[
@@ -107,7 +135,7 @@ class deliveryController extends Controller
         }
 
         $id = $request->id;
-    
+
         $data = paket::find($id);
         $data->dn_no = $request->dn_no;
         $data->nama_paket = $request->nama_paket;
@@ -132,7 +160,7 @@ class deliveryController extends Controller
         } else {
             $data = paket::find($id)->delete();
         }
-        
+
         return response()->json(array('res' => 'berhasil'));
     }
 
@@ -295,7 +323,7 @@ class deliveryController extends Controller
                 'message' => 'An error occurred!'
             );
             return response()->json($returnData, 500);
-        }        
+        }
 
         $id = uniqid();
         $data = expedisi::create([
@@ -332,7 +360,7 @@ class deliveryController extends Controller
                 'message' => 'An error occurred!'
             );
             return response()->json($returnData, 500);
-        }    
+        }
         $nama_expedisi = $request->nama_expedisi;
         $no_telp = $request->no_telp;
         $alamat = $request->alamat;

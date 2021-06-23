@@ -68,16 +68,16 @@ class transaksiController extends Controller
 			$temp = $this->penyebut($nilai/1000000000) . " MILYAR" . $this->penyebut(fmod($nilai,1000000000));
 		} else if ($nilai < 1000000000000000) {
 			$temp = $this->penyebut($nilai/1000000000000) . " TRILYUN" . $this->penyebut(fmod($nilai,1000000000000));
-		}     
+		}
 		return $temp;
 	}
- 
+
 	public function terbilang($nilai) {
 		if($nilai<0) {
 			$hasil = "minus ". trim($this->penyebut($nilai));
 		} else {
 			$hasil = trim($this->penyebut($nilai));
-		}     		
+		}
 		return $hasil;
 	}
 
@@ -91,7 +91,8 @@ class transaksiController extends Controller
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses' ,'bagian' => 'PO USER']);
         $data = customer::all();
-        return view('/transaksi/pouser', compact('data'));
+        $pouser = pouser::orderBy('created_at','desc')->where('status','!=','Arsip')->skip(0)->take(10)->get();
+        return view('/transaksi/pouser', ['pouser' => $pouser],compact('data'));
     }
 
     public function pouserView()
@@ -117,12 +118,27 @@ class transaksiController extends Controller
         })
         ->editColumn('print', function ($data)
         {
-            if ($data->no_invoice == null) return '<button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>'; 
-            if (!empty($data->no_invoice)) return '<button class="btn btn-sm btn-success" onclick=print_invoice("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>INV</button> <button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>'; 
-            
+            if ($data->no_invoice == null) return '<button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>';
+            if (!empty($data->no_invoice)) return '<button class="btn btn-sm btn-success" onclick=print_invoice("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>INV</button> <button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>';
+
         })
         ->rawColumns(['action','detail','status','print'])
         ->make(true);
+    }
+
+    public function pouserLazy(Request $request)
+    {
+        $cur_index = $request->cur_index;
+        $take = $cur_index + 10;
+        $pouser = pouser::orderBy('created_at','desc')->where('status','!=','Arsip')->skip($cur_index)->take(10)->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $pouser));
+    }
+
+    public function pouserCari_dn(Request $request)
+    {
+        $dn = $request->dn;
+        $pouser = pouser::orderBy('created_at','desc')->where('dn_no', 'like', '%'.$dn.'%')->get();
+        return response()->json(array('res' => 'berhasil', 'data' => $pouser));
     }
 
     public function pouserTambah(Request $request)
@@ -261,7 +277,7 @@ class transaksiController extends Controller
             }
         }
         $pouser_del = pouser_det::where('userReq_id',$id)->delete();
-        
+
         $data->delete();
 
         return response()->json(array('res' => 'berhasil'));
@@ -300,7 +316,7 @@ class transaksiController extends Controller
         {
             if ($status == 'po') return '<a href="#" id="edit_pouser_det" onclick=edit_pouser_det("'.$data->userReq_det_id.'") class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-edit"></i></a><a href="#" id="hapus_pouser_det" onclick=hapus_pouser_det("'.$data->userReq_det_id.'") class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
             if ($status != 'po') return '<span class="badge badge-info">Tidak bisa di ubah</span>';
-            
+
         })
         ->editColumn('detail', function ($data)
         {
@@ -465,12 +481,12 @@ class transaksiController extends Controller
                 ->where('serial.no_serial', 'LIKE', '%'.$cari.'%')
                 ->where('serial.userReq_det_id', null)
                 ->where('inventorie.quantity','>',0)
-                ->get(); 
+                ->get();
                 return response()->json($serial);
             } else {
                 return response()->json($data);
             }
-            
+
         }
     }
 
@@ -555,8 +571,8 @@ class transaksiController extends Controller
                 'message' => 'An error occurred!'
             );
             return response()->json(array('res' => 'gagal'));
-        } 
-        else 
+        }
+        else
         {
             $sn = serial::all();
             $row = array();
@@ -579,7 +595,7 @@ class transaksiController extends Controller
             }
             $rowJson = json_encode($row);
             return response()->json(array('res' => 'berhasil', 'data' => $rowJson, 'valid' => $validCount, 'invalid' => $invalidCount, 'count' =>  $count));
-        } 
+        }
 
     }
 
@@ -596,8 +612,8 @@ class transaksiController extends Controller
                 'message' => 'An error occurred!'
             );
             return response()->json(array('res' => 'gagal'));
-        } 
-        else 
+        }
+        else
         {
             $sn = serial::all();
             $row = array();
@@ -614,7 +630,7 @@ class transaksiController extends Controller
                 }
             }
             return response()->json(array('res' => 'berhasil'));
-        } 
+        }
 
     }
 
@@ -667,7 +683,7 @@ class transaksiController extends Controller
                         <td>: ".$paket->tgl_kirim."</td>
                     </tr>
                 </table>
-                
+
             </div>
             <div class='col-12'>
             <br>
@@ -702,6 +718,34 @@ class transaksiController extends Controller
         return response()->json(array('res' => 'berhasil'));
     }
 
+    public function pouserCheckDN(Request $request)
+    {
+        $dn_no = $request->dn_no;
+        $check = pouser::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        $checkPaket = paket::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        if ($check > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else if ($checkPaket > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else {
+          return response()->json(array('dn_no' => 'available', 'text' => 'text-success'));
+        }
+    }
+
+    public function pouserCheckDNEdit(Request $request)
+    {
+        $dn_no = $request->dn_no;
+        $check = pouser::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        $checkPaket = paket::where('dn_no','LIKE', '%'.$dn_no.'%')->count();
+        if ($check > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else if ($checkPaket > 0) {
+          return response()->json(array('dn_no' => 'not available', 'text' => 'text-danger'));
+        } else {
+          return response()->json(array('dn_no' => 'available', 'text' => 'text-success'));
+        }
+    }
+
     public function arsip()
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Akses Arsip' ,'bagian' => 'PO USER']);
@@ -723,13 +767,13 @@ class transaksiController extends Controller
         })
         ->editColumn('print', function ($data)
         {
-            if (!empty($data->no_invoice)) return '<button class="btn btn-sm btn-success" onclick=print_invoice("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>INV</button> <button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>'; 
-            
+            if (!empty($data->no_invoice)) return '<button class="btn btn-sm btn-success" onclick=print_invoice("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>INV</button> <button class="btn btn-sm btn-success" onclick=print_dn("'.$data->userReq_id.'")><span class="glyphicon glyphicon-print"></span>DN</button>';
+
         })
         ->rawColumns(['action','detail','status','print'])
         ->make(true);
     }
-    
+
     public function arsipLihat_paket(Request $request)
     {
         DB::table('log')->insert(['user_id'=> Auth::User()->id, 'created_at' => date('Y-m-d H:i:s') ,'aksi'=> 'Lihat Paket Arsip' ,'bagian' => 'PO USER']);
@@ -750,7 +794,7 @@ class transaksiController extends Controller
                 <td><textarea cols='20' rows='5' readonly class='form-control'>".$sn."</textarea></td>
             </tr>";
         }
-        
+
             $html = $html . "<div class='col-12'>
             <table class='table table-striped'>
                 <thead>
@@ -765,7 +809,7 @@ class transaksiController extends Controller
                 </tbody>
             </table>
         </div>";
-        
+
         $tag = "
             <div class='col-6'>
                 <b> PO Customer </b> : ".$pouser->po_customer." <br>
@@ -872,7 +916,7 @@ class transaksiController extends Controller
     {
         $data = invoice::find($id);
         $pouser = pouser::find($data->userReq_id);
-        $customer_id = $data->customer_id;
+        $customer_id = $pouser->customer_id;
         $customer = customer::find($customer_id);
         $det = pouser_det::where('userReq_id',$data->userReq_id)->get();
 
@@ -892,7 +936,7 @@ class transaksiController extends Controller
     {
         return $data = pouser_det::where('userReq_id',$id)->get();
     }
-    
+
     public function autofill(Request $request)
     {
         $data = customer::all();

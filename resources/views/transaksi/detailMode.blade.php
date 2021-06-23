@@ -35,7 +35,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
                           </table>
                         </div>
@@ -106,7 +106,7 @@
             <div class="modal-body">
                 <div class="form-group">
                   <label for="">Pilih Dari Inventory</label>
-                  <select name="" id="pilih_barang_edit" class="form-control" style="width: 100%"></select>
+                  <select name="" id="pilih_barang_edit" class="form-control"></select>
                 </div>
                 <div class="form-group">
                     <label for="">Nama Barang</label>
@@ -181,7 +181,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <input type="hidden" id="detail_id"> 
+                        <input type="hidden" id="detail_id">
                         <button class="btn btn-info float-right" id="detail_view">
                           <i class="glyphicon glyphicon-eye-open"></i>
                         </button>
@@ -265,36 +265,27 @@
           var barang = {!! json_encode($barang->toArray()) !!};
           console.log(barang)
           $.each(barang, function (key,value) {
-              $('#pilih_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang)); 
+              $('#pilih_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang));
           })
+
           $('#pilih_barang').select2({
               theme :'bootstrap',
-              formatSelectionTooBig: function (limit) {
-
-                  // Callback
-
-                  return 'Too many selected items';
-              }
           });
-          
+
           $("#pilih_barang").select2({
-              width: '100%' // need to override the changed default
+              width: '100%', // need to override the changed default
+              dropdownParent: $("#modal_tambah"),
           });
 
           $.each(barang, function (key,value) {
-              $('#pilih_barang_edit').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang)); 
+              $('#pilih_barang_edit').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang + '|' + value.nama_gudang));
           })
           $('#pilih_barang_edit').select2({
               theme :'bootstrap',
-              formatSelectionTooBig: function (limit) {
-
-                  // Callback
-
-                  return 'Too many selected items';
-              }
           });
           $("#pilih_barang_edit").select2({
-              width: '100%' // need to override the changed default
+              width: '100%', // need to override the changed default
+              dropdownParent: $("#modal_edit"),
           });
         })
       </script>
@@ -311,7 +302,7 @@
               $.ajax({
                   type: "POST",
                   url: '/transaksi/detail/autofillCom',
-                  data: { pilih_barang:pilih_barang }, 
+                  data: { pilih_barang:pilih_barang },
                   success: function( result ) {
                      $('#nama_barang').val('');
                      $('#spek').val('');
@@ -339,7 +330,7 @@
               $.ajax({
                   type: "POST",
                   url: '/transaksi/detail/autofillCom',
-                  data: { pilih_barang:pilih_barang }, 
+                  data: { pilih_barang:pilih_barang },
                   success: function( result ) {
                      $('#nama_barang_edit').val('');
                      $('#spek_edit').val('');
@@ -382,7 +373,7 @@
               $.ajax({
                   type: "POST",
                   url: '/transaksi/po/detailMode/tambah',
-                  data: { id:id,nama_barang:nama_barang, spek:spek, quantity:quantity , harga_barang:harga_barang, pn:pn, sku:sku}, 
+                  data: { id:id,nama_barang:nama_barang, spek:spek, quantity:quantity , harga_barang:harga_barang, pn:pn, sku:sku},
                   success: function( result ) {
                       if (result.res === 'berhasil') {
                         new PNotify({
@@ -421,14 +412,14 @@
         })
       </script>
 
-      
+
 
       <script>
         function edit_pouser_det(id) {
             $('#nama_barang_edit').val('');
             $('#spek_edit').val('');
             $('#quantity_edit').val('');
-            $('#harga_barang_edit').val(''); 
+            $('#harga_barang_edit').val('');
             $('#edit_id').val('');
             $('#part_number_edit').val('');
             $('#sku_edit').val('');
@@ -440,20 +431,20 @@
             $.ajax({
                 type: "POST",
                 url: '/transaksi/po/detailMode/editGet',
-                data: { id:id }, 
+                data: { id:id },
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                         $('#nama_barang_edit').val(result.data.nama_barang);
                         $('#spek_edit').val(result.data.spek);
                         $('#quantity_edit').val(result.data.quantity);
-                        $('#harga_barang_edit').val(result.data.harga_barang_satuan); 
+                        $('#harga_barang_edit').val(result.data.harga_barang_satuan);
                         $('#edit_id').val(result.data.userReq_det_id);
                         $('#part_number_edit').val(result.data.pn);
                         $('sku_edit').val(result.data.sku);
                         $('#modal_edit').modal('show');
                       }
                     }
-                
+
             });
         }
       </script>
@@ -464,7 +455,7 @@
       var nama_barang = $('#nama_barang_edit').val();
       var spek = $('#spek_edit').val();
       var quantity = $('#quantity_edit').val();
-      var harga_barang = $('#harga_barang_edit').val(); 
+      var harga_barang = $('#harga_barang_edit').val();
       var id = $('#edit_id').val();
       var pn = $('#part_number_edit').val();
       var sku = $('#sku_edit').val();
@@ -485,7 +476,7 @@
         $.ajax({
             type: "POST",
             url: '/transaksi/po/detailMode/editStore',
-            data: { id:id,nama_barang:nama_barang, spek:spek, quantity:quantity, harga_barang:harga_barang, pn:pn, sku:sku}, 
+            data: { id:id,nama_barang:nama_barang, spek:spek, quantity:quantity, harga_barang:harga_barang, pn:pn, sku:sku},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
@@ -525,7 +516,7 @@
         $.ajax({
             type: "POST",
             url: '/transaksi/po/detailMode/hapus',
-            data: { id:id}, 
+            data: { id:id},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                   new PNotify({
@@ -558,7 +549,7 @@
         $.ajax({
             type: "POST",
             url: '/transaksi/po/detailMode/serial/view',
-            data: { id:id}, 
+            data: { id:id},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                     $.each(result.data, function (key, value) {
@@ -589,12 +580,12 @@
         $.ajax({
             type: "POST",
             url: '/transaksi/po/detailMode/serial/view',
-            data: { id:id}, 
+            data: { id:id},
             success: function( result ) {
                 if (result.res === 'berhasil') {
                     $.each(result.data, function (key, value) {
                       jum = jum + value.no_serial+",";
-  
+
                     });
                     $('#detail_body_area').val(jum)
                     $('#modal_sn').modal('show');

@@ -121,7 +121,7 @@
                         </div>
                     </div>
             </div>
-                
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -153,24 +153,17 @@
                 $.ajax({
                     type: "POST",
                     url: '/inventory/gudang/cariGudang',
-                    data: { gudang:gudang}, 
+                    data: { gudang:gudang},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             $.each(result.data, function (key,value) {
-                                $('#barang_data').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
+                                $('#barang_data').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang));
                             })
                             $.each(result.gudang, function (key,value) {
-                                $('#destination').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang)); 
+                                $('#destination').append($("<option></option>").attr("value", value.gudang_id).text(value.nama_gudang));
                             })
                             $('#barang_data').select2({
                                 theme :'bootstrap',
-                                maximumSelectionLength: result.max_qty,
-                                formatSelectionTooBig: function (limit) {
-
-                                    // Callback
-
-                                    return 'Too many selected items';
-                                }
                             });
                             $('#barang_body').removeAttr('hidden');
                         }
@@ -193,11 +186,11 @@
             $.ajax({
                 type: "POST",
                 url: '/inventory/gudang/cariBarang',
-                data: { barang:barang}, 
+                data: { barang:barang},
                 success: function( result ) {
                     if (result.res === 'berhasil') {
                         $.each(result.data, function (key,value) {
-                            $('#serial_data').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial)); 
+                            $('#serial_data').append($("<option></option>").attr("value", value.sn_id).text(value.no_serial));
                         })
                         $('#serial_data').select2({
                             theme :'bootstrap',
@@ -244,11 +237,11 @@
                 $.ajax({
                     type: "POST",
                     url: '/inventory/gudang/cariBarangDestination',
-                    data: { barang:barang}, 
+                    data: { barang:barang},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             $.each(result.data, function (key,value) {
-                                $('#destination_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang)); 
+                                $('#destination_barang').append($("<option></option>").attr("value", value.inventory_id).text(value.nama_barang));
                             })
                             $('#destination_barang').select2({
                                 theme :'bootstrap',
@@ -308,7 +301,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/inventory/transferStoreMake',
-                    data: { barang:barang, serial:serial, destination:destination, qty:qty}, 
+                    data: { barang:barang, serial:serial, destination:destination, qty:qty},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             new PNotify({
@@ -323,7 +316,7 @@
                 });
             }
 
-                
+
             } else {
                 var barang = $('#barang_data').val();
                 var serial = $('#serial_data').val();
@@ -349,7 +342,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/inventory/transferStore',
-                    data: { barang:barang, serial:serial, destination:destination, destination_barang:destination_barang, qty:qty}, 
+                    data: { barang:barang, serial:serial, destination:destination, destination_barang:destination_barang, qty:qty},
                     success: function( result ) {
                         if (result.res === 'berhasil') {
                             new PNotify({

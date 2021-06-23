@@ -35,7 +35,7 @@ use App\Http\Controllers\gudangController;
 
 use App\Http\Controllers\botNotifController;
 
-    
+
 Auth::routes();
 
 Route::get('/', [AuthController::class, 'showFormLogin' ])->name('login');
@@ -49,21 +49,54 @@ Route::post('/whgsc_bot/setWebhook', [botNotifController::class, 'setWebhook']);
 Route::post('/whgsc_bot/removeWebhook', [botNotifController::class, 'removeWebhook']);
 Route::post('/whgsc_bot/getUpdates', [botNotifController::class, 'getUpdates']);
 
-Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function () {
+Route::group(['middleware' => ['web', 'auth','checkstatus']], function () {
 
 
     //TELEGRAM
     Route::get('/update-activity', [botNotifController::class, 'updatedActivity']);
 
-    //ACCOUNT
-    Route::get('/account', [accountController::class, 'account']);
-    Route::get('/account/get', [accountController::class, 'accountGet']);
-    Route::post('/account/tambah', [accountController::class, 'accountTambah']);
-    Route::post('/account/editGet', [accountController::class, 'accountEditGet']);
-    Route::post('/account/editStore', [accountController::class, 'accountEditStore']);
-    Route::post('/account/hapus', [accountController::class, 'accountHapus']);
-    Route::post('/account/activated', [accountController::class, 'accountActivated']);
-    
+    Route::group(['middleware' => ['superAdmin']], function () {
+      //ACCOUNT
+      Route::get('/account', [accountController::class, 'account']);
+      Route::get('/account/get', [accountController::class, 'accountGet']);
+      Route::post('/account/tambah', [accountController::class, 'accountTambah']);
+      Route::post('/account/editGet', [accountController::class, 'accountEditGet']);
+      Route::post('/account/editStore', [accountController::class, 'accountEditStore']);
+      Route::post('/account/hapus', [accountController::class, 'accountHapus']);
+      Route::post('/account/activated', [accountController::class, 'accountActivated']);
+
+    });
+
+    Route::group(['middleware' => ['owner']], function ()
+    {
+      //REPORTS
+      Route::get('/report', [reportController::class, 'report']);
+      Route::get('/reportGet/{data}', [reportController::class, 'reportGet']);
+      Route::post('/report/download', [reportController::class, 'reportDownload']);
+      Route::get('/report/cetak', [reportController::class, 'reportCetak']);
+      Route::post('/report/excel', [reportController::class, 'reportExcel']);
+
+      //data toko
+      Route::get('/store/data_toko', [storeController::class, 'data_toko']);
+      Route::get('/store/data_toko/get', [storeController::class, 'data_tokoGet']);
+      Route::post('/store/data_toko/tambah', [storeController::class, 'data_tokoTambah']);
+      Route::post('/store/data_toko/editGet', [storeController::class, 'data_tokoEditGet']);
+      Route::post('/store/data_toko/editStore', [storeController::class, 'data_tokoEditStore']);
+      Route::post('/store/data_toko/hapus', [storeController::class, 'data_tokoHapus']);
+      Route::get('/store/data_toko/transaksi', [storeController::class, 'data_tokoPenjualan']);
+      //Route::post('/store/data_toko/detail', [storeController::class, 'data_tokoDetail']);
+
+      //platform
+      Route::get('/store/platform', [storeController::class, 'platform']);
+      Route::get('/store/platform/get', [storeController::class, 'platformGet']);
+      Route::post('/store/platform/tambah', [storeController::class, 'platformTambah']);
+      Route::post('/store/platform/editGet', [storeController::class, 'platformEditGet']);
+      Route::post('/store/platform/editStore', [storeController::class, 'platformEditStore']);
+      Route::post('/store/platform/hapus', [storeController::class, 'platformHapus']);
+      Route::get('/store/platform/transaksi', [storeController::class, 'platformPenjualan']);
+      //Route::post('/store/platform/detail', [storeController::class, 'platformDetail']);
+    });
+
  //DASHBOARD
     Route::get('/dashboard', [dashboardController::class, 'index'])->name('home');
     Route::post('/dashboard/serial', [dashboardController::class, 'serial']);
@@ -71,7 +104,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
 
 
  //GSC
- 
+
      //distributor
      Route::get('/gsc/distributor', [gscController::class, 'distributorView']);
      Route::post('/gsc/distributor/tambah', [gscController::class, 'distributorTambah']);
@@ -79,7 +112,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/gsc/distributor/editGet', [gscController::class, 'distributorEditGet']);
      Route::post('/gsc/distributor/editStore', [gscController::class, 'distributorEditStore']);
      Route::post('/gsc/distributor/hapus', [gscController::class, 'distributorHapus']);
- 
+
      //pogsc
      Route::get('/gsc/pogsc', [gscController::class, 'pogscView']);
      Route::post('/gsc/pogsc/tambah', [gscController::class, 'pogscTambah']);
@@ -101,11 +134,13 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/gsc/pogsc/autofillCom', [gscController::class, 'autofillCom']);
      Route::get('/gsc/pogsc/wizard', [gscController::class, 'wizard']);
      Route::post('/gsc/pogsc/wizard/store', [gscController::class, 'wizardStore']);
+     Route::post('/gsc/pogsc/lazy', [gscController::class, 'pogscLazy']);
+     Route::post('/gsc/pogsc/cari_po', [gscController::class, 'pogscCari_po']);
 
      //Gudang
      Route::post('/gsc/gudang/autofill', [gscController::class, 'gudangAutofill']);
      Route::post('/gsc/gudang/autofillCom', [gscController::class, 'gudangAutofillCom']);
- 
+
  //TRANSAKSI
      //po user
      Route::get('/transaksi', [transaksiController::class, 'pouser']);
@@ -153,6 +188,11 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/transaksi/detail/autofillCom', [transaksiController::class, 'detailAutofillCom']);
      Route::get('/transaksi/wizard', [transaksiController::class, 'wizard']);
      Route::post('/transaksi/wizard/store', [transaksiController::class, 'wizardStore']);
+     Route::post('/transaksi/po/lazy', [transaksiController::class, 'pouserLazy']);
+     Route::post('/transaksi/po/cari_dn', [transaksiController::class, 'pouserCari_dn']);
+     Route::post('/transaksi/po/checkDN', [transaksiController::class, 'pouserCheckDN']);
+     Route::post('/transaksi/po/checkDNEdit', [transaksiController::class, 'pouserCheckDNEdit']);
+
 
 //Customer (New)
     Route::get('/customers', [transaksiController::class, 'customers']);
@@ -161,9 +201,9 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::post('/customers/editGet', [transaksiController::class, 'customersEditGet']);
     Route::post('/customers/editStore', [transaksiController::class, 'customersEditStore']);
     Route::post('/customers/hapus', [transaksiController::class, 'customersHapus']);
- 
+
  //INVENTORY
- 
+
         //gudang
         Route::get('/inventory', [inventoryController::class, 'inventory']);
         Route::post('/inventory/gudang/cariGudang', [inventoryController::class, 'inventoryGudangCariGudang']);
@@ -199,8 +239,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
         Route::post('/inventory/barang_masuk/snImport', [inventoryController::class, 'snImport']);
         Route::post('/inventory/barang_masuk/active', [inventoryController::class, 'active_data']);
         Route::post('/inventory/barang_masuk/inactive', [inventoryController::class, 'inactive_data']);
- 
- 
+
+
  //Delivery
      //Paket
      Route::get('/delivery/paket', [deliveryController::class, 'paketView']);
@@ -220,7 +260,9 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::get('/delivery/paket/konfirmasi', [deliveryController::class, 'paketKonfirmasi']);
      Route::post('/delivery/paket/kirim', [deliveryController::class, 'paketKirim']);
      Route::get('/delivery/paket/print/{id}', [deliveryController::class, 'paketPrint']);
- 
+     Route::post('/delivery/paket/checkDN', [deliveryController::class, 'paketCheckDN']);
+     Route::post('/delivery/paket/checkDNEdit', [deliveryController::class, 'paketCheckDNEdit']);
+
      //Logistic
      Route::get('/delivery/logistic', [deliveryController::class, 'logistic']);
      Route::get('/delivery/logisticGet', [deliveryController::class, 'logisticGetView']);
@@ -228,37 +270,11 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
      Route::post('/delivery/logistic/editGet', [deliveryController::class, 'logisticEditGet']);
      Route::post('/delivery/logistic/editStore', [deliveryController::class, 'logisticEditStore']);
      Route::post('/delivery/logistic/hapus', [deliveryController::class, 'logisticHapus']);
- 
- 
- //REPORTS
-     Route::get('/report', [reportController::class, 'report']);
-     Route::get('/reportGet/{data}', [reportController::class, 'reportGet']);
-     Route::post('/report/download', [reportController::class, 'reportDownload']);
-     Route::get('/report/cetak', [reportController::class, 'reportCetak']);
- 
-    
+
+
+
 //STORE
 
-    //data toko
-    Route::get('/store/data_toko', [storeController::class, 'data_toko']);
-    Route::get('/store/data_toko/get', [storeController::class, 'data_tokoGet']);
-    Route::post('/store/data_toko/tambah', [storeController::class, 'data_tokoTambah']);
-    Route::post('/store/data_toko/editGet', [storeController::class, 'data_tokoEditGet']);
-    Route::post('/store/data_toko/editStore', [storeController::class, 'data_tokoEditStore']);
-    Route::post('/store/data_toko/hapus', [storeController::class, 'data_tokoHapus']);
-    Route::get('/store/data_toko/transaksi', [storeController::class, 'data_tokoPenjualan']);
-    //Route::post('/store/data_toko/detail', [storeController::class, 'data_tokoDetail']);
-
-    //platform
-    Route::get('/store/platform', [storeController::class, 'platform']);
-    Route::get('/store/platform/get', [storeController::class, 'platformGet']);
-    Route::post('/store/platform/tambah', [storeController::class, 'platformTambah']);
-    Route::post('/store/platform/editGet', [storeController::class, 'platformEditGet']);
-    Route::post('/store/platform/editStore', [storeController::class, 'platformEditStore']);
-    Route::post('/store/platform/hapus', [storeController::class, 'platformHapus']);
-    Route::get('/store/platform/transaksi', [storeController::class, 'platformPenjualan']);
-    //Route::post('/store/platform/detail', [storeController::class, 'platformDetail']);
-    
     //transaksi
     Route::get('/store/transaksi', [storeController::class, 'transaksi']);
     Route::get('/store/transaksi/get', [storeController::class, 'transaksiGet']);
@@ -283,8 +299,3 @@ Route::group(['middleware' => ['web', 'auth', 'roles','checkstatus']], function 
     Route::get('/store/detail_transaksi/cari_barang/{id}', [storeController::class, 'detailTransaksiCari_barang']);
 
 });
-
-
-
-
-

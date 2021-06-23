@@ -138,7 +138,7 @@
     }
 
 
-        
+
     @page {
         size: A4;
         margin: 0;
@@ -167,7 +167,7 @@
     @media print {
     tr.vendor {
         background-color: black !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -180,7 +180,7 @@
     @media print {
     td#kiri {
         background-color: #404040 !important;
-        -webkit-print-color-adjust: exact; 
+        -webkit-print-color-adjust: exact;
         }
     }
 
@@ -207,7 +207,7 @@
     <div class="subpage">
         <div class="row">
             <div class="col-print-12">
-                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo"> 
+                <img src="{{asset('/img/original.png')}}" width="50px" alt="Logo">
                 <span style="font-size: 20; font-weight: bold;"> PT GOSYEN SOLUSINDO CEMERLANG</span>
                 <br>
            </div>
@@ -222,22 +222,20 @@
             <div style="width: 200px">
                 Jl. Pahlawan Revolusi No.7a, RT.1/RW.4, Pd. Bambu, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13430
             </div>
-            
-            
+
+
            </div>
            <div class="col-print-6 fnt-12">
             <div class="row">
                 <div class="col-print-6">
                     Delivery Note <br>
                     Date <br>
-                    PO No. <br>			
                 </div>
                 <div class="col-print-6">
                     : {{$paket->dn_no}} <br>
                     : @php
                         echo date('d M Y');
                     @endphp <br>
-                    : <br>
                 </div>
             </div>
            </div>
@@ -247,7 +245,7 @@
             <div style="width: 200px">
                 {{$expedisi->alamat_expedisi}} <br><br>
             </div>
-            
+
            </div>
            <div class="col-print-4 fnt-12"></div>
 
@@ -260,7 +258,7 @@
                    <div class="col-print-9">
                     Description
                    </div>
-    
+
                    <div class="col-print-2">
                     QTY/EA
                    </div>
@@ -286,7 +284,7 @@
                         {{$item->quantity}} UNIT
                     </div>
                     <div class="col-print-1">
-                        
+
                     </div>
                     <div class="col-print-9 fnt-12 serial">
                         <div id="toolbar"></div>
@@ -295,10 +293,17 @@
                         </div>
                     </div>
                     <div class="col-print-2">
-                        
+
                     </div>
                 </div>
             @endforeach
+           </div>
+           <div class="col-print-12 fnt-12" style="border:1px solid;">
+             Mohon dikirim ke : {{$data->customer}} <br>
+             {{$data->alamat}}
+           </div>
+           <div class="col-print-12">
+             <br><br>
            </div>
            @endforeach
 
@@ -313,7 +318,7 @@
                 <b>{{$expedisi->nama_expedisi}}</b>
                 <br><br><br><br><br>
                 Name:______________ <br>
-                                    
+
                 Date:______________ <br>
                 (Please sign & stamp)
 
@@ -325,7 +330,7 @@
 <script>
   var row =  document.getElementById('row').value;
   for (let i = 0; i <= row; i++) {
-    var editor = new Quill(document.getElementById('editor'+i));  
+    var editor = new Quill(document.getElementById('editor'+i));
   }
 
 </script>
